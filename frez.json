@@ -1,0 +1,31 @@
+{"1" : {
+    "diameter": 4,
+    "length": 108,
+    "speed": 10000
+},
+"2" : {
+    "diameter": 5,
+    "length": 99.4,
+    "speed": 9000
+},
+"3" : {
+    "diameter": 6,
+    "length": 92.3,
+    "speed": 11000
+},
+"4" : {
+    "diameter": 8,
+    "length": 98.7,
+    "speed": 12000
+},
+"5" : {
+    "diameter": 10,
+    "length": 121.1,
+    "speed": 12000
+},
+"6" : {
+    "diameter": 6,
+    "length": 130,
+    "speed": 8000
+}
+}

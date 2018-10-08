@@ -1,5 +1,6 @@
 import copy
 import os
+import json
 import math
 import ncloader
 
@@ -84,12 +85,12 @@ def zmianaKata(kat):
     Delta_Y = round(Okrag_Y + math.cos(katKoncowy) * Okrag_R, 2)
     Delta_Z = round(Okrag_Z + math.sin(katKoncowy) * Okrag_R, 2)
 
-## Definicja frezów i makr
+''' Definicja frezów i makr - Została zastąpiona przez definicję w JSON
 frezList = [Frez(0,0,0), Frez(4,108,10000), Frez(5, 99.4,9000), Frez(6,92.3,11000), Frez(8, 98.7,12000), Frez(10,121.1,12000), Frez(6,130,8000)]
 
 macroFrezDict = {"OTW MONT 8_6" : 3, "M4_D_HIDDEN KTZ - FRAME" : 3, "Drain for Frame - hidden d BJM machining 4034" : 3, "Drain for Frame - hidden d BJM machining 4035" : 3,
                 'Holes for corner connector BJM macro KTZ1883' : 2}
-##
+'''
 
 arrBars = ncloader.load(content)
 success = False
@@ -120,11 +121,15 @@ for index, macro in enumerate(macros):
 else:
     index = -1
 
+with open("macro.json", "r", encoding='utf-8') as f:
+    macroLib = json.load(f)
+
+with open("frez.json", "r") as f:
+    frezLib = json.load(f)
+
 for macro in macros:
-    if (
-            macro.macroIdent == 'M4_D_HIDDEN KTZ - FRAME' or macro.macroIdent == "Drain for Frame - hidden d BJM machining 4034"):
-        macro.macroObrot = 43.0
-    macro.macroFrez = macroFrezDict[macro.macroIdent]  # przypasuj frez do makra
+    macro.macroObrot = macroLib[macro.macroIdent]['angle']
+    macro.macroFrez = macroLib[macro.macroIdent]['tool']
 
 macrosSortedWX = copy.copy(macros)
 macros.sort(key=lambda x: x.macroWX)
@@ -169,89 +174,89 @@ file.write('40;0;;Z;;24.00;;;;\n' + '50;0;;Y;;16.50;;;;\n' + '60;97;10;;0.00;;;;
 ### KONIEC BLOKU STAŁEGO RUMBA 1 ###
 
 for macro in macros:
-    frezWybrany = frezList[macro.macroFrez]
-    wysDisengage = Delta_Z + frezWybrany.Dlugosc + Disengage_Z
-    writeInc(file, str(i * 10) + ';97;6;;1;' + str(macro.macroFrez) + ';4;' + str(frezWybrany.Predkosc) + ';;\n')
+    frezWybrany = frezLib[macro.macroFrez]
+    wysDisengage = Delta_Z + frezWybrany['length'] + Disengage_Z
+    writeInc(file, str(i * 10) + ';97;6;;1;' + str(macro.macroFrez) + ';4;' + str(frezWybrany['speed']) + ';;\n')
     writeInc(file, str(i * 10) + ';0;;Z;;24.00;;;;\n')
     writeInc(file, str(i * 10) + ';0;;Y;;16.50;;;;\n')
     writeInc(file, str(i * 10) + ';97;10;;' + str(kat_loza) + ';;;;;\n')  # Kąt łoża i obrót
     writeInc(file, str(i * 10) + ';97;4;;1;' + str(
-        frezWybrany.Predkosc) + ';;;;\n')  # Uruchomienie narzędzia z zadanymi obrotami
+        frezWybrany['speed']) + ';;;;\n')  # Uruchomienie narzędzia z zadanymi obrotami
     if (macro.macroIdent == 'OTW MONT 8_6'):  # Przerobić na wyszukiwanie z JSONA
         writeInc(file, str(i * 10) + ';0;;XYZ;;' + str(Delta_X + macro.macroWX) + ';' + str(
-            Delta_Y - Odsuniecie_Y - 12 + (8 - frezWybrany.Srednica) / 2) + ';'
+            Delta_Y - Odsuniecie_Y - 12 + (8 - frezWybrany['diameter']) / 2) + ';'
                  + str(wysDisengage) + ';;\n')  # fi 8-6/2 , 13wys + 2.79zapasu
-        writeInc(file, str(i * 10) + ';0;;Z;;' + str(round(Delta_Z + frezWybrany.Dlugosc + 15.79,
+        writeInc(file, str(i * 10) + ';0;;Z;;' + str(round(Delta_Z + frezWybrany['length'] + 15.79,
                                                            2)) + ';;;;\n')  # 13wys + 2.79zapasu <- jako funkcja, to + 4 linijki w dol ?  
         writeInc(file, str(i * 10) + ';97;7;;2;;;;;\n')
         writeInc(file, str(i * 10) + ';97;11;;;;;;;\n')
         writeInc(file, str(i * 10) + ';1;;Z;200;' + str(
-            round(Delta_Z + frezWybrany.Dlugosc + 7.79, 2)) + ';;;;\n')  # Praca w osi Z, zejście
+            round(Delta_Z + frezWybrany['length'] + 7.79, 2)) + ';;;;\n')  # Praca w osi Z, zejście
         writeInc(file, str(i * 10) + ';28;;XY;;;;;;\n')
         writeInc(file, str(i * 10) + ';2;;XY;800;' + str(Delta_X + macro.macroWX) + ';' + str(
-            Delta_Y - Odsuniecie_Y - 12 - (8 - frezWybrany.Srednica) / 2) + ';'
+            Delta_Y - Odsuniecie_Y - 12 - (8 - frezWybrany['diameter']) / 2) + ';'
                  + str(Delta_X + macro.macroWX) + ';' + str(Delta_Y - Odsuniecie_Y - 12) + ';\n')
         writeInc(file, str(i * 10) + ';2;;XY;800;' + str(Delta_X + macro.macroWX) + ';' + str(
-            Delta_Y - Odsuniecie_Y - 12 + (8 - frezWybrany.Srednica) / 2) + ';'
+            Delta_Y - Odsuniecie_Y - 12 + (8 - frezWybrany['diameter']) / 2) + ';'
                  + str(Delta_X + macro.macroWX) + ';' + str(Delta_Y - Odsuniecie_Y - 12) + ';\n')
         writeInc(file, str(i * 10) + ';97;9;;;;;;;\n')
         writeInc(file, str(i * 10) + ';0;;Z;;' + str(wysDisengage) + ';;;;\n')
         writeInc(file, str(i * 10) + ';0;;XYZ;;' + str(Delta_X + macro.macroWX) + ';' + str(
-            Delta_Y - Odsuniecie_Y - 12 + (8 - frezWybrany.Srednica) / 2) + ';'
+            Delta_Y - Odsuniecie_Y - 12 + (8 - frezWybrany['diameter']) / 2) + ';'
                  + str(wysDisengage) + ';;\n')
-        writeInc(file, str(i * 10) + ';0;;Z;;' + str(round(Delta_Z + frezWybrany.Dlugosc + 3.79,
+        writeInc(file, str(i * 10) + ';0;;Z;;' + str(round(Delta_Z + frezWybrany['length'] + 3.79,
                                                            2)) + ';;;;\n')  # 13wys + 2.79zapasu <- jako funkcja, to + 4 linijki w dol ?  
         writeInc(file, str(i * 10) + ';97;7;;2;;;;;\n')
         writeInc(file, str(i * 10) + ';97;11;;;;;;;\n')
         writeInc(file, str(i * 10) + ';1;;Z;200;' + str(
-            round(Delta_Z + frezWybrany.Dlugosc - 2, 2)) + ';;;;\n')  # Praca w osi Z, zejście
+            round(Delta_Z + frezWybrany['length'] - 2, 2)) + ';;;;\n')  # Praca w osi Z, zejście
         writeInc(file, str(i * 10) + ';97;9;;;;;;;\n')
 
     if (
             macro.macroIdent == 'M4_D_HIDDEN KTZ - FRAME' or macro.macroIdent == "Drain for Frame - hidden d BJM machining 4034"):  # Przerobić na wyszukiwanie z JSONA
         zmianaKata(43)  # Wstawiamy 43, w programie pojawia sie -43, do poprawki!
         Disengage_Z = 103.68  # Dla sprawdzenia, zmienil sie w programie
-        wysDisengage = Delta_Z + frezWybrany.Dlugosc + Disengage_Z  # Ponowne przeliczenie
+        wysDisengage = Delta_Z + frezWybrany['length'] + Disengage_Z  # Ponowne przeliczenie
         writeInc(file, str(i * 10) + ';0;;XYZ;;' + str(
-            Delta_X + macro.macroWX - 35 / 2 + frezWybrany.Srednica / 2) + ';' + str(
+            Delta_X + macro.macroWX - 35 / 2 + frezWybrany['diameter'] / 2) + ';' + str(
             Delta_Y - Odsuniecie_Y - 55.25 + 9.65) + ';'  # 9.65 <- wyliczyć skąd, obrót, w innym miejscu makro?
                  + str(
             round(wysDisengage, 2)) + ';;\n')  # fi 8-6/2 , 13wys + 2.79zapasu, X - odwodnienie ma 35/2, frez d/2
-        writeInc(file, str(i * 10) + ';0;;Z;;' + str(round((Delta_Z + frezWybrany.Dlugosc - 37.03),
+        writeInc(file, str(i * 10) + ';0;;Z;;' + str(round((Delta_Z + frezWybrany['length'] - 37.03),
                                                            2)) + ';;;;\n')  # 13wys + 2.79zapasu <- jako funkcja, to + 4 linijki w dol ?  
         writeInc(file, str(i * 10) + ';97;7;;2;;;;;\n')
         writeInc(file, str(i * 10) + ';97;11;;;;;;;\n')
-        writeInc(file, str(i * 10) + ';1;;Z;200;' + str(round(Delta_Z + frezWybrany.Dlugosc - 49.03,
+        writeInc(file, str(i * 10) + ';1;;Z;200;' + str(round(Delta_Z + frezWybrany['length'] - 49.03,
                                                               2)) + ';;;;\n')  # Praca w osi Z, zejście - póki co na twardo przyjęte - do przeliczenia.
         writeInc(file, str(i * 10) + ';28;;XY;;;;;;\n')
         writeInc(file, str(i * 10) + ';1;;XY;800;' + str(
-            Delta_X + macro.macroWX + 35 / 2 - frezWybrany.Srednica / 2) + ';' + str(
+            Delta_X + macro.macroWX + 35 / 2 - frezWybrany['diameter'] / 2) + ';' + str(
             Delta_Y - Odsuniecie_Y - 55.25 + 9.65) + ';;;\n')
         writeInc(file, str(i * 10) + ';97;9;;;;;;;\n')
         # Druga polowka
         writeInc(file, str(i * 10) + ';0;;XYZ;;' + str(
-            Delta_X + macro.macroWX - 35 / 2 + frezWybrany.Srednica / 2) + ';' + str(
+            Delta_X + macro.macroWX - 35 / 2 + frezWybrany['diameter'] / 2) + ';' + str(
             Delta_Y - Odsuniecie_Y - 55.25 + 9.65) + ';'
-                 + str(round(Delta_Z + frezWybrany.Dlugosc - 49.03,
+                 + str(round(Delta_Z + frezWybrany['length'] - 49.03,
                              2)) + ';;\n')  # fi 8-6/2 , 13wys + 2.79zapasu, X - odwodnienie ma 35/2, frez d/2
-        writeInc(file, str(i * 10) + ';0;;Z;;' + str(round(Delta_Z + frezWybrany.Dlugosc - 49.03 - 0.01,
+        writeInc(file, str(i * 10) + ';0;;Z;;' + str(round(Delta_Z + frezWybrany['length'] - 49.03 - 0.01,
                                                            2)) + ';;;;\n')  # 13wys + 2.79zapasu <- jako funkcja, to + 4 linijki w dol ?  0.01 zapasu? nie wiem po co
         writeInc(file, str(i * 10) + ';97;7;;2;;;;;\n')
         writeInc(file, str(i * 10) + ';97;11;;;;;;;\n')
-        writeInc(file, str(i * 10) + ';1;;Z;200;' + str(round(Delta_Z + frezWybrany.Dlugosc - 49.03 - 12.37,
+        writeInc(file, str(i * 10) + ';1;;Z;200;' + str(round(Delta_Z + frezWybrany['length'] - 49.03 - 12.37,
                                                               2)) + ';;;;\n')  # Praca w osi Z, zejście - póki co na twardo przyjęte - do przeliczenia. 12.37 w glab
         writeInc(file, str(i * 10) + ';28;;XY;;;;;;\n')
         writeInc(file, str(i * 10) + ';1;;XY;800;' + str(
-            Delta_X + macro.macroWX + 35 / 2 - frezWybrany.Srednica / 2) + ';' + str(
+            Delta_X + macro.macroWX + 35 / 2 - frezWybrany['diameter'] / 2) + ';' + str(
             Delta_Y - Odsuniecie_Y - 55.25 + 9.65) + ';;;\n')
         writeInc(file, str(i * 10) + ';97;9;;;;;;;\n')
         # print(macro.macroIdent + ' - ' + str(macro.macroWX) + ' - ' + str(wysDisengage))
 
-    writeInc(file, str(i * 10) + ';0;;Z;;24.00;;;;\n')
-    writeInc(file, str(i * 10) + ';97;5;;;;;;;\n')
-    writeInc(file, str(i * 10) + ';97;50;;;;;;;\n')
-    writeInc(file, str(i * 10) + ';97;80;;;;;;;\n')
-    writeInc(file, str(i * 10) + ';97;15;;;;;;;\n')
+writeInc(file, str(i * 10) + ';0;;Z;;24.00;;;;\n')
+writeInc(file, str(i * 10) + ';97;5;;;;;;;\n')
+writeInc(file, str(i * 10) + ';97;50;;;;;;;\n')
+writeInc(file, str(i * 10) + ';97;80;;;;;;;\n')
+writeInc(file, str(i * 10) + ';97;15;;;;;;;\n')
 
 print('Plik wygenerowany pomyślnie!')
 file.close() 
