@@ -183,6 +183,7 @@ for macro in macros:
             frezWybrany['speed']) + ';;;;\n')  # Uruchomienie narzędzia z zadanymi obrotami
     elif (obrotPoprzedni == obrot):
         writeInc(file, str(inc * 10) + ';0;;Z;;'+str(round(wysDisengage,2))+';;;;\n')
+        zmianaKata(macro.Obrot)  # Wstawiamy 43, w programie pojawia sie -43, do poprawki!
     if (macro.Ident == 'OTW MONT 8_6'):  # Przerobić na wyszukiwanie z JSONA
         writeInc(file, str(inc * 10) + ';0;;XYZ;;' + str(Delta_X + macro.WX) + ';' + str(
             Delta_Y - Odsuniecie_Y - 12 + (8 - frezWybrany['diameter']) / 2) + ';'
@@ -213,7 +214,6 @@ for macro in macros:
         writeInc(file, str(inc * 10) + ';97;9;;;;;;;\n')
 
     if (macro.Ident == 'M4_D_HIDDEN KTZ - FRAME' or macro.Ident == "Drain for Frame - hidden d BJM machining 4034"):  # Przerobić na wyszukiwanie z JSONA
-        zmianaKata(43)  # Wstawiamy 43, w programie pojawia sie -43, do poprawki!
         Disengage_Z = 103.68  # Dla sprawdzenia, zmienil sie w programie
         wysDisengage = Delta_Z + frezWybrany['length'] + Disengage_Z  # Ponowne przeliczenie
         writeInc(file, str(inc * 10) + ';0;;XYZ;;' + str(

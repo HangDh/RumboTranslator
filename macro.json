@@ -1,6 +1,45 @@
-{"421113A" : {
+{"M4_D_HIDDEN KTZ - FRAME" : {
     "description": "Water drainage in G24 Frame",
-    "width": 75.7,
-    "height": 28.5
+    "type" : "Slot",
+    "width": [35],
+    "height": [6],
+    "tool": [3],
+    "angle": 43,
+    "posY": [49.61],
+    "approach": [-37.03],
+    "end": [-43.09]
+},
+"Drain for Frame - hidden d BJM machining 4034" : {
+    "description": "Water drainage in G24 Frame",
+    "type" : "Slot",
+    "width": [35],
+    "height": [6],
+    "tool": [3],
+    "angle": 43,
+    "posY": [49.61],
+    "approach": [-37.03],
+    "end": [-43.09]
+},
+"OTW MONT 8_6" : {
+    "description": "Mounting holes in G24 Frame",
+    "type" : "Hole",
+    "width": [8,6],
+    "height": [8,6],
+    "tool": [3],
+    "angle": 0,
+    "posY": [27.5],
+    "approach": [-15.79, -3.79],
+    "end": [-7.79, 2.0]
+},
+"Holes for corner connector BJM macro KTZ1883" : {
+    "description": "Corner connectors in G24 Frame",
+    "type" : "Hole",
+    "width": [5],
+    "height": [5],
+    "tool": [2],
+    "angle": 0,
+    "posY": [21, 54.3],
+    "approach": [-15.79],
+    "end": [2.0]
 }
 }
