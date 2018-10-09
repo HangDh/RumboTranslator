@@ -3,6 +3,7 @@ import os
 import json
 import math
 import ncloader
+import ncfunctions
 
 zlecenia_pliki = []
 for file in os.listdir("."):
@@ -121,9 +122,16 @@ with open("macro.json", "r", encoding='utf-8') as f:
 with open("frez.json", "r") as f:
     frezLib = json.load(f)
 
-for macro in macros:
+for macro in macros:  # Przypisanie wartości z JSONA do właściwości obiektu
     macro.Obrot = macroLib[macro.Ident]['angle']
-    macro.Frez = macroLib[macro.Ident]['tool'][0]
+    macro.Frez = macroLib[macro.Ident]['tool']
+    macro.Description = macroLib[macro.Ident]['description']
+    macro.Width = macroLib[macro.Ident]['width']
+    macro.Height = macroLib[macro.Ident]['height']
+    macro.Approach = macroLib[macro.Ident]['approach']
+    macro.End = macroLib[macro.Ident]['end']
+    macro.PosY = macroLib[macro.Ident]['posY']
+
 
 macrosSortedWX = copy.copy(macros)
 macros.sort(key=lambda x: x.WX)
@@ -171,20 +179,22 @@ frezPoprzedni = 0
 obrotPoprzedni = 0
 
 for macro in macros:
-    frezWybrany = frezLib[str(macro.Frez)]
+    frezWybrany = frezLib[str(macro.Frez[0])]
+    Disengage_Z = ncfunctions.find_nearest(macro.Obrot)
     wysDisengage = Delta_Z + frezWybrany['length'] + Disengage_Z
     obrot = macro.Obrot
     if (frezPoprzedni != frezWybrany):
-        writeInc(file, str(inc * 10) + ';97;6;;1;' + str(macro.Frez) + ';4;' + str(frezWybrany['speed']) + ';;\n')
-        writeInc(file, str(inc * 10) + ';0;;Z;;24.00;;;;\n')
-        writeInc(file, str(inc * 10) + ';0;;Y;;16.50;;;;\n')
-        writeInc(file, str(inc * 10) + ';97;10;;' + str(kat_loza) + ';;;;;\n')  # Kąt łoża i obrót
-        writeInc(file, str(inc * 10) + ';97;4;;1;' + str(
-            frezWybrany['speed']) + ';;;;\n')  # Uruchomienie narzędzia z zadanymi obrotami
+        ncfunctions.zmianaNarzedzia(macro.Frez[0], frezWybrany['speed'], file, inc, kat_loza)
     elif (obrotPoprzedni == obrot):
         writeInc(file, str(inc * 10) + ';0;;Z;;'+str(round(wysDisengage,2))+';;;;\n')
         zmianaKata(macro.Obrot)  # Wstawiamy 43, w programie pojawia sie -43, do poprawki!
-    if (macro.Ident == 'OTW MONT 8_6'):  # Przerobić na wyszukiwanie z JSONA
+
+    XPos, YPos, ZPos = '', '', ''
+    if (macro.Height > frezWybrany['diameter']):
+        YPos = Delta_Y - Odsuniecie_Y - macro
+    else:
+        if (macro.Width > frezWybrany['diameter']):
+            XPos = Delta_X + macro.WX - macro.Width/2 + frezWybrany['diameter']/2
         writeInc(file, str(inc * 10) + ';0;;XYZ;;' + str(Delta_X + macro.WX) + ';' + str(
             Delta_Y - Odsuniecie_Y - 12 + (8 - frezWybrany['diameter']) / 2) + ';'
                  + str(wysDisengage) + ';;\n')  # fi 8-6/2 , 13wys + 2.79zapasu
@@ -214,8 +224,6 @@ for macro in macros:
         writeInc(file, str(inc * 10) + ';97;9;;;;;;;\n')
 
     if (macro.Ident == 'M4_D_HIDDEN KTZ - FRAME' or macro.Ident == "Drain for Frame - hidden d BJM machining 4034"):  # Przerobić na wyszukiwanie z JSONA
-        Disengage_Z = 103.68  # Dla sprawdzenia, zmienil sie w programie
-        wysDisengage = Delta_Z + frezWybrany['length'] + Disengage_Z  # Ponowne przeliczenie
         writeInc(file, str(inc * 10) + ';0;;XYZ;;' + str(
             Delta_X + macro.WX - 35 / 2 + frezWybrany['diameter'] / 2) + ';' + str(
             Delta_Y - Odsuniecie_Y - 55.25 + 9.65) + ';'  # 9.65 <- wyliczyć skąd, obrót, w innym miejscu makro?
