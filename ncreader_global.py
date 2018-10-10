@@ -187,17 +187,21 @@ file.write('40;0;;Z;;24.00;;;;\n' + '50;0;;Y;;16.50;;;;\n' + '60;97;10;;0.00;;;;
 ### KONIEC BLOKU STAŁEGO RUMBA 1 ###
 
 frezPoprzedni = 0
-obrotPoprzedni = 0
+obrotPoprzedni = -1
 for macro in macros:
     frezWybrany = frezLib[str(macro.Frez[0])]
+    obrot = macro.Obrot
+    if (obrotPoprzedni != obrot):
+        zmianaKata(macro.Obrot)
+
     Disengage_Z = ncfunctions.findNearest(macro.Obrot)
     wysDisengage = Delta_Z + frezWybrany['length'] + Disengage_Z
-    obrot = macro.Obrot
+
+    if (obrotPoprzedni == obrot):
+        writeInc(file, str(inc * 10) + ';0;;Z;;'+str(round(wysDisengage,2))+';;;;\n')
+
     if (frezPoprzedni != frezWybrany):
         zmianaNarzedzia(macro.Frez[0], frezWybrany['speed'], file, inc, kat_loza)
-    elif (obrotPoprzedni == obrot):
-        writeInc(file, str(inc * 10) + ';0;;Z;;'+str(round(wysDisengage,2))+';;;;\n')
-        zmianaKata(macro.Obrot)  # Wstawiamy 43, w programie pojawia sie -43, do poprawki!
 
     XPos, YPos, ZPosStart, ZPosEnd = '', '', '', ''
     for i in range(len(macro.Approach)):
@@ -206,14 +210,15 @@ for macro in macros:
             YPos = Delta_Y - Odsuniecie_Y - macro.PosY[0] + (macro.Height[i] - frezWybrany['diameter'])/2
         else:
             YPos = Delta_Y - Odsuniecie_Y - macro.PosY[0]
-            if (macro.Width[i] > frezWybrany['diameter']):
-                XPos = Delta_X + macro.WX - macro.Width[i]/2 + frezWybrany['diameter']/2
-            else:
-                XPos = Delta_X + macro.WX
-        ZPosStart = Delta_Z + frezWybrany['length']+macro.Approach[i]
-        ZPosEnd = Delta_Z + frezWybrany['length'] + macro.End[i]
+
+        if (macro.Width[i] > frezWybrany['diameter'] and macro.Type != 'Hole'):
+            XPos = Delta_X + macro.WX - macro.Width[i]/2 + frezWybrany['diameter']/2
+        else:
+            XPos = Delta_X + macro.WX
+        ZPosStart = Delta_Z + frezWybrany['length'] - macro.Approach[i]
+        ZPosEnd = Delta_Z + frezWybrany['length'] - macro.End[i]
         # Oznaczenie wartości X, Y, Z zakończone
-        writeInc(file, str(inc * 10) + ';0;;XYZ;;' + str(XPos) + ';' + str(YPos) + ';' + str(wysDisengage) + ';;\n')
+        writeInc(file, str(inc * 10) + ';0;;XYZ;;' + str(XPos) + ';' + str(YPos) + ';' + str(round(wysDisengage, 2)) + ';;\n')
         writeInc(file, str(inc * 10) + ';0;;Z;;' + str(round(ZPosStart,2)) + ';;;;\n')
         writeInc(file, str(inc * 10) + ';97;7;;2;;;;;\n')
         writeInc(file, str(inc * 10) + ';97;11;;;;;;;\n')
@@ -225,43 +230,9 @@ for macro in macros:
             writeInc(file, str(inc * 10) + ';2;;XY;800;' + str(XPos) + ';' + str(YPos - holeDiff) + ';' + str(XPos) + ';' + str(YPos) + ';\n')
             writeInc(file, str(inc * 10) + ';2;;XY;800;' + str(XPos) + ';' + str(YPos + holeDiff) + ';' + str(XPos) + ';' + str(YPos) + ';\n')
         writeInc(file, str(inc * 10) + ';97;9;;;;;;;\n')
-        writeInc(file, str(inc * 10) + ';0;;Z;;' + str(wysDisengage) + ';;;;\n')
+        if (i < len(macro.Approach) - 1):
+            writeInc(file, str(inc * 10) + ';0;;Z;;' + str(wysDisengage) + ';;;;\n')
 
-    if (macro.Ident == 'M4_D_HIDDEN KTZ - FRAME' or macro.Ident == "Drain for Frame - hidden d BJM machining 4034"):  # Przerobić na wyszukiwanie z JSONA
-        writeInc(file, str(inc * 10) + ';0;;XYZ;;' + str(
-            Delta_X + macro.WX - 35 / 2 + frezWybrany['diameter'] / 2) + ';' + str(
-            Delta_Y - Odsuniecie_Y - 55.25 + 9.65) + ';'  # 9.65 <- wyliczyć skąd, obrót, w innym miejscu makro?
-                 + str(
-            round(wysDisengage, 2)) + ';;\n')  # fi 8-6/2 , 13wys + 2.79zapasu, X - odwodnienie ma 35/2, frez d/2
-        writeInc(file, str(inc * 10) + ';0;;Z;;' + str(round((Delta_Z + frezWybrany['length'] - 37.03),
-                                                           2)) + ';;;;\n')  # 13wys + 2.79zapasu <- jako funkcja, to + 4 linijki w dol ?  
-        writeInc(file, str(inc * 10) + ';97;7;;2;;;;;\n')
-        writeInc(file, str(inc * 10) + ';97;11;;;;;;;\n')
-        writeInc(file, str(inc * 10) + ';1;;Z;200;' + str(round(Delta_Z + frezWybrany['length'] - 49.03,
-                                                              2)) + ';;;;\n')  # Praca w osi Z, zejście - póki co na twardo przyjęte - do przeliczenia.
-        writeInc(file, str(inc * 10) + ';28;;XY;;;;;;\n')
-        writeInc(file, str(inc * 10) + ';1;;XY;800;' + str(
-            Delta_X + macro.WX + 35 / 2 - frezWybrany['diameter'] / 2) + ';' + str(
-            Delta_Y - Odsuniecie_Y - 55.25 + 9.65) + ';;;\n')
-        writeInc(file, str(inc * 10) + ';97;9;;;;;;;\n')
-        # Druga polowka
-        writeInc(file, str(inc * 10) + ';0;;XYZ;;' + str(
-            Delta_X + macro.WX - 35 / 2 + frezWybrany['diameter'] / 2) + ';' + str(
-            Delta_Y - Odsuniecie_Y - 55.25 + 9.65) + ';'
-                 + str(round(Delta_Z + frezWybrany['length'] - 49.03,
-                             2)) + ';;\n')  # fi 8-6/2 , 13wys + 2.79zapasu, X - odwodnienie ma 35/2, frez d/2
-        writeInc(file, str(inc * 10) + ';0;;Z;;' + str(round(Delta_Z + frezWybrany['length'] - 49.03 - 0.01,
-                                                           2)) + ';;;;\n')  # 13wys + 2.79zapasu <- jako funkcja, to + 4 linijki w dol ?  0.01 zapasu? nie wiem po co
-        writeInc(file, str(inc * 10) + ';97;7;;2;;;;;\n')
-        writeInc(file, str(inc * 10) + ';97;11;;;;;;;\n')
-        writeInc(file, str(inc * 10) + ';1;;Z;200;' + str(round(Delta_Z + frezWybrany['length'] - 49.03 - 12.37,
-                                                              2)) + ';;;;\n')  # Praca w osi Z, zejście - póki co na twardo przyjęte - do przeliczenia. 12.37 w glab
-        writeInc(file, str(inc * 10) + ';28;;XY;;;;;;\n')
-        writeInc(file, str(inc * 10) + ';1;;XY;800;' + str(
-            Delta_X + macro.WX + 35 / 2 - frezWybrany['diameter'] / 2) + ';' + str(
-            Delta_Y - Odsuniecie_Y - 55.25 + 9.65) + ';;;\n')
-        writeInc(file, str(inc * 10) + ';97;9;;;;;;;\n')
-        # print(macro.Ident + ' - ' + str(macro.WX) + ' - ' + str(wysDisengage))
     frezPoprzedni = frezWybrany
     obrotPoprzedni = obrot
 

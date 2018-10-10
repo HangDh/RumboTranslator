@@ -5,9 +5,9 @@
     "height": [6],
     "tool": [3],
     "angle": 43,
-    "posY": [49.61],
-    "approach": [-37.03],
-    "end": [-43.09]
+    "posY": [45.6],
+    "approach": [37],
+    "end": [49]
 },
 "Drain for Frame - hidden d BJM machining 4034" : {
     "description": "Water drainage in G24 Frame",
@@ -16,9 +16,9 @@
     "height": [6],
     "tool": [3],
     "angle": 43,
-    "posY": [49.61],
-    "approach": [-37.03],
-    "end": [-43.09]
+    "posY": [45.6],
+    "approach": [37],
+    "end": [49]
 },
 "OTW MONT 8_6" : {
     "description": "Mounting holes in G24 Frame",
@@ -34,12 +34,12 @@
 "Holes for corner connector BJM macro KTZ1883" : {
     "description": "Corner connectors in G24 Frame",
     "type" : "Hole",
-    "width": [5],
-    "height": [5],
+    "width": [5,5],
+    "height": [5,5],
     "tool": [2],
     "angle": 0,
     "posY": [21, 54.3],
-    "approach": [-15.79],
-    "end": [2.0]
+    "approach": [-15.79, -15.79],
+    "end": [2.0, 2.0]
 }
 }
