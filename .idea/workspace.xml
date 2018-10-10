@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="740396fc-4634-4cad-bd4c-b68fb3ae1b56" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/ncfunctions.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ncfunctions.py" beforeDir="false" afterPath="$PROJECT_DIR$/ncfunctions.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ncreader_global.py" beforeDir="false" afterPath="$PROJECT_DIR$/ncreader_global.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -21,7 +21,7 @@
       <file leaf-file-name="ncloader.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ncloader.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="240">
+            <state relative-caret-position="2783">
               <caret line="121" column="83" selection-start-line="121" selection-start-column="83" selection-end-line="121" selection-end-column="83" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
@@ -33,8 +33,8 @@
       <file leaf-file-name="ncreader_global.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/ncreader_global.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="345">
-              <caret line="204" column="58" lean-forward="true" selection-start-line="204" selection-start-column="58" selection-end-line="204" selection-end-column="58" />
+            <state relative-caret-position="189">
+              <caret line="212" selection-start-line="212" selection-end-line="212" />
               <folding>
                 <element signature="e#0#11#0" expanded="true" />
               </folding>
@@ -45,8 +45,8 @@
       <file leaf-file-name="ncfunctions.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ncfunctions.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="253">
-              <caret line="11" lean-forward="true" selection-start-line="11" selection-end-line="11" />
+            <state relative-caret-position="46">
+              <caret line="2" lean-forward="true" selection-start-line="2" selection-end-line="2" />
             </state>
           </provider>
         </entry>
@@ -98,11 +98,17 @@
       <find>file, str(i</find>
       <find>.macro</find>
       <find>Macro.Frez</find>
+      <find>,</find>
+      <find>ncfunc</find>
+      <find>ncreader_global</find>
+      <find>zmianaN</find>
     </findStrings>
     <replaceStrings>
       <replace>ncloader.writeInc</replace>
       <replace>file, str(inc</replace>
       <replace>.</replace>
+      <replace>,</replace>
+      <replace>,</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -304,25 +310,31 @@
       <option name="project" value="LOCAL" />
       <updated>1539003597412</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="few fixes to formulas,">
+      <created>1539089859816</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1539089859821</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.13151042" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.13151042" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="right" id="R Packages" order="4" />
       <window_info anchor="right" id="R Graphics" order="3" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" weight="0.32965517" />
       <window_info anchor="bottom" id="Version Control" order="9" />
       <window_info anchor="bottom" id="Python Console" order="8" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.25241378" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.24965517" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Terminal" order="7" />
       <window_info id="Favorites" order="2" side_tool="true" weight="0.3294271" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info active="true" anchor="bottom" id="Debug" order="3" visible="true" weight="0.4" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
@@ -359,11 +371,44 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Changed into json -&gt; Macros + Frez" />
     <MESSAGE value="Moved angle to global function, added nc_reader_global for futher testing of this functionality" />
-    <option name="LAST_COMMIT_MESSAGE" value="Moved angle to global function, added nc_reader_global for futher testing of this functionality" />
+    <MESSAGE value="few fixes to formulas," />
+    <option name="LAST_COMMIT_MESSAGE" value="few fixes to formulas," />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="9" />
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/ncreader_global.py</url>
+          <line>191</line>
+          <option name="timeStamp" value="9" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/ncreader_global.py</url>
+          <line>205</line>
+          <option name="timeStamp" value="12" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/ncreader_global.py</url>
+          <line>201</line>
+          <option name="timeStamp" value="14" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/ncreader_global.py</url>
+          <line>196</line>
+          <option name="timeStamp" value="16" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/ncreader_global.py</url>
+          <line>212</line>
+          <option name="timeStamp" value="19" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/ncreader_global.py</url>
+          <line>208</line>
+          <option name="timeStamp" value="20" />
+        </line-breakpoint>
+      </breakpoints>
+      <option name="time" value="21" />
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
@@ -571,7 +616,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/ncloader.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
+        <state relative-caret-position="2783">
           <caret line="121" column="83" selection-start-line="121" selection-start-column="83" selection-end-line="121" selection-end-column="83" />
           <folding>
             <element signature="e#0#9#0" expanded="true" />
@@ -581,15 +626,15 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/ncfunctions.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="253">
-          <caret line="11" lean-forward="true" selection-start-line="11" selection-end-line="11" />
+        <state relative-caret-position="46">
+          <caret line="2" lean-forward="true" selection-start-line="2" selection-end-line="2" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/ncreader_global.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="345">
-          <caret line="204" column="58" lean-forward="true" selection-start-line="204" selection-start-column="58" selection-end-line="204" selection-end-column="58" />
+        <state relative-caret-position="189">
+          <caret line="212" selection-start-line="212" selection-end-line="212" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
           </folding>

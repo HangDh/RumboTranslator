@@ -1,16 +1,19 @@
 import numpy as np
 
-def zmianaNarzedzia(frez, predkosc, file, inc, kat_loza):
-    writeInc(file, str(inc * 10) + ';97;6;;1;' + str(frez) + ';4;' + str(predkosc) + ';;\n')
-    writeInc(file, str(inc * 10) + ';0;;Z;;24.00;;;;\n')
-    writeInc(file, str(inc * 10) + ';0;;Y;;16.50;;;;\n')
-    writeInc(file, str(inc * 10) + ';97;10;;' + str(kat_loza) + ';;;;;\n')  # Kąt łoża i obrót
-    writeInc(file, str(inc * 10) + ';97;4;;1;' + str(predkosc) + ';;;;\n')
 
-disengage = np.array([-90, -75, -60, -45, -30, -15, 0, 15, 30, 45, 60, 75, 90])
-disengage_val = {-90: 198.81, -75: 192.89, -60: 175.52, -45:147.9, -30:118.3, -15:99.18, 0:95.92, 15:102.3, 30:105.42, 45:103.5, 60:96.46, 75:85, 90:69.45}
+def findNearest(value):
+    disengage = np.array(
+        [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, -90, -85, -80, -75, -70, -65, -60, -55, -50, -45, -40, -35, -30, -25, -20,
+         -15, -10, -5])
+    dval = np.array(
+        [95.92, 97.27, 100.08, 102.3, 103.94, 104.98, 105.42, 105.23, 104.44, 103.5, 101.43, 99.23, 96.46, 93.15, 89.32, 85, 80.22, 75.03, 69.45, 198.81,
+         198.15, 196.17, 192.89, 188.33, 182.53, 175.52, 167.38, 158.15, 147.9, 137.54, 132.21, 118.3, 119.13, 111.49, 99.18, 94.3, 84.88])
+    disengage_val = {}
+    val = 0
+    for i in disengage:
+        disengage_val.update({i: dval[val]})
+        val += 1
 
-def find_nearest(value):
     array = np.asarray(disengage)
     idx = (np.abs(array - value)).argmin()
     return disengage_val[array[idx]]

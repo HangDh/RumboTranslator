@@ -17,6 +17,16 @@ orderFilename = input('Podaj numer zlecenia z powyższej listy (bez .NCX!)')
 with open(orderFilename+'.NCX') as f:
     content = f.read()
 
+def zmianaNarzedzia(frez, predkosc, file, inc, kat_loza):
+    writeInc(file, str(inc * 10) + ';97;6;;1;' + str(frez) + ';4;' + str(predkosc) + ';;\n')
+    inc += 1
+    writeInc(file, str(inc * 10) + ';0;;Z;;24.00;;;;\n')
+    inc += 1
+    writeInc(file, str(inc * 10) + ';0;;Y;;16.50;;;;\n')
+    inc += 1
+    writeInc(file, str(inc * 10) + ';97;10;;' + str(kat_loza) + ';;;;;\n') # Kąt łoża i obrót
+    inc += 1
+    writeInc(file, str(inc * 10) + ';97;4;;1;' + str(predkosc) + ';;;;\n')
 
 class Frez(object):
     Srednica = 0
@@ -126,6 +136,7 @@ for macro in macros:  # Przypisanie wartości z JSONA do właściwości obiektu
     macro.Obrot = macroLib[macro.Ident]['angle']
     macro.Frez = macroLib[macro.Ident]['tool']
     macro.Description = macroLib[macro.Ident]['description']
+    macro.Type = macroLib[macro.Ident]['type']
     macro.Width = macroLib[macro.Ident]['width']
     macro.Height = macroLib[macro.Ident]['height']
     macro.Approach = macroLib[macro.Ident]['approach']
@@ -177,51 +188,44 @@ file.write('40;0;;Z;;24.00;;;;\n' + '50;0;;Y;;16.50;;;;\n' + '60;97;10;;0.00;;;;
 
 frezPoprzedni = 0
 obrotPoprzedni = 0
-
 for macro in macros:
     frezWybrany = frezLib[str(macro.Frez[0])]
-    Disengage_Z = ncfunctions.find_nearest(macro.Obrot)
+    Disengage_Z = ncfunctions.findNearest(macro.Obrot)
     wysDisengage = Delta_Z + frezWybrany['length'] + Disengage_Z
     obrot = macro.Obrot
     if (frezPoprzedni != frezWybrany):
-        ncfunctions.zmianaNarzedzia(macro.Frez[0], frezWybrany['speed'], file, inc, kat_loza)
+        zmianaNarzedzia(macro.Frez[0], frezWybrany['speed'], file, inc, kat_loza)
     elif (obrotPoprzedni == obrot):
         writeInc(file, str(inc * 10) + ';0;;Z;;'+str(round(wysDisengage,2))+';;;;\n')
         zmianaKata(macro.Obrot)  # Wstawiamy 43, w programie pojawia sie -43, do poprawki!
 
-    XPos, YPos, ZPos = '', '', ''
-    if (macro.Height > frezWybrany['diameter']):
-        YPos = Delta_Y - Odsuniecie_Y - macro
-    else:
-        if (macro.Width > frezWybrany['diameter']):
-            XPos = Delta_X + macro.WX - macro.Width/2 + frezWybrany['diameter']/2
-        writeInc(file, str(inc * 10) + ';0;;XYZ;;' + str(Delta_X + macro.WX) + ';' + str(
-            Delta_Y - Odsuniecie_Y - 12 + (8 - frezWybrany['diameter']) / 2) + ';'
-                 + str(wysDisengage) + ';;\n')  # fi 8-6/2 , 13wys + 2.79zapasu
-        writeInc(file, str(inc * 10) + ';0;;Z;;' + str(round(Delta_Z + frezWybrany['length'] + 15.79,
-                                                           2)) + ';;;;\n')  # 13wys + 2.79zapasu <- jako funkcja, to + 4 linijki w dol ?  
+    XPos, YPos, ZPosStart, ZPosEnd = '', '', '', ''
+    for i in range(len(macro.Approach)):
+        # Blok ustawiania odpowiednich wartości X, Y, Z
+        if (macro.Height[i] > frezWybrany['diameter'] and macro.Type != 'Hole'):
+            YPos = Delta_Y - Odsuniecie_Y - macro.PosY[0] + (macro.Height[i] - frezWybrany['diameter'])/2
+        else:
+            YPos = Delta_Y - Odsuniecie_Y - macro.PosY[0]
+            if (macro.Width[i] > frezWybrany['diameter']):
+                XPos = Delta_X + macro.WX - macro.Width[i]/2 + frezWybrany['diameter']/2
+            else:
+                XPos = Delta_X + macro.WX
+        ZPosStart = Delta_Z + frezWybrany['length']+macro.Approach[i]
+        ZPosEnd = Delta_Z + frezWybrany['length'] + macro.End[i]
+        # Oznaczenie wartości X, Y, Z zakończone
+        writeInc(file, str(inc * 10) + ';0;;XYZ;;' + str(XPos) + ';' + str(YPos) + ';' + str(wysDisengage) + ';;\n')
+        writeInc(file, str(inc * 10) + ';0;;Z;;' + str(round(ZPosStart,2)) + ';;;;\n')
         writeInc(file, str(inc * 10) + ';97;7;;2;;;;;\n')
         writeInc(file, str(inc * 10) + ';97;11;;;;;;;\n')
-        writeInc(file, str(inc * 10) + ';1;;Z;200;' + str(
-            round(Delta_Z + frezWybrany['length'] + 7.79, 2)) + ';;;;\n')  # Praca w osi Z, zejście
-        writeInc(file, str(inc * 10) + ';28;;XY;;;;;;\n')
-        writeInc(file, str(inc * 10) + ';2;;XY;800;' + str(Delta_X + macro.WX) + ';' + str(
-            Delta_Y - Odsuniecie_Y - 12 - (8 - frezWybrany['diameter']) / 2) + ';'
-                 + str(Delta_X + macro.WX) + ';' + str(Delta_Y - Odsuniecie_Y - 12.00) + ';\n')
-        writeInc(file, str(inc * 10) + ';2;;XY;800;' + str(Delta_X + macro.WX) + ';' + str(
-            Delta_Y - Odsuniecie_Y - 12 + (8 - frezWybrany['diameter']) / 2) + ';'
-                 + str(Delta_X + macro.WX) + ';' + str(Delta_Y - Odsuniecie_Y - 12.00) + ';\n')
+        writeInc(file, str(inc * 10) + ';1;;Z;200;' + str(round(ZPosEnd, 2)) + ';;;;\n')  # Praca w osi Z, zejście
+        holeDiff = (macro.Height[i] - frezWybrany['diameter']) / 2
+
+        if (macro.Type == 'Hole' and holeDiff > 0):
+            writeInc(file, str(inc * 10) + ';28;;XY;;;;;;\n')
+            writeInc(file, str(inc * 10) + ';2;;XY;800;' + str(XPos) + ';' + str(YPos - holeDiff) + ';' + str(XPos) + ';' + str(YPos) + ';\n')
+            writeInc(file, str(inc * 10) + ';2;;XY;800;' + str(XPos) + ';' + str(YPos + holeDiff) + ';' + str(XPos) + ';' + str(YPos) + ';\n')
         writeInc(file, str(inc * 10) + ';97;9;;;;;;;\n')
         writeInc(file, str(inc * 10) + ';0;;Z;;' + str(wysDisengage) + ';;;;\n')
-        writeInc(file, str(inc * 10) + ';0;;XYZ;;' + str(Delta_X + macro.WX) + ';' + str(
-            Delta_Y - Odsuniecie_Y - 12) + ';'+ str(wysDisengage) + ';;\n')
-        writeInc(file, str(inc * 10) + ';0;;Z;;' + str(round(Delta_Z + frezWybrany['length'] + 3.79,
-                                                           2)) + ';;;;\n')  # 13wys + 2.79zapasu <- jako funkcja, to + 4 linijki w dol ?  
-        writeInc(file, str(inc * 10) + ';97;7;;2;;;;;\n')
-        writeInc(file, str(inc * 10) + ';97;11;;;;;;;\n')
-        writeInc(file, str(inc * 10) + ';1;;Z;200;' + str(
-            round(Delta_Z + frezWybrany['length'] - 2, 2)) + ';;;;\n')  # Praca w osi Z, zejście
-        writeInc(file, str(inc * 10) + ';97;9;;;;;;;\n')
 
     if (macro.Ident == 'M4_D_HIDDEN KTZ - FRAME' or macro.Ident == "Drain for Frame - hidden d BJM machining 4034"):  # Przerobić na wyszukiwanie z JSONA
         writeInc(file, str(inc * 10) + ';0;;XYZ;;' + str(
