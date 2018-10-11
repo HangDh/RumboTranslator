@@ -1,24 +1,24 @@
 {"M4_D_HIDDEN KTZ - FRAME" : {
     "description": "Water drainage in G24 Frame",
     "type" : "Slot",
-    "width": [35],
-    "height": [6],
+    "width": [35,35],
+    "height": [6,6],
     "tool": [3],
     "angle": 43,
-    "posY": [45.6],
-    "approach": [37],
-    "end": [49]
+    "posY": [45.6, 45.6],
+    "approach": [37,49.01],
+    "end": [49,61.4]
 },
 "Drain for Frame - hidden d BJM machining 4034" : {
     "description": "Water drainage in G24 Frame",
     "type" : "Slot",
-    "width": [35],
-    "height": [6],
+    "width": [35,35],
+    "height": [6,6],
     "tool": [3],
     "angle": 43,
-    "posY": [45.6],
-    "approach": [37],
-    "end": [49]
+    "posY": [45.6, 45.6],
+    "approach": [37,49.01],
+    "end": [49,61.4]
 },
 "OTW MONT 8_6" : {
     "description": "Mounting holes in G24 Frame",
@@ -38,7 +38,7 @@
     "height": [5,5],
     "tool": [2],
     "angle": 0,
-    "posY": [21, 54.3],
+    "posY": [21.4, 54.7],
     "approach": [-15.79, -15.79],
     "end": [2.0, 2.0]
 }

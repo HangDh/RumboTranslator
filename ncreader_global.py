@@ -2,19 +2,21 @@ import copy
 import os
 import json
 import math
+import sys
+
+from PyQt5.QtWidgets import QApplication
+
 import ncloader
+import dndTest
 import ncfunctions
 
-zlecenia_pliki = []
-for file in os.listdir("."):
-    if file.endswith(".NCX"):
-        zlecenia_pliki.append(file)
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    ex = dndTest.Example()
+    ex.show()
+    app.exec_()
 
-print("Dostępne pliki: " + str(zlecenia_pliki) + "\n")
-
-orderFilename = input('Podaj numer zlecenia z powyższej listy (bez .NCX!)')
-
-with open(orderFilename+'.NCX') as f:
+with open(dndTest.fileName+'.NCX') as f:
     content = f.read()
 
 def zmianaNarzedzia(frez, predkosc, file, inc, kat_loza):
@@ -207,31 +209,46 @@ for macro in macros:
     for i in range(len(macro.Approach)):
         # Blok ustawiania odpowiednich wartości X, Y, Z
         if (macro.Height[i] > frezWybrany['diameter'] and macro.Type != 'Hole'):
-            YPos = Delta_Y - Odsuniecie_Y - macro.PosY[0] + (macro.Height[i] - frezWybrany['diameter'])/2
+            YPos = Delta_Y - Odsuniecie_Y - macro.PosY[i] + (macro.Height[i] - frezWybrany['diameter'])/2
         else:
-            YPos = Delta_Y - Odsuniecie_Y - macro.PosY[0]
+            YPos = Delta_Y - Odsuniecie_Y - macro.PosY[i]
 
-        if (macro.Width[i] > frezWybrany['diameter'] and macro.Type != 'Hole'):
+        if macro.Width[i] > frezWybrany['diameter'] and macro.Type != 'Hole':
             XPos = Delta_X + macro.WX - macro.Width[i]/2 + frezWybrany['diameter']/2
         else:
             XPos = Delta_X + macro.WX
+        # Oznaczenie wartości X, Y, Z zakończone
+
+        #Inne zachowanie dla pierwszego wjazdu niż kolejnych
+        if i == 0:
+            enterPos = wysDisengage
+        elif macro.Approach[i] != macro.Approach[i-1]:
+            enterPos = ZPosEnd  # końcówka poprzedniej obróbki!
+
         ZPosStart = Delta_Z + frezWybrany['length'] - macro.Approach[i]
         ZPosEnd = Delta_Z + frezWybrany['length'] - macro.End[i]
-        # Oznaczenie wartości X, Y, Z zakończone
-        writeInc(file, str(inc * 10) + ';0;;XYZ;;' + str(XPos) + ';' + str(YPos) + ';' + str(round(wysDisengage, 2)) + ';;\n')
-        writeInc(file, str(inc * 10) + ';0;;Z;;' + str(round(ZPosStart,2)) + ';;;;\n')
+
+        writeInc(file, str(inc * 10) + ';0;;XYZ;;' + str(XPos) + ';' + str(YPos) + ';' + str(round(enterPos, 2)) + ';;\n')
+        writeInc(file, str(inc * 10) + ';0;;Z;;' + str(round(ZPosStart, 2)) + ';;;;\n')
         writeInc(file, str(inc * 10) + ';97;7;;2;;;;;\n')
         writeInc(file, str(inc * 10) + ';97;11;;;;;;;\n')
         writeInc(file, str(inc * 10) + ';1;;Z;200;' + str(round(ZPosEnd, 2)) + ';;;;\n')  # Praca w osi Z, zejście
         holeDiff = (macro.Height[i] - frezWybrany['diameter']) / 2
 
-        if (macro.Type == 'Hole' and holeDiff > 0):
+        if macro.Type == 'Slot':
+            XPos = Delta_X + macro.WX + macro.Width[i] / 2 - frezWybrany['diameter'] / 2
+            writeInc(file, str(inc*10) + ';28;;XY;;;;;;\n')
+            writeInc(file, str(inc*10) + ';1;;XY;800;' + str(XPos) + ';' + str(YPos) + ';;;\n')
+        if macro.Type == 'Hole' and holeDiff > 0:
             writeInc(file, str(inc * 10) + ';28;;XY;;;;;;\n')
             writeInc(file, str(inc * 10) + ';2;;XY;800;' + str(XPos) + ';' + str(YPos - holeDiff) + ';' + str(XPos) + ';' + str(YPos) + ';\n')
             writeInc(file, str(inc * 10) + ';2;;XY;800;' + str(XPos) + ';' + str(YPos + holeDiff) + ';' + str(XPos) + ';' + str(YPos) + ';\n')
+
         writeInc(file, str(inc * 10) + ';97;9;;;;;;;\n')
-        if (i < len(macro.Approach) - 1):
-            writeInc(file, str(inc * 10) + ';0;;Z;;' + str(wysDisengage) + ';;;;\n')
+
+        # Cofanie się n a pozycje Z jest niepotrzebne - wydlużenie czasu obróbki.
+        #if i < len(macro.Approach) - 1:
+        #    writeInc(file, str(inc * 10) + ';0;;Z;;' + str(round(ZPosEnd, 2)) + ';;;;\n')
 
     frezPoprzedni = frezWybrany
     obrotPoprzedni = obrot
@@ -243,4 +260,5 @@ writeInc(file, str(inc * 10) + ';97;80;;;;;;;\n')
 writeInc(file, str(inc * 10) + ';97;15;;;;;;;\n')
 
 print('Plik wygenerowany pomyślnie!')
-file.close() 
+file.close()
+
