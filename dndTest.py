@@ -48,14 +48,16 @@ class Button(QPushButton):
 
         dropAction = drag.exec_(Qt.MoveAction)
 
-global klemy
+global klemy, arrBars
 klemy = ['-9999', '-9999', '-9999', '-9999']
+arrBars = []
 
 class Example(QWidget):
 
+    macros, currentProfil = [], Profil
+
     def __init__(self):
         super().__init__()
-
         self.initUI()
 
     def initUI(self):
@@ -69,8 +71,12 @@ class Example(QWidget):
         searchBtn.move(575, 26)
         searchBtn.clicked.connect(self.openFileNameDialog)
 
+        resetBtn = QPushButton('RESET', self)
+        resetBtn.move(575, 150)
+        resetBtn.clicked.connect(self.clampsReset)
+
         self.button1 = Button('K1', self)
-        self.button1.resize(20,40)
+        self.button1.resize(20, 40)
         self.button1.move(620, 80)
 
         self.button2 = Button('K2', self)
@@ -85,9 +91,21 @@ class Example(QWidget):
         self.button4.resize(20, 40)
         self.button4.move(665, 80)
 
-        self.textbox = QLineEdit('Wpisz nazwę profilu', self)
-        self.textbox.resize(150, 20)
-        self.textbox.move(100, 30)
+        self.textboxK1 = QLineEdit('', self)
+        self.textboxK1.resize(55, 20)
+        self.textboxK1.move(130, 170)
+
+        self.textboxK2 = QLineEdit('', self)
+        self.textboxK2.resize(55, 20)
+        self.textboxK2.move(230, 170)
+
+        self.textboxK3 = QLineEdit('', self)
+        self.textboxK3.resize(55, 20)
+        self.textboxK3.move(330, 170)
+
+        self.textboxK4 = QLineEdit('', self)
+        self.textboxK4.resize(55, 20)
+        self.textboxK4.move(430, 170)
 
         self.labelZlec = QLabel('', self)
         self.labelZlec.resize(150, 20)
@@ -95,8 +113,11 @@ class Example(QWidget):
 
         self.label = QLabel('Pozycja klem: ', self)
         self.label.resize(500, 20)
-        #self.label.setAlignment(Qt.AlignCenter)
-        self.label.move(100, 140)
+        self.label.move(130, 135)
+
+        self.textbox = QLineEdit('Wpisz nazwę profilu', self)
+        self.textbox.resize(150, 20)
+        self.textbox.move(100, 30)
 
         self.setWindowTitle('Click or Move')
         self.setGeometry(300, 200, 280, 150)
@@ -108,13 +129,12 @@ class Example(QWidget):
     def dropEvent(self, e):
         self.setAcceptDrops(True)
 
-        length = 1400
+        length = self.currentProfil.Length
         point = e.pos()
         point.setX(e.pos().x()-10)  # Move to the center of square
         point.setY(80)  # 100 - wysokość buttona
 
         pointXStr = str(((point.x()-50)*length)/500)
-        print(point.x())
 
         if point.x() < 50:
             point.setX(40)
@@ -124,11 +144,52 @@ class Example(QWidget):
             pointXStr = str(length)
 
         klemy[int(e.source().text()[1:])-1] = pointXStr
-        self.label.setText('Położenie: ' + str(e.source().text()) + ': ' + pointXStr + ', ')
+        if e.source().text()[1:] == '1':
+            self.textboxK1.setText(pointXStr)
+        if e.source().text()[1:] == '2':
+            self.textboxK2.setText(pointXStr)
+        if e.source().text()[1:] == '3':
+            self.textboxK3.setText(pointXStr)
+        if e.source().text()[1:] == '4':
+            self.textboxK4.setText(pointXStr)
         e.source().move(point.x(), point.y())
 
         e.setDropAction(Qt.MoveAction)
         e.accept()
+
+    def readProfil(self):
+        # Definicja frezów i makr - Została zastąpiona przez definicję w JSON
+        global macros, currentProfil
+        if self.textbox.text() != 'Wpisz nazwę profilu':
+            for bar in arrBars:
+                for cut in bar.barCuts:
+                    if cut.cutDescription == self.textbox.text():
+                        macros = (cut.cutMacros)  # wybór belki
+                        self.currentProfil = Profil(bar.barProfil, bar.barWidth, bar.barHeight, cut.cutLength)
+                        print(self.currentProfil.Length)
+            try:
+                for index, macro in enumerate(macros):
+                    if macro.Ident == 'Drain for Frame - hidden d BJM machining 4035':
+                        macros.remove(macro)
+                        break
+                else:
+                    index = -1
+            except:
+                self.label.setText('Nie odnaleziono podanej belki w zleceniu')
+
+    def clampsReset(self):
+        global klemy
+        klemy = ['-9999', '-9999', '-9999', '-9999']
+        self.label.setText('Położenie klem zostało zresetowane')
+        self.button1.move(620, 80)
+        self.button2.move(635, 80)
+        self.button3.move(650, 80)
+        self.button4.move(665, 80)
+        self.textboxK1.setText('')
+        self.textboxK2.setText('')
+        self.textboxK3.setText('')
+        self.textboxK4.setText('')
+
 
     def paintEvent(self, e):
         qp = QPainter()
@@ -147,21 +208,19 @@ class Example(QWidget):
         options |= QFileDialog.DontUseNativeDialog
         fileName, _ = QFileDialog.getOpenFileName(self, "Wyszukaj plik *.NCX zlecenia", "",
                                                   "NCX files (*.ncx)", options=options)
-
         if fileName:
             print(fileName)
             self.labelZlec.setText(fileName)
-            #x = self.xlsToCun(fileName)
-            #time.sleep(1.0)
-            #self.saveFileDialog(x)
+
+            with open(self.labelZlec.text()) as f:
+                global content
+                content = f.read()
+            global arrBars, inc
+            arrBars = ncloader.load(content)
+
+            self.textbox.textChanged.connect(self.readProfil)
 
     def generateFile(self):
-        with open(self.labelZlec.text()) as f:
-            global content
-            content = f.read()
-
-        global arrBars, inc
-        arrBars = ncloader.load(content)
         inc = 8  # Zaczynam od 8 linijki - 80
 
         def zmianaNarzedzia(frez, predkosc, file, inc, kat_loza):
@@ -180,7 +239,7 @@ class Example(QWidget):
             global inc
             inc += 1
 
-        file = open('testfile.txt', 'w')
+        file = open(self.textbox.text()+'.txt', 'w')
 
         #  Definicja zmiennych dla parametrów maszyny ##
         global Delta_X, Delta_Y, Delta_Z, Odsuniecie_Y, kat_loza
@@ -214,17 +273,7 @@ class Example(QWidget):
             Delta_Y = round(Okrag_Y + math.cos(katKoncowy) * Okrag_R, 2)
             Delta_Z = round(Okrag_Z + math.sin(katKoncowy) * Okrag_R, 2)
 
-        # Definicja frezów i makr - Została zastąpiona przez definicję w JSON
-        macros = (arrBars[3].barCuts[0].cutMacros)  # wybór belki
-        currentProfil = Profil(arrBars[3].barProfil, arrBars[3].barWidth, arrBars[3].barHeight,
-                               arrBars[3].barCuts[0].cutLength)
 
-        for index, macro in enumerate(macros):
-            if macro.Ident == 'Drain for Frame - hidden d BJM machining 4035':
-                macros.remove(macro)
-                break
-        else:
-            index = -1
 
         with open("macro.json", "r", encoding='utf-8') as f:
             macroLib = json.load(f)
@@ -248,9 +297,6 @@ class Example(QWidget):
         macros.sort(key=lambda x: x.Obrot)  # posortuj po obrocie
         macros.sort(key=lambda x: x.Frez, reverse=True)  # posortuj po narzędziu
 
-        for macro in macrosSortedWX:
-            print(macro.Ident + ' w pozycji X: ' + str(macro.WX))
-
         m_prev = 0
         distanceList = []
 
@@ -258,11 +304,10 @@ class Example(QWidget):
             distanceList.append(macrosSortedWX[m].WX - m_prev)
             m_prev = macrosSortedWX[m].WX
             if (m == len(macrosSortedWX) - 1):
-                distanceList.append(arrBars[3].barCuts[0].cutLength - macrosSortedWX[m].WX)
+                distanceList.append(currentProfil.Length - macrosSortedWX[m].WX)
 
         for d in distanceList:
-            print('|', end='')
-            if (arrBars[3].barCuts[0].cutLength > 1500):
+            if (currentProfil.Length > 1500):
                 for i in range(int(d) // 20):
                     print('-', end='')
             else:
