@@ -3,7 +3,7 @@ import math
 
 from PyQt5.QtWidgets import QPushButton, QWidget, QApplication, QLabel, QLineEdit, QFileDialog
 from PyQt5.QtCore import Qt, QMimeData
-from PyQt5.QtGui import QDrag, QPainter, QPen, QDropEvent
+from PyQt5.QtGui import QDrag, QPainter, QPen, QDropEvent, QColor, QFont
 import sys
 import copy
 
@@ -115,6 +115,10 @@ class Example(QWidget):
         self.label.resize(500, 20)
         self.label.move(130, 135)
 
+        self.macrosVis = []
+        for i in range(20):
+            self.macrosVis.append(QLabel('', self))
+
         self.textbox = QLineEdit('Wpisz nazwę profilu', self)
         self.textbox.resize(150, 20)
         self.textbox.move(100, 30)
@@ -157,16 +161,39 @@ class Example(QWidget):
         e.setDropAction(Qt.MoveAction)
         e.accept()
 
+    myFont = QFont()
+    myFont.setBold(True)
+    myFont.setPixelSize(14)
+
     def readProfil(self):
         # Definicja frezów i makr - Została zastąpiona przez definicję w JSON
         global macros, currentProfil
         if self.textbox.text() != 'Wpisz nazwę profilu':
+            for i in range(20):
+                self.macrosVis[i].setText('')
             for bar in arrBars:
                 for cut in bar.barCuts:
                     if cut.cutDescription == self.textbox.text():
+                        self.label.setText('')
                         macros = (cut.cutMacros)  # wybór belki
+                        for m in macros:
+                            if m.Ident == 'Drain for Frame - hidden d BJM machining 4035':
+                                macros.remove(m)
                         self.currentProfil = Profil(bar.barProfil, bar.barWidth, bar.barHeight, cut.cutLength)
-                        print(self.currentProfil.Length)
+                        midx = 0
+                        for m in macros:
+                            print(m.WX)
+                            self.macrosVis[midx].resize(20,40)
+                            self.macrosVis[midx].move((46+m.WX*500/self.currentProfil.Length), 80)
+                            self.macrosVis[midx].setStyleSheet('color: red')
+                            self.macrosVis[midx].setFont(self.myFont)
+                            if '4034' in m.Ident or 'HIDDEN' in m.Ident:
+                                self.macrosVis[midx].setText('O')
+                            elif 'corner' in m.Ident:
+                                self.macrosVis[midx].setText('C')
+                            else:
+                                self.macrosVis[midx].setText('M')
+                            midx += 1
             try:
                 for index, macro in enumerate(macros):
                     if macro.Ident == 'Drain for Frame - hidden d BJM machining 4035':
@@ -189,7 +216,8 @@ class Example(QWidget):
         self.textboxK2.setText('')
         self.textboxK3.setText('')
         self.textboxK4.setText('')
-
+        for i in range(20):
+            self.macrosVis[i].setText('')
 
     def paintEvent(self, e):
         qp = QPainter()
@@ -199,7 +227,6 @@ class Example(QWidget):
 
     def drawLines(self, qp):
         pen = QPen(Qt.black, 2, Qt.SolidLine)
-
         qp.setPen(pen)
         qp.drawLine(50, 100, 550, 100)
 
@@ -272,8 +299,6 @@ class Example(QWidget):
 
             Delta_Y = round(Okrag_Y + math.cos(katKoncowy) * Okrag_R, 2)
             Delta_Z = round(Okrag_Z + math.sin(katKoncowy) * Okrag_R, 2)
-
-
 
         with open("macro.json", "r", encoding='utf-8') as f:
             macroLib = json.load(f)
