@@ -1,9 +1,8 @@
+from PyQt5.QtWidgets import QPushButton, QWidget, QApplication, QLabel, QLineEdit, QFileDialog, QTextEdit, QGraphicsView
+from PyQt5.QtCore import Qt, QMimeData
+from PyQt5.QtGui import QDrag, QPainter, QPen, QFont, QPixmap
 import json
 import math
-
-from PyQt5.QtWidgets import QPushButton, QWidget, QApplication, QLabel, QLineEdit, QFileDialog
-from PyQt5.QtCore import Qt, QMimeData
-from PyQt5.QtGui import QDrag, QPainter, QPen, QDropEvent, QColor, QFont
 import sys
 import copy
 
@@ -36,11 +35,9 @@ class Button(QPushButton):
 
     def __init__(self, title, parent):
         super().__init__(title, parent)
-
         self.setAcceptDrops(True)
 
     def mouseMoveEvent(self, e):
-
         mimeData = QMimeData()
         drag = QDrag(self)
         drag.setMimeData(mimeData)
@@ -68,28 +65,28 @@ class Example(QWidget):
         generateBtn.clicked.connect(self.generateFile)
 
         searchBtn = QPushButton('Wczytaj', self)
-        searchBtn.move(575, 26)
+        searchBtn.move(650, 25)
         searchBtn.clicked.connect(self.openFileNameDialog)
 
         resetBtn = QPushButton('RESET', self)
-        resetBtn.move(575, 150)
+        resetBtn.move(650, 150)
         resetBtn.clicked.connect(self.clampsReset)
 
         self.button1 = Button('K1', self)
         self.button1.resize(20, 40)
-        self.button1.move(620, 80)
+        self.button1.move(600, 80)
 
         self.button2 = Button('K2', self)
         self.button2.resize(20, 40)
-        self.button2.move(635, 80)
+        self.button2.move(615, 80)
 
         self.button3 = Button('K3', self)
         self.button3.resize(20, 40)
-        self.button3.move(650, 80)
+        self.button3.move(630, 80)
 
         self.button4 = Button('K4', self)
         self.button4.resize(20, 40)
-        self.button4.move(665, 80)
+        self.button4.move(645, 80)
 
         self.textboxK1 = QLineEdit('', self)
         self.textboxK1.resize(55, 20)
@@ -123,9 +120,19 @@ class Example(QWidget):
         self.textbox.resize(150, 20)
         self.textbox.move(100, 30)
 
+        self.textBoxMacro = QTextEdit(self)
+        self.textBoxMacro.resize(400, 230)
+        self.textBoxMacro.move(20, 250)
+
+        self.imageView = QLabel(self)
+        self.imageView.setAlignment(Qt.AlignCenter)
+        self.imageView.resize(320, 230)
+        self.imageView.move(460, 250)
+
+
         self.setWindowTitle('Click or Move')
         self.setGeometry(300, 200, 280, 150)
-        self.resize(700, 220)
+        self.resize(800, 500)
 
     def dragEnterEvent(self, e):
         e.accept()
@@ -167,22 +174,44 @@ class Example(QWidget):
 
     def readProfil(self):
         # Definicja frezów i makr - Została zastąpiona przez definicję w JSON
-        global macros, currentProfil
+        global macros, currentProfil, macroLib, frezLib
+
+        with open("macro.json", "r", encoding='utf-8') as f:
+            macroLib = json.load(f)
+        with open("frez.json", "r") as f:
+            frezLib = json.load(f)
+
         if self.textbox.text() != 'Wpisz nazwę profilu':
             for i in range(20):
                 self.macrosVis[i].setText('')
             for bar in arrBars:
                 for cut in bar.barCuts:
-                    if cut.cutDescription == self.textbox.text():
+                    if cut.cutDescription == self.textbox.text() or cut.cutNumber == self.textbox.text()[7:12]:
                         self.label.setText('')
-                        macros = (cut.cutMacros)  # wybór belki
+                        self.textBoxMacro.setText('')
+                        self.textBoxMacro.append('Belka: ' + cut.cutDescription + ', Długość: ' + str(cut.cutLength) + ', Profil: ' + bar.barProfil + '\n')
+                        macros = cut.cutMacros  # wybór belki
                         for m in macros:
                             if m.Ident == 'Drain for Frame - hidden d BJM machining 4035':
                                 macros.remove(m)
                         self.currentProfil = Profil(bar.barProfil, bar.barWidth, bar.barHeight, cut.cutLength)
+
+                        self.imageView.setPixmap(QPixmap(".\\profile\\"+bar.barProfil+".png"))
+
+                        for macro in macros:  # Przypisanie wartości z JSONA do właściwości obiektu
+                            macro.Obrot = macroLib[macro.Ident]['angle']
+                            macro.Frez = macroLib[macro.Ident]['tool']
+                            macro.Description = macroLib[macro.Ident]['description']
+                            macro.Type = macroLib[macro.Ident]['type']
+                            macro.Width = macroLib[macro.Ident]['width']
+                            macro.Height = macroLib[macro.Ident]['height']
+                            macro.Approach = macroLib[macro.Ident]['approach']
+                            macro.End = macroLib[macro.Ident]['end']
+                            macro.PosY = macroLib[macro.Ident]['posY']
+
                         midx = 0
                         for m in macros:
-                            print(m.WX)
+                            self.textBoxMacro.append('Opis: ' + m.Description + ' PosX: ' + str(m.WX))
                             self.macrosVis[midx].resize(20,40)
                             self.macrosVis[midx].move((46+m.WX*500/self.currentProfil.Length), 80)
                             self.macrosVis[midx].setStyleSheet('color: red')
@@ -203,6 +232,8 @@ class Example(QWidget):
                     index = -1
             except:
                 self.label.setText('Nie odnaleziono podanej belki w zleceniu')
+            self.textbox.setFocus(True)
+            self.textbox.selectAll()
 
     def clampsReset(self):
         global klemy
@@ -231,6 +262,7 @@ class Example(QWidget):
         qp.drawLine(50, 100, 550, 100)
 
     def openFileNameDialog(self):
+        self.textbox.clear()
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
         fileName, _ = QFileDialog.getOpenFileName(self, "Wyszukaj plik *.NCX zlecenia", "",
@@ -246,6 +278,7 @@ class Example(QWidget):
             arrBars = ncloader.load(content)
 
             self.textbox.textChanged.connect(self.readProfil)
+            self.textbox.setFocus(True)
 
     def generateFile(self):
         inc = 8  # Zaczynam od 8 linijki - 80
@@ -299,22 +332,6 @@ class Example(QWidget):
 
             Delta_Y = round(Okrag_Y + math.cos(katKoncowy) * Okrag_R, 2)
             Delta_Z = round(Okrag_Z + math.sin(katKoncowy) * Okrag_R, 2)
-
-        with open("macro.json", "r", encoding='utf-8') as f:
-            macroLib = json.load(f)
-        with open("frez.json", "r") as f:
-            frezLib = json.load(f)
-
-        for macro in macros:  # Przypisanie wartości z JSONA do właściwości obiektu
-            macro.Obrot = macroLib[macro.Ident]['angle']
-            macro.Frez = macroLib[macro.Ident]['tool']
-            macro.Description = macroLib[macro.Ident]['description']
-            macro.Type = macroLib[macro.Ident]['type']
-            macro.Width = macroLib[macro.Ident]['width']
-            macro.Height = macroLib[macro.Ident]['height']
-            macro.Approach = macroLib[macro.Ident]['approach']
-            macro.End = macroLib[macro.Ident]['end']
-            macro.PosY = macroLib[macro.Ident]['posY']
 
         macrosSortedWX = copy.copy(macros)
         macros.sort(key=lambda x: x.WX)
@@ -419,6 +436,8 @@ class Example(QWidget):
 
         print('Plik wygenerowany pomyślnie!')
         file.close()
+        self.textbox.clear()
+        self.textbox.setFocus(True)
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
