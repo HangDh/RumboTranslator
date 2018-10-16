@@ -91,18 +91,22 @@ class Example(QWidget):
         self.textboxK1 = QLineEdit('', self)
         self.textboxK1.resize(55, 20)
         self.textboxK1.move(130, 170)
+        self.textboxK1.textChanged.connect(self.moveClampK1)
 
         self.textboxK2 = QLineEdit('', self)
         self.textboxK2.resize(55, 20)
         self.textboxK2.move(230, 170)
+        self.textboxK2.textChanged.connect(self.moveClampK2)
 
         self.textboxK3 = QLineEdit('', self)
         self.textboxK3.resize(55, 20)
         self.textboxK3.move(330, 170)
+        self.textboxK3.textChanged.connect(self.moveClampK3)
 
         self.textboxK4 = QLineEdit('', self)
         self.textboxK4.resize(55, 20)
         self.textboxK4.move(430, 170)
+        self.textboxK4.textChanged.connect(self.moveClampK4)
 
         self.labelZlec = QLabel('', self)
         self.labelZlec.resize(150, 20)
@@ -133,6 +137,42 @@ class Example(QWidget):
         self.setWindowTitle('Click or Move')
         self.setGeometry(300, 200, 280, 150)
         self.resize(800, 500)
+
+    def moveClampK1(self, e):
+        try:
+            length = self.currentProfil.Length
+            flPosX = int(int(self.textboxK1.text())*500/length) + 45
+            self.button1.setGeometry(flPosX, 80, 20, 40)
+            klemy[0] = int(self.textboxK1.text())
+        except:
+            print('ERROR')
+
+    def moveClampK2(self, e):
+        try:
+            length = self.currentProfil.Length
+            flPosX = int(int(self.textboxK2.text())*500/length) + 40
+            self.button2.setGeometry(flPosX, 80, 20, 40)
+            klemy[1] = int(self.textboxK2.text())
+        except:
+            print('ERROR')
+
+    def moveClampK3(self, e):
+        try:
+            length = self.currentProfil.Length
+            flPosX = int(int(self.textboxK3.text())*500/length) + 40
+            self.button3.setGeometry(flPosX, 80, 20, 40)
+            klemy[2] = int(self.textboxK3.text())
+        except:
+            print('ERROR')
+
+    def moveClampK4(self, e):
+        try:
+            length = self.currentProfil.Length
+            flPosX = int(int(self.textboxK4.text())*500/length) + 40
+            self.button4.setGeometry(flPosX, 80, 20, 40)
+            klemy[3] = int(self.textboxK4.text())
+        except:
+            print('ERROR')
 
     def dragEnterEvent(self, e):
         e.accept()
@@ -210,7 +250,9 @@ class Example(QWidget):
                             macro.PosY = macroLib[macro.Ident]['posY']
 
                         midx = 0
-                        for m in macros:
+                        macrosSorted = copy.copy(macros)
+                        macrosSorted.sort(key=lambda x: x.WX)
+                        for m in macrosSorted:
                             self.textBoxMacro.append('Opis: ' + m.Description + ' PosX: ' + str(m.WX))
                             self.macrosVis[midx].resize(20,40)
                             self.macrosVis[midx].move((46+m.WX*500/self.currentProfil.Length), 80)
