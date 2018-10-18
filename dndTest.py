@@ -344,9 +344,9 @@ class Example(QWidget):
             global inc
             inc += 1
 
-        #logFile = open('time.log', 'w')
-        #logFile.write(self.textbox.text() + ' - ' + str(datetime.datetime.now()))
-        #logFile.close()
+        logFile = open('time.log', 'a')
+        logFile.write(self.labelZlec.text() + ' - ' + self.textbox.text() + ' - ' + str(datetime.datetime.now()) + '\n')
+        logFile.close()
 
         file = open(self.textbox.text()+'.txt', 'w')
 
