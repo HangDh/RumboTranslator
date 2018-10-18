@@ -1,6 +1,7 @@
 from PyQt5.QtWidgets import QPushButton, QWidget, QApplication, QLabel, QLineEdit, QFileDialog, QTextEdit, QGraphicsView
 from PyQt5.QtCore import Qt, QMimeData
 from PyQt5.QtGui import QDrag, QPainter, QPen, QFont, QPixmap
+import datetime
 import json
 import math
 import sys
@@ -138,38 +139,38 @@ class Example(QWidget):
         self.setGeometry(300, 200, 280, 150)
         self.resize(800, 500)
 
-    def moveClampK1(self, e):
+    def moveClampK1(self):
         try:
             length = self.currentProfil.Length
             flPosX = int(int(self.textboxK1.text())*500/length) + 45
-            self.button1.setGeometry(flPosX, 80, 20, 40)
+            self.button1.setGeometry(flPosX+10, 80, 120*500/length, 40)
             klemy[0] = int(self.textboxK1.text())
         except:
             print('ERROR')
 
-    def moveClampK2(self, e):
+    def moveClampK2(self):
         try:
             length = self.currentProfil.Length
-            flPosX = int(int(self.textboxK2.text())*500/length) + 40
-            self.button2.setGeometry(flPosX, 80, 20, 40)
+            flPosX = int(int(self.textboxK2.text())*500/length) + 45
+            self.button2.setGeometry(flPosX+10, 80, 120*500/length, 40)
             klemy[1] = int(self.textboxK2.text())
         except:
             print('ERROR')
 
-    def moveClampK3(self, e):
+    def moveClampK3(self):
         try:
             length = self.currentProfil.Length
-            flPosX = int(int(self.textboxK3.text())*500/length) + 40
-            self.button3.setGeometry(flPosX, 80, 20, 40)
+            flPosX = int(int(self.textboxK3.text())*500/length) + 45
+            self.button3.setGeometry(flPosX+20, 80, 120*500/length, 40)
             klemy[2] = int(self.textboxK3.text())
         except:
             print('ERROR')
 
-    def moveClampK4(self, e):
+    def moveClampK4(self):
         try:
             length = self.currentProfil.Length
-            flPosX = int(int(self.textboxK4.text())*500/length) + 40
-            self.button4.setGeometry(flPosX, 80, 20, 40)
+            flPosX = int(int(self.textboxK4.text())*500/length) + 45
+            self.button4.setGeometry(flPosX+20, 80, 120*500/length, 40)
             klemy[3] = int(self.textboxK4.text())
         except:
             print('ERROR')
@@ -182,7 +183,7 @@ class Example(QWidget):
 
         length = self.currentProfil.Length
         point = e.pos()
-        point.setX(e.pos().x()-10)  # Move to the center of square
+        point.setX(e.pos().x()+2)  # Klema jest z boku
         point.setY(80)  # 100 - wysokość buttona
 
         pointXStr = str(((point.x()-50)*length)/500)
@@ -204,6 +205,7 @@ class Example(QWidget):
         if e.source().text()[1:] == '4':
             self.textboxK4.setText(pointXStr)
         e.source().move(point.x(), point.y())
+        e.source().setGeometry(point.x(), point.y(), 120*500/length, 40)
 
         e.setDropAction(Qt.MoveAction)
         e.accept()
@@ -323,25 +325,31 @@ class Example(QWidget):
             self.textbox.setFocus(True)
 
     def generateFile(self):
+        global inc
         inc = 8  # Zaczynam od 8 linijki - 80
 
-        def zmianaNarzedzia(frez, predkosc, file, inc, kat_loza):
-            writeInc(file, str(inc * 10) + ';97;6;;1;' + str(frez) + ';4;' + str(predkosc) + ';;\n')
+        def zmianaNarzedzia(frez, predkosc, fileIn, inc, kat_lozaIn):
+            writeInc(fileIn, str(inc * 10) + ';97;6;;1;' + str(frez) + ';4;' + str(predkosc) + ';;\n')
             inc += 1
-            writeInc(file, str(inc * 10) + ';0;;Z;;24.00;;;;\n')
+            writeInc(fileIn, str(inc * 10) + ';0;;Z;;24.00;;;;\n')
             inc += 1
-            writeInc(file, str(inc * 10) + ';0;;Y;;16.50;;;;\n')
+            writeInc(fileIn, str(inc * 10) + ';0;;Y;;16.50;;;;\n')
             inc += 1
-            writeInc(file, str(inc * 10) + ';97;10;;' + str(kat_loza) + ';;;;;\n')  # Kąt łoża i obrót
+            writeInc(fileIn, str(inc * 10) + ';97;10;;' + str(kat_lozaIn) + ';;;;;\n')  # Kąt łoża i obrót
             inc += 1
-            writeInc(file, str(inc * 10) + ';97;4;;1;' + str(predkosc) + ';;;;\n')
+            writeInc(fileIn, str(inc * 10) + ';97;4;;1;' + str(predkosc) + ';;;;\n')
 
         def writeInc(plik, tekst):
             plik.write(tekst)
             global inc
             inc += 1
 
+        #logFile = open('time.log', 'w')
+        #logFile.write(self.textbox.text() + ' - ' + str(datetime.datetime.now()))
+        #logFile.close()
+
         file = open(self.textbox.text()+'.txt', 'w')
+
 
         #  Definicja zmiennych dla parametrów maszyny ##
         global Delta_X, Delta_Y, Delta_Z, Odsuniecie_Y, kat_loza
@@ -388,16 +396,8 @@ class Example(QWidget):
             distanceList.append(macrosSortedWX[m].WX - m_prev)
             m_prev = macrosSortedWX[m].WX
             if (m == len(macrosSortedWX) - 1):
-                distanceList.append(currentProfil.Length - macrosSortedWX[m].WX)
+                distanceList.append(self.currentProfil.Length - macrosSortedWX[m].WX)
 
-        for d in distanceList:
-            if (currentProfil.Length > 1500):
-                for i in range(int(d) // 20):
-                    print('-', end='')
-            else:
-                for i in range(int(d) // 10):
-                    print('-', end='')
-        print('|\n')
 
         ### BLOK STAŁY STARTOWY ###
         file.write('10;97;80;;;;;;;\n' + '20;97;15;;;;;;;\n' + '30;97;99;;' + klemy[0] + ';' + klemy[1] + ';' + klemy[2] + ';' + klemy[
