@@ -135,7 +135,7 @@ class Example(QWidget):
         self.imageView.move(460, 250)
 
 
-        self.setWindowTitle('Click or Move')
+        self.setWindowTitle('Rumbominator 2018')
         self.setGeometry(300, 200, 280, 150)
         self.resize(800, 500)
 
@@ -444,13 +444,14 @@ class Example(QWidget):
 
                 ZPosStart = Delta_Z + frezWybrany['length'] - macro.Approach[i]
                 ZPosEnd = Delta_Z + frezWybrany['length'] - macro.End[i]
+                holeDiff = (macro.Height[i] - frezWybrany['diameter']) / 2
 
-                writeInc(file, str(inc * 10) + ';0;;XYZ;;' + str(XPos) + ';' + str(YPos) + ';' + str(round(enterPos, 2)) + ';;\n')
+                writeInc(file, str(inc * 10) + ';0;;XYZ;;' + str(XPos) + ';' + str(YPos + holeDiff) + ';' + str(round(enterPos, 2)) + ';;\n')
                 writeInc(file, str(inc * 10) + ';0;;Z;;' + str(round(ZPosStart, 2)) + ';;;;\n')
                 writeInc(file, str(inc * 10) + ';97;7;;2;;;;;\n')
                 writeInc(file, str(inc * 10) + ';97;11;;;;;;;\n')
                 writeInc(file, str(inc * 10) + ';1;;Z;200;' + str(round(ZPosEnd, 2)) + ';;;;\n')  # Praca w osi Z, zejście
-                holeDiff = (macro.Height[i] - frezWybrany['diameter']) / 2
+
 
                 if macro.Type == 'Slot':
                     XPos = Delta_X + macro.WX + macro.Width[i] / 2 - frezWybrany['diameter'] / 2
@@ -463,9 +464,11 @@ class Example(QWidget):
 
                 writeInc(file, str(inc * 10) + ';97;9;;;;;;;\n')
 
-                # Cofanie się n a pozycje Z jest niepotrzebne - wydlużenie czasu obróbki.
-                # if i < len(macro.Approach) - 1:
-                #    writeInc(file, str(inc * 10) + ';0;;Z;;' + str(round(ZPosEnd, 2)) + ';;;;\n')
+                # Cofanie się n a pozycje Z jest niepotrzebne - wydlużenie czasu obróbki - wyjatek kiedy maja inne Y
+                if i < len(macro.Approach) - 1 and macro.PosY[i] != macro.PosY[i + 1]:
+                    writeInc(file, str(inc * 10) + ';0;;Z;;' + str(round(wysDisengage, 2)) + ';;;;\n')
+
+
 
             frezPoprzedni = frezWybrany
             obrotPoprzedni = obrot
