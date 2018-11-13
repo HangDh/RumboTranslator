@@ -38,20 +38,22 @@ class Button(QPushButton):
         super().__init__(title, parent)
         self.setAcceptDrops(True)
 
+    # Zdefiniowanie drag'n'dropa - bez drop Action? ;) - dropAction do usuniecia
     def mouseMoveEvent(self, e):
         mimeData = QMimeData()
         drag = QDrag(self)
         drag.setMimeData(mimeData)
         drag.setHotSpot(e.pos() - self.rect().topLeft())
+        # dropAction = drag.exec_(Qt.MoveAction)
 
-        dropAction = drag.exec_(Qt.MoveAction)
-
+# Pierwsze uruchomienie programu to zawsze klemy na 0 + arrBars - lista belek z cutsami - jako pusta lista
 global klemy, arrBars
+# -9999 dla rumby nowszej, brak wartosci dla drugiej
 klemy = ['-9999', '-9999', '-9999', '-9999']
 arrBars = []
 
 class Example(QWidget):
-
+    # Makra - pusta lista, obecny profil to profil - potem nadamy mu właściwości
     macros, currentProfil = [], Profil
 
     def __init__(self):
@@ -69,10 +71,12 @@ class Example(QWidget):
         searchBtn.move(650, 25)
         searchBtn.clicked.connect(self.openFileNameDialog)
 
+        # Przycisk resetu klem i zadań
         resetBtn = QPushButton('RESET', self)
         resetBtn.move(650, 150)
         resetBtn.clicked.connect(self.clampsReset)
 
+        #Tutaj zaczyna się spis klem jako buttonow
         self.button1 = Button('K1', self)
         self.button1.resize(20, 40)
         self.button1.move(600, 80)
@@ -88,7 +92,9 @@ class Example(QWidget):
         self.button4 = Button('K4', self)
         self.button4.resize(20, 40)
         self.button4.move(645, 80)
+        # Tutaj konczy się spis klem jako buttonow
 
+        # Tutaj zaczynaja się textboxy z pozycjami klem
         self.textboxK1 = QLineEdit('', self)
         self.textboxK1.resize(55, 20)
         self.textboxK1.move(130, 170)
@@ -108,6 +114,7 @@ class Example(QWidget):
         self.textboxK4.resize(55, 20)
         self.textboxK4.move(430, 170)
         self.textboxK4.textChanged.connect(self.moveClampK4)
+        # Tutaj kończą się textboxy z pozycjami klem
 
         self.labelZlec = QLabel('', self)
         self.labelZlec.resize(150, 20)
@@ -117,37 +124,46 @@ class Example(QWidget):
         self.label.resize(500, 20)
         self.label.move(130, 135)
 
+        # Labele z nazwami makr - czy to C, O, W, M - literki od Cornerów, Odwodnień itp.
         self.macrosVis = []
         for i in range(20):
             self.macrosVis.append(QLabel('', self))
 
-        self.textbox = QLineEdit('Wpisz nazwę profilu', self)
+        # Miejsce do wpisania lub zeskanowania kodu
+        self.textbox = QLineEdit('Wpisz numer/nazwe profilu', self)
         self.textbox.resize(150, 20)
         self.textbox.move(100, 30)
 
+        # Tutaj znajdują się informacje o makrach, które będą wykonywane na danej belce.
         self.textBoxMacro = QTextEdit(self)
         self.textBoxMacro.resize(400, 230)
         self.textBoxMacro.move(20, 250)
 
+        # ImageView - podgląd profilu
         self.imageView = QLabel(self)
         self.imageView.setAlignment(Qt.AlignCenter)
         self.imageView.resize(320, 230)
         self.imageView.move(460, 250)
 
-
+        # Ogólne okno programu - RUMBOMINATOR
         self.setWindowTitle('Rumbominator 2018')
         self.setGeometry(300, 200, 280, 150)
         self.resize(800, 500)
 
+    # Poruszkanie klemami - informacje na temat przemieszczeń z pola.
     def moveClampK1(self):
         try:
             length = self.currentProfil.Length
+            # Ustal pozycje w X - weź pod uwagę długość profila
             flPosX = int(int(self.textboxK1.text())*500/length) + 45
+            # Skalowanie wielkości klemy i ustawienie pozycji oraz rozmiaru.
             self.button1.setGeometry(flPosX+10, 80, 120*500/length, 40)
+            # Zmień wartość w liscie (do poźniejszego zapisu do pliku)
             klemy[0] = int(self.textboxK1.text())
         except:
             print('ERROR')
 
+    # J/W - klema K2
     def moveClampK2(self):
         try:
             length = self.currentProfil.Length
@@ -157,6 +173,7 @@ class Example(QWidget):
         except:
             print('ERROR')
 
+    # J/W - klema K3
     def moveClampK3(self):
         try:
             length = self.currentProfil.Length
@@ -166,6 +183,7 @@ class Example(QWidget):
         except:
             print('ERROR')
 
+    # J/W - klema K4
     def moveClampK4(self):
         try:
             length = self.currentProfil.Length
@@ -175,19 +193,23 @@ class Example(QWidget):
         except:
             print('ERROR')
 
+    # Początek drag and dropa - zaakceptowanie - pozwolenie na event.
     def dragEnterEvent(self, e):
         e.accept()
 
+    # Drop - czyli po zakończeniu Drag.
     def dropEvent(self, e):
         self.setAcceptDrops(True)
 
+        # Ustawianie klemy w pozycji na którą przesuwamy
         length = self.currentProfil.Length
         point = e.pos()
-        point.setX(e.pos().x()+2)  # Klema jest z boku
+        point.setX(e.pos().x()+2)  # Klema jest z boku kursura (z boku miarki też)
         point.setY(80)  # 100 - wysokość buttona
 
         pointXStr = str(((point.x()-50)*length)/500)
 
+        # Jeżeli przesuwamy sie za bardzo na lewo/prawo (za granice) - to przesun kleme na koniec profilu
         if point.x() < 50:
             point.setX(40)
             pointXStr = str(0)
@@ -195,6 +217,7 @@ class Example(QWidget):
             point.setX(540)
             pointXStr = str(length)
 
+        # Przesuwanie klem - ustawia na tekst-pozycje (setText) w odpowiednim boxie (dla K1,K2...)
         klemy[int(e.source().text()[1:])-1] = pointXStr
         if e.source().text()[1:] == '1':
             self.textboxK1.setText(pointXStr)
@@ -204,12 +227,15 @@ class Example(QWidget):
             self.textboxK3.setText(pointXStr)
         if e.source().text()[1:] == '4':
             self.textboxK4.setText(pointXStr)
+
+        # Przesuń i ustaw nową geometrie (weź pod uwagę długość profila!)
         e.source().move(point.x(), point.y())
         e.source().setGeometry(point.x(), point.y(), 120*500/length, 40)
 
         e.setDropAction(Qt.MoveAction)
         e.accept()
 
+    # Ustalenie nowej czcionki (pogrubienie, większa czcionka - dla oznaczeń makr?)
     myFont = QFont()
     myFont.setBold(True)
     myFont.setPixelSize(14)
@@ -218,26 +244,36 @@ class Example(QWidget):
         # Definicja frezów i makr - Została zastąpiona przez definicję w JSON
         global macros, currentProfil, macroLib, frezLib
 
+        # Definicje makr (JSON)
         with open("macro.json", "r", encoding='utf-8') as f:
             macroLib = json.load(f)
+        # Definicje frezów (JSON)
         with open("frez.json", "r") as f:
             frezLib = json.load(f)
 
+        # Wpisz nazwe profilu to początkowy string pola 'textbox' - po zmianie odpalamy funkcje.
         if self.textbox.text() != 'Wpisz nazwę profilu':
+            # Dodaj 20 makr (bo raczej więcej nie będzie - wyświetl na belce) - zainicjowanie.
+            # Inaczej nie dało się później zmieniać koloru, pozycji itp
             for i in range(20):
                 self.macrosVis[i].setText('')
+            # Iteracja wzdłuż barów, Cutów
             for bar in arrBars:
                 for cut in bar.barCuts:
-                    if cut.cutDescription == self.textbox.text() or cut.cutNumber == self.textbox.text()[7:12]:
+                    # Jeżeli uda sie znaleźć cutDescription lub cutNumber we wpisanym polu - to.
+                    if cut.cutDescription == self.textbox.text() or cut.cutNumber == self.textbox.text()[7:12] or cut.cutNumber == self.textbox.text():
                         self.label.setText('')
                         self.textBoxMacro.setText('')
                         self.textBoxMacro.append('Belka: ' + cut.cutDescription + ', Długość: ' + str(cut.cutLength) + ', Profil: ' + bar.barProfil + '\n')
                         macros = cut.cutMacros  # wybór belki
                         for m in macros:
+                            # Ponieważ BJM miał dwa makra pod odwodnienie, to jedno z nich po prostu usuwamy
                             if m.Ident == 'Drain for Frame - hidden d BJM machining 4035':
                                 macros.remove(m)
-                        self.currentProfil = Profil(bar.barProfil, bar.barWidth, bar.barHeight, cut.cutLength)
 
+                        # Dopisujemy właściwości do obecnego profilu - informacje czerpiac z bara (plik ncx)
+                        self.currentProfil = Profil(bar.barProfil, bar.barWidth, bar.barHeight, cut.cutLength)
+                        # Wczytaj obrazek z bar profilem
                         self.imageView.setPixmap(QPixmap(".\\profile\\"+bar.barProfil+".png"))
 
                         for macro in macros:  # Przypisanie wartości z JSONA do właściwości obiektu
@@ -254,12 +290,14 @@ class Example(QWidget):
                         midx = 0
                         macrosSorted = copy.copy(macros)
                         macrosSorted.sort(key=lambda x: x.WX)
+                        # Dla uszeregowanych makr - dodaj opisy w boxie, dodaj ich polozenie na belce, pokoloruj na czerwono ;)
                         for m in macrosSorted:
                             self.textBoxMacro.append('Opis: ' + m.Description + ' PosX: ' + str(m.WX))
                             self.macrosVis[midx].resize(20,40)
                             self.macrosVis[midx].move((46+m.WX*500/self.currentProfil.Length), 80)
                             self.macrosVis[midx].setStyleSheet('color: red')
                             self.macrosVis[midx].setFont(self.myFont)
+                            # Odwodnienie - O, Corner - C, inne - M (montażowe)
                             if '4034' in m.Ident or 'HIDDEN' in m.Ident:
                                 self.macrosVis[midx].setText('O')
                             elif 'corner' in m.Ident:
@@ -268,6 +306,7 @@ class Example(QWidget):
                                 self.macrosVis[midx].setText('M')
                             midx += 1
             try:
+                # Jeszcze raz dla pewności usuwamy makro 4035 ?
                 for index, macro in enumerate(macros):
                     if macro.Ident == 'Drain for Frame - hidden d BJM machining 4035':
                         macros.remove(macro)
@@ -277,7 +316,8 @@ class Example(QWidget):
             except:
                 self.label.setText('Nie odnaleziono podanej belki w zleceniu')
             self.textbox.setFocus(True)
-            self.textbox.selectAll()
+            if len(self.textbox.text()) == 5 or len(self.textbox.text()) == 11:
+                self.textbox.selectAll()
 
     def clampsReset(self):
         global klemy
