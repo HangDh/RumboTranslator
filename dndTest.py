@@ -44,7 +44,7 @@ class Button(QPushButton):
         drag = QDrag(self)
         drag.setMimeData(mimeData)
         drag.setHotSpot(e.pos() - self.rect().topLeft())
-        # dropAction = drag.exec_(Qt.MoveAction)
+        dropAction = drag.exec_(Qt.MoveAction)
 
 # Pierwsze uruchomienie programu to zawsze klemy na 0 + arrBars - lista belek z cutsami - jako pusta lista
 global klemy, arrBars
