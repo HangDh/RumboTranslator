@@ -453,7 +453,7 @@ class Example(QWidget):
             if (obrotPoprzedni != obrot):
                 zmianaKata(macro.Obrot)
 
-            Disengage_Z = ncfunctions.findNearest(macro.Obrot)
+            Disengage_Z = ncfunctions.findNearest(macro.Obrot, currentProfil.Height)
             wysDisengage = Delta_Z + frezWybrany['length'] + Disengage_Z
 
             if (obrotPoprzedni == obrot):
@@ -488,7 +488,7 @@ class Example(QWidget):
 
                 writeInc(file, str(inc * 10) + ';0;;XYZ;;' + str(XPos) + ';' + str(YPos + holeDiff) + ';' + str(round(enterPos, 2)) + ';;\n')
                 writeInc(file, str(inc * 10) + ';0;;Z;;' + str(round(ZPosStart, 2)) + ';;;;\n')
-                writeInc(file, str(inc * 10) + ';97;7;;2;;;;;\n')
+                writeInc(file, str(inc * 10) + ';97;7;;2;;;;;\n') # Zagadka - co powoduje ta linijka, czy możemy ją jakoś wyselekcjonować.
                 writeInc(file, str(inc * 10) + ';97;11;;;;;;;\n')
                 writeInc(file, str(inc * 10) + ';1;;Z;200;' + str(round(ZPosEnd, 2)) + ';;;;\n')  # Praca w osi Z, zejście
 

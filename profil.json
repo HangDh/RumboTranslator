@@ -2,5 +2,10 @@
     "description": "G24 Frame",
     "width": 75.7,
     "height": 28.5
+},
+"C9V001A":{
+	"description":"Sapa Comfort Vent",
+	"width": 70.0,
+	"height": 104.0
 }
 }
