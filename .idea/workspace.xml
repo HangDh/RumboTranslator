@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="740396fc-4634-4cad-bd4c-b68fb3ae1b56" name="Default" comment="drop action actually is needed ;)">
+    <list default="true" id="740396fc-4634-4cad-bd4c-b68fb3ae1b56" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dndTest.py" beforeDir="false" afterPath="$PROJECT_DIR$/dndTest.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/macro.json" beforeDir="false" afterPath="$PROJECT_DIR$/macro.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ncfunctions.py" beforeDir="false" afterPath="$PROJECT_DIR$/ncfunctions.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/profil.json" beforeDir="false" afterPath="$PROJECT_DIR$/profil.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/time.log" beforeDir="false" afterPath="$PROJECT_DIR$/time.log" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -24,7 +23,7 @@
       <file leaf-file-name="ncinfo.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/../NC_Info/ncinfo.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="467">
+            <state relative-caret-position="1035">
               <caret line="48" column="57" selection-start-line="48" selection-start-column="57" selection-end-line="48" selection-end-column="57" />
               <folding>
                 <element signature="e#0#15#0" expanded="true" />
@@ -36,8 +35,8 @@
       <file leaf-file-name="dndTest.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/dndTest.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="162">
-              <caret line="399" column="27" selection-start-line="399" selection-start-column="27" selection-end-line="399" selection-end-column="27" />
+            <state relative-caret-position="300">
+              <caret line="490" selection-start-line="490" selection-end-line="490" />
               <folding>
                 <element signature="e#0#120#0" expanded="true" />
               </folding>
@@ -48,8 +47,17 @@
       <file leaf-file-name="ncfunctions.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ncfunctions.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="299">
-              <caret line="13" column="9" lean-forward="true" selection-start-line="13" selection-start-column="9" selection-end-line="13" selection-end-column="9" />
+            <state relative-caret-position="92">
+              <caret line="4" column="30" selection-start-line="4" selection-start-column="30" selection-end-line="4" selection-end-column="30" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ncloader.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ncloader.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="368">
+              <caret line="17" column="21" selection-start-line="17" selection-start-column="21" selection-end-line="17" selection-end-column="21" />
             </state>
           </provider>
         </entry>
@@ -65,10 +73,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>,</find>
-      <find>ncfunc</find>
-      <find>zmianaN</find>
-      <find>ncreader_global</find>
       <find>pri</find>
       <find>inc</find>
       <find>input</find>
@@ -95,6 +99,10 @@
       <find>wysD</find>
       <find>findNea</find>
       <find>Dis</find>
+      <find>checkE</find>
+      <find>macroLib</find>
+      <find>textbox</find>
+      <find>evalu</find>
     </findStrings>
     <replaceStrings>
       <replace>ncloader.writeInc</replace>
@@ -122,17 +130,17 @@
         <option value="V:/TEST/RCP/RCP.py" />
         <option value="C:/RW_Depozyt/RW_Depozyt.py" />
         <option value="$PROJECT_DIR$/../XML_to_Excel_Konstrukcje/XLMtoExcel.py" />
-        <option value="$PROJECT_DIR$/../PythonOptimCut/MainCutShucoXLS.py" />
         <option value="Z:/emmegifdd/backup.py" />
         <option value="$PROJECT_DIR$/../NC_Info/ncinfo.py" />
         <option value="$PROJECT_DIR$/../PythonCut2/MainCutShucoXLS.py" />
+        <option value="$PROJECT_DIR$/../PythonOptimCut/MainCutShucoXLS.py" />
         <option value="$PROJECT_DIR$/ncfunctions.py" />
         <option value="$PROJECT_DIR$/dndTest.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="45" />
+    <option name="x" value="741" />
     <option name="y" value="-15" />
     <option name="width" value="1940" />
     <option name="height" value="1060" />
@@ -143,7 +151,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -155,15 +162,17 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="full.screen.before.presentation.mode" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../PythonCut2/MainCutShucoXLS.py" />
     <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors.General" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Python_Programy\PythonOptimCut" />
       <recent name="C:\NC_Reader" />
     </key>
   </component>
@@ -179,7 +188,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.RW_Export_scalone">
+  <component name="RunManager" selected="Python.dndTest">
     <configuration name="MainCutShucoXLS (1)" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="NC_Reader" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -193,6 +202,42 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/../PythonCut2/MainCutShucoXLS.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+    </configuration>
+    <configuration name="MainCutShucoXLS" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="NC_Reader" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/../PythonOptimCut" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/../PythonOptimCut/MainCutShucoXLS.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+    </configuration>
+    <configuration name="RCP" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="NC_Reader" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="V:/TEST/RCP" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="V:/TEST/RCP/RCP.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -234,56 +279,20 @@
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
     </configuration>
-    <configuration name="ncloader" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="NC_Reader" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/ncloader.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-    </configuration>
-    <configuration name="ncreader_main" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="NC_Reader" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/ncreader_main.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-    </configuration>
     <list>
-      <item itemvalue="Python.MainCutShucoXLS (1)" />
-      <item itemvalue="Python.ncloader" />
-      <item itemvalue="Python.ncreader_main" />
       <item itemvalue="Python.dndTest" />
       <item itemvalue="Python.RW_Export_scalone" />
+      <item itemvalue="Python.MainCutShucoXLS" />
+      <item itemvalue="Python.MainCutShucoXLS (1)" />
+      <item itemvalue="Python.RCP" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.RW_Export_scalone" />
         <item itemvalue="Python.dndTest" />
-        <item itemvalue="Python.ncreader_main" />
-        <item itemvalue="Python.ncloader" />
+        <item itemvalue="Python.MainCutShucoXLS" />
         <item itemvalue="Python.MainCutShucoXLS (1)" />
+        <item itemvalue="Python.RCP" />
+        <item itemvalue="Python.RW_Export_scalone" />
       </list>
     </recent_temporary>
   </component>
@@ -410,21 +419,28 @@
       <option name="project" value="LOCAL" />
       <updated>1542619655554</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="Changed way which disengage is calculated, for higher profiles.">
+      <created>1546499075794</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1546499075794</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.13489933" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.14832215" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="right" id="R Packages" order="4" />
       <window_info anchor="right" id="R Graphics" order="3" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" weight="0.32965517" />
       <window_info anchor="bottom" id="Version Control" order="9" />
       <window_info anchor="bottom" id="Python Console" order="8" />
-      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.2008547" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.26068377" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Terminal" order="7" />
       <window_info id="Favorites" order="2" side_tool="true" weight="0.3294271" />
@@ -438,25 +454,25 @@
       <window_info anchor="bottom" id="Find" order="1" />
     </layout>
     <layout-to-restore>
+      <window_info anchor="bottom" id="Version Control" order="9" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.23586208" />
-      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.13151042" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="right" id="R Graphics" order="3" />
-      <window_info anchor="bottom" id="Find" order="1" />
       <window_info anchor="right" id="R Packages" order="4" />
-      <window_info anchor="bottom" id="Python Console" order="8" />
+      <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Terminal" order="7" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" weight="0.32965517" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="Version Control" order="9" />
-      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info anchor="bottom" id="Find" order="1" />
+      <window_info anchor="bottom" id="Python Console" order="8" />
     </layout-to-restore>
   </component>
   <component name="VcsContentAnnotationSettings">
@@ -479,7 +495,8 @@
     <MESSAGE value="Minor fixes to the program. (log file also added)" />
     <MESSAGE value="Comments + Refactoring" />
     <MESSAGE value="drop action actually is needed ;)" />
-    <option name="LAST_COMMIT_MESSAGE" value="drop action actually is needed ;)" />
+    <MESSAGE value="Changed way which disengage is calculated, for higher profiles." />
+    <option name="LAST_COMMIT_MESSAGE" value="Changed way which disengage is calculated, for higher profiles." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -581,27 +598,27 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/dndTest.py</url>
-          <line>385</line>
+          <line>398</line>
           <option name="timeStamp" value="102" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/dndTest.py</url>
-          <line>440</line>
+          <line>453</line>
           <option name="timeStamp" value="117" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/dndTest.py</url>
-          <line>464</line>
+          <line>477</line>
           <option name="timeStamp" value="120" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/dndTest.py</url>
-          <line>475</line>
+          <line>488</line>
           <option name="timeStamp" value="121" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/dndTest.py</url>
-          <line>422</line>
+          <line>435</line>
           <option name="timeStamp" value="124" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -765,24 +782,9 @@
           <option name="timeStamp" value="180" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/dndTest.py</url>
-          <line>363</line>
-          <option name="timeStamp" value="181" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/../PythonOptimCut/MainCutShucoXLS.py</url>
-          <line>391</line>
-          <option name="timeStamp" value="184" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/../PythonOptimCut/MainCutShucoXLS.py</url>
-          <line>342</line>
+          <line>343</line>
           <option name="timeStamp" value="185" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/../PythonOptimCut/MainCutShucoXLS.py</url>
-          <line>357</line>
-          <option name="timeStamp" value="188" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/../NC_Info/ncinfo.py</url>
@@ -856,43 +858,73 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/dndTest.py</url>
-          <line>456</line>
+          <line>469</line>
           <option name="timeStamp" value="212" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/dndTest.py</url>
-          <line>423</line>
+          <line>436</line>
           <option name="timeStamp" value="213" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/dndTest.py</url>
-          <line>425</line>
+          <line>438</line>
           <option name="timeStamp" value="214" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/dndTest.py</url>
-          <line>470</line>
+          <line>483</line>
           <option name="timeStamp" value="215" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/dndTest.py</url>
-          <line>479</line>
+          <line>492</line>
           <option name="timeStamp" value="216" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/dndTest.py</url>
-          <line>484</line>
+          <line>497</line>
           <option name="timeStamp" value="217" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/dndTest.py</url>
-          <line>488</line>
+          <line>501</line>
           <option name="timeStamp" value="218" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/dndTest.py</url>
-          <line>481</line>
+          <line>494</line>
           <option name="timeStamp" value="219" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://V:/TEST/RCP/RCP.py</url>
+          <line>123</line>
+          <option name="timeStamp" value="220" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://V:/TEST/RCP/RCP.py</url>
+          <line>99</line>
+          <option name="timeStamp" value="221" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://V:/TEST/RCP/RCP.py</url>
+          <line>101</line>
+          <option name="timeStamp" value="222" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://V:/TEST/RCP/RCP.py</url>
+          <line>97</line>
+          <option name="timeStamp" value="223" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/../PythonOptimCut/MainCutShucoXLS.py</url>
+          <line>164</line>
+          <option name="timeStamp" value="232" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/dndTest.py</url>
+          <line>301</line>
+          <option name="timeStamp" value="249" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
@@ -902,7 +934,7 @@
           </properties>
         </breakpoint>
       </default-breakpoints>
-      <option name="time" value="220" />
+      <option name="time" value="253" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="PythonConfigurationType">
@@ -912,20 +944,6 @@
     </watches-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/ncreader_global.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4876">
-          <caret line="217" column="71" lean-forward="true" selection-start-line="217" selection-start-column="71" selection-end-line="217" selection-end-column="71" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ncloader.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2040">
-          <caret line="121" column="83" selection-start-line="121" selection-start-column="83" selection-end-line="121" selection-end-column="83" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$APPLICATION_HOME_DIR$/helpers/pydev/_pydev_imps/_pydev_execfile.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="119">
@@ -1102,28 +1120,11 @@
       </provider>
     </entry>
     <entry file="file://C:/RW_Export/RW_Export_scalone.py" />
-    <entry file="file://V:/TEST/RCP/RCP.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="68" column="12" selection-start-line="68" selection-start-column="12" selection-end-line="69" selection-end-column="57" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://C:/RW_Depozyt/RW_Depozyt.py" />
     <entry file="file://$PROJECT_DIR$/image.png">
       <provider selected="true" editor-type-id="images" />
     </entry>
     <entry file="file://Z:/emmegifdd/backup.py" />
-    <entry file="file://$PROJECT_DIR$/../PythonOptimCut/MainCutShucoXLS.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="282">
-          <caret line="320" column="64" lean-forward="true" selection-start-line="320" selection-start-column="64" selection-end-line="320" selection-end-column="64" />
-          <folding>
-            <element signature="e#3040#12449#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../RW_Depozyt/RW_Depozyt.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="138">
@@ -1141,26 +1142,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../PythonCut2/MainCutShucoXLS.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="388" column="43" selection-start-line="388" selection-start-column="43" selection-end-line="388" selection-end-column="43" />
-          <folding>
-            <element signature="e#2634#3102#0" />
-            <element signature="e#3657#4125#0" />
-            <element signature="e#4176#11389#0" />
-            <element signature="e#11437#14071#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ncloader.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="299">
-          <caret line="22" column="21" lean-forward="true" selection-start-line="22" selection-start-column="21" selection-end-line="22" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/ncreader_main.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="203">
@@ -1172,15 +1153,53 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="391">
           <caret line="17" column="36" lean-forward="true" selection-start-line="17" selection-start-column="36" selection-end-line="17" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://V:/TEST/RCP/RCP.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="23">
+          <caret line="97" selection-start-line="97" selection-end-line="97" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../PythonCut2/MainCutShucoXLS.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="240">
+          <caret line="554" lean-forward="true" selection-start-line="554" selection-end-line="554" />
           <folding>
-            <element signature="e#0#18#0" expanded="true" />
+            <element signature="e#2634#3102#0" />
+            <element signature="e#3657#4125#0" />
+            <element signature="e#4176#11389#0" />
+            <element signature="e#11437#14071#0" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../PythonOptimCut/MainCutShucoXLS.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="277">
+          <caret line="170" column="35" lean-forward="true" selection-start-line="170" selection-start-column="35" selection-end-line="170" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ncloader.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="368">
+          <caret line="17" column="21" selection-start-line="17" selection-start-column="21" selection-end-line="17" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/macro.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="254">
+          <caret line="42" column="14" selection-start-line="42" selection-start-column="14" selection-end-line="42" selection-end-column="14" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/../NC_Info/ncinfo.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="467">
+        <state relative-caret-position="1035">
           <caret line="48" column="57" selection-start-line="48" selection-start-column="57" selection-end-line="48" selection-end-column="57" />
           <folding>
             <element signature="e#0#15#0" expanded="true" />
@@ -1188,17 +1207,20 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/873.NCX">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
     <entry file="file://$PROJECT_DIR$/ncfunctions.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="299">
-          <caret line="13" column="9" lean-forward="true" selection-start-line="13" selection-start-column="9" selection-end-line="13" selection-end-column="9" />
+        <state relative-caret-position="92">
+          <caret line="4" column="30" selection-start-line="4" selection-start-column="30" selection-end-line="4" selection-end-column="30" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/dndTest.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="162">
-          <caret line="399" column="27" selection-start-line="399" selection-start-column="27" selection-end-line="399" selection-end-column="27" />
+        <state relative-caret-position="300">
+          <caret line="490" selection-start-line="490" selection-end-line="490" />
           <folding>
             <element signature="e#0#120#0" expanded="true" />
           </folding>

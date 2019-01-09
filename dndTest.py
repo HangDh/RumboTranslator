@@ -52,6 +52,16 @@ global klemy, arrBars
 klemy = ['-9999', '-9999', '-9999', '-9999']
 arrBars = []
 
+def evaluateMathGeometry(arrayToChange, valueParam):
+    for i, s in enumerate(arrayToChange):
+        if type(arrayToChange[i]) == str:
+            arrayToChange[i] = arrayToChange[i].replace('H', str(valueParam)).split(' ')
+            sum = 0.0
+            for part in arrayToChange[i]:
+                sum += float(part)
+            arrayToChange[i] = sum
+    return arrayToChange
+
 class Example(QWidget):
     # Makra - pusta lista, obecny profil to profil - potem nadamy mu właściwości
     macros, currentProfil = [], Profil
@@ -281,12 +291,15 @@ class Example(QWidget):
                             macro.Frez = macroLib[macro.Ident]['tool']
                             macro.Description = macroLib[macro.Ident]['description']
                             macro.Type = macroLib[macro.Ident]['type']
+                            macro.DeltaX = macroLib[macro.Ident]['deltaX']
                             macro.Width = macroLib[macro.Ident]['width']
                             macro.Height = macroLib[macro.Ident]['height']
                             macro.Approach = macroLib[macro.Ident]['approach']
+                            macro.Approach = evaluateMathGeometry(macro.Approach, self.currentProfil.Height)
                             macro.End = macroLib[macro.Ident]['end']
+                            macro.End =evaluateMathGeometry(macro.End, self.currentProfil.Height)
                             macro.PosY = macroLib[macro.Ident]['posY']
-
+                            macro.PosY =evaluateMathGeometry(macro.PosY, self.currentProfil.Width)
                         midx = 0
                         macrosSorted = copy.copy(macros)
                         macrosSorted.sort(key=lambda x: x.WX)
@@ -453,7 +466,7 @@ class Example(QWidget):
             if (obrotPoprzedni != obrot):
                 zmianaKata(macro.Obrot)
 
-            Disengage_Z = ncfunctions.findNearest(macro.Obrot, currentProfil.Height)
+            Disengage_Z = ncfunctions.findNearest(macro.Obrot, self.currentProfil.Height)
             wysDisengage = Delta_Z + frezWybrany['length'] + Disengage_Z
 
             if (obrotPoprzedni == obrot):
@@ -471,9 +484,9 @@ class Example(QWidget):
                     YPos = Delta_Y - Odsuniecie_Y - macro.PosY[i]
 
                 if macro.Width[i] > frezWybrany['diameter'] and macro.Type != 'Hole':
-                    XPos = Delta_X + macro.WX - macro.Width[i] / 2 + frezWybrany['diameter'] / 2
+                    XPos = Delta_X + macro.WX + macro.DeltaX[i] - macro.Width[i] / 2 + frezWybrany['diameter'] / 2
                 else:
-                    XPos = Delta_X + macro.WX
+                    XPos = Delta_X + macro.WX + macro.DeltaX[i]
                 # Oznaczenie wartości X, Y, Z zakończone
 
                 # Inne zachowanie dla pierwszego wjazdu niż kolejnych
