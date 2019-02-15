@@ -483,6 +483,9 @@ class Example(QWidget):
                 else:
                     YPos = Delta_Y - Odsuniecie_Y - macro.PosY[i]
 
+                if macro.WX + macro.DeltaX[i] > self.currentprofil.Length:
+                    macro.DeltaX[i] *= -1
+
                 if macro.Width[i] > frezWybrany['diameter'] and macro.Type != 'Hole':
                     XPos = Delta_X + macro.WX + macro.DeltaX[i] - macro.Width[i] / 2 + frezWybrany['diameter'] / 2
                 else:
@@ -505,11 +508,16 @@ class Example(QWidget):
                 writeInc(file, str(inc * 10) + ';97;11;;;;;;;\n')
                 writeInc(file, str(inc * 10) + ';1;;Z;200;' + str(round(ZPosEnd, 2)) + ';;;;\n')  # Praca w osi Z, zejście
 
-
                 if macro.Type == 'Slot':
-                    XPos = Delta_X + macro.WX + macro.Width[i] / 2 - frezWybrany['diameter'] / 2
-                    writeInc(file, str(inc * 10) + ';28;;XY;;;;;;\n')
-                    writeInc(file, str(inc * 10) + ';1;;XY;800;' + str(XPos) + ';' + str(YPos) + ';;;\n')
+                    if macro.Width[i] > macro.Height[i]:
+                        YPos = Delta_Y - Odsuniecie_Y - macro.PosY[i] + (macro.Height[i] - frezWybrany['diameter']) / 2
+                        writeInc(file, str(inc * 10) + ';28;;XY;;;;;;\n')
+                        writeInc(file, str(inc * 10) + ';1;;XY;800;' + str(XPos) + ';' + str(YPos) + ';;;\n')
+                    else:
+                        XPos = Delta_X + macro.WX + macro.Width[i] / 2 - frezWybrany['diameter'] / 2
+                        writeInc(file, str(inc * 10) + ';28;;XY;;;;;;\n')
+                        writeInc(file, str(inc * 10) + ';1;;XY;800;' + str(XPos) + ';' + str(YPos) + ';;;\n')
+
                 if macro.Type == 'Hole' and holeDiff > 0:
                     writeInc(file, str(inc * 10) + ';28;;XY;;;;;;\n')
                     writeInc(file, str(inc * 10) + ';2;;XY;800;' + str(XPos) + ';' + str(YPos - holeDiff) + ';' + str(XPos) + ';' + str(YPos) + ';\n')

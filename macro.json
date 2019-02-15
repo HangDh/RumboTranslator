@@ -57,5 +57,29 @@
 	"deltaX" : [0, 0],
 	"approach": ["-H +25", -34],
 	"end": ["-H +32", -27]
+},
+"AWS114-01-01-01": {
+    "description": "Drainage slot (outer) - Frame",
+    "type": "Rectangle",
+    "width": [35, 25],
+    "height": [8.4, 15],
+    "tool": [3],
+    "angle": 0,
+    "posY": [10.1, 1.4],
+    "deltaX": [0, 0],
+    "approach": ["-H -3", "-H -3"],
+    "end": ["-H + 14.3", "-H + 14.3"]
+},
+"AWS114-01-02-01": {
+    "description": "Drainage slot (inner) - Frame",
+    "type": "Slot",
+    "width": [10],
+    "height": [26],
+    "tool": [5],
+    "angle": 0,
+    "posY": [36.3],
+    "deltaX": [0],
+    "approach": ["-23.5"],
+    "end": ["-9.7"]
 }
 }

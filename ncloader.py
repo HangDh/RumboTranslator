@@ -41,10 +41,12 @@ def load(content):
         Approach = 0
         End = 0
         Frez = 0
+        macroWorks = []
 
         def __init__(self, ident):
             self.Ident = ident
             self.Frez = 0
+            self.macroWorks = []
 
     class Work(object):
         workComment = ''
@@ -52,8 +54,11 @@ def load(content):
         workWX = 0.0
         workWY = 0.0
         workSide = 0
+        workWW1 = 0
+        workWW2 = 0
         workHeight = 0.0
         workDepth = 0.0
+        workAngle = 0.0
 
         def __init__(self, comment):
             self.workComment = comment
@@ -108,7 +113,7 @@ def load(content):
                 macro_idx += 1
                 work_idx = 0
 
-            if y.startswith('WComment') and macro_ident.startswith(':WMacroIdent'):
+            if y.startswith('WComment') and macro_ident.startswith('WMacroIdent'):
                 if macro_idx > 0:
                     arrBars[idx].barCuts[sub_idx - 1].cutMacros[macro_idx - 1].Comment = (
                         re.search(r'= "(.*)"', y, flags=0).group(1))
@@ -123,9 +128,63 @@ def load(content):
                             (re.search(r'= (\d*.\d*)', y, flags=0).group(1)))
 
 
+            if y.startswith('WComment') and macro_ident.startswith(':WORK'):
+                arrBars[idx].barCuts[sub_idx - 1].cutMacros[macro_idx - 1].macroWorks.append(Work(re.search(r'= "(.*)"', y, flags=0).group(1)))
+                work_idx += 1
 
-            # if y.startswith(':WORK'):
-            # print(macro_ident)
+            if y.startswith('WType') and macro_ident.startswith('WPriority'):
+                if work_idx > 0:
+                    test = (re.search(r'= "(.)"', y, flags=0).group(1))
+                    arrBars[idx].barCuts[sub_idx - 1].cutMacros[macro_idx - 1].macroWorks[work_idx -1].workType = (
+                        re.search(r'= "(.)"', y, flags=0).group(1))
+
+            if y.startswith('WX1') and macro_ident.startswith('WType'):
+                if work_idx > 0:
+                    if '-' in y:
+                        arrBars[idx].barCuts[sub_idx - 1].cutMacros[macro_idx - 1].macroWorks[work_idx - 1].workWX = float(
+                            (re.search(r'= (-\d*.\d*)', y, flags=0).group(1)))
+                    else:
+                        arrBars[idx].barCuts[sub_idx - 1].cutMacros[macro_idx - 1].macroWorks[work_idx - 1].workWX = float(
+                            (re.search(r'= (\d*.\d*)', y, flags=0).group(1)))
+
+            if y.startswith('WSide') and macro_ident.startswith('WX1'):
+                if work_idx > 0:
+                    arrBars[idx].barCuts[sub_idx - 1].cutMacros[macro_idx - 1].macroWorks[work_idx - 1].workSide = (
+                        re.search(r'= (\d)', y, flags=0).group(1))
+
+            if y.startswith('WY1') and macro_ident.startswith('WSide'):
+                if work_idx > 0:
+                    if '-' in y:
+                        arrBars[idx].barCuts[sub_idx - 1].cutMacros[macro_idx - 1].macroWorks[work_idx - 1].workWY = float(
+                            (re.search(r'= (-\d*.\d*)', y, flags=0).group(1)))
+                    else:
+                        arrBars[idx].barCuts[sub_idx - 1].cutMacros[macro_idx - 1].macroWorks[work_idx - 1].workWY = float(
+                            (re.search(r'= (\d*.\d*)', y, flags=0).group(1)))
+
+            if y.startswith('WHeight') and macro_ident.startswith('WY1'):
+                if work_idx > 0:
+                    arrBars[idx].barCuts[sub_idx - 1].cutMacros[macro_idx - 1].macroWorks[work_idx - 1].workHeight = float(
+                        (re.search(r'= (\d*.\d*)', y, flags=0).group(1)))
+
+            if y.startswith('WDepth') and macro_ident.startswith('WHeight'):
+                if work_idx > 0:
+                    arrBars[idx].barCuts[sub_idx - 1].cutMacros[macro_idx - 1].macroWorks[work_idx - 1].workDepth = float(
+                        (re.search(r'= (\d*.\d*)', y, flags=0).group(1)))
+
+            if y.startswith('WW1') and macro_ident.startswith('WDepth'):
+                if work_idx > 0:
+                    arrBars[idx].barCuts[sub_idx - 1].cutMacros[macro_idx - 1].macroWorks[work_idx - 1].workWW1 = float(
+                        (re.search(r'= (\d*.\d*)', y, flags=0).group(1)))
+
+            if y.startswith('WW2') and macro_ident.startswith('WW1'):
+                if work_idx > 0:
+                    arrBars[idx].barCuts[sub_idx - 1].cutMacros[macro_idx - 1].macroWorks[work_idx - 1].workWW2 = float(
+                        (re.search(r'= (\d*.\d*)', y, flags=0).group(1)))
+
+            if y.startswith('WAngle') and macro_ident.startswith('WW2'):
+                if work_idx > 0:
+                    arrBars[idx].barCuts[sub_idx - 1].cutMacros[macro_idx - 1].macroWorks[work_idx - 1].workAngle = float(
+                        (re.search(r'= (\d*.\d*)', y, flags=0).group(1)))
 
             macro_ident = y
         idx += 1
