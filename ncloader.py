@@ -33,19 +33,11 @@ def load(content):
         Comment = ''
         Description = ''
         WX = 0.0
-        Obrot = 0.0
-        Type = ''
-        Width = 0
-        Height = 0
         PosY = 0
-        Approach = 0
-        End = 0
-        Frez = 0
         macroWorks = []
 
         def __init__(self, ident):
             self.Ident = ident
-            self.Frez = 0
             self.macroWorks = []
 
     class Work(object):

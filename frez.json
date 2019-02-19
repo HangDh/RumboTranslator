@@ -1,31 +1,43 @@
-{"1" : {
+{"0" : {
+    "diameter": 0,
+    "length": 0,
+    "worklength": 0,
+    "speed": 0
+},
+"1" : {
     "diameter": 4,
     "length": 108,
+    "worklength": 50,
     "speed": 10000
 },
 "2" : {
     "diameter": 5,
     "length": 99.4,
+    "worklength": 45,
     "speed": 9000
 },
 "3" : {
     "diameter": 6,
     "length": 92.3,
+    "worklength": 40,
     "speed": 11000
 },
 "4" : {
     "diameter": 8,
     "length": 98.7,
+    "worklength": 50,
     "speed": 12000
 },
 "5" : {
     "diameter": 10,
     "length": 121.1,
+    "worklength": 70,
     "speed": 12000
 },
 "6" : {
     "diameter": 6,
     "length": 130,
+    "worklength": 80,
     "speed": 8000
 }
 }

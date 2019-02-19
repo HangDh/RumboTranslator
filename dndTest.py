@@ -62,6 +62,24 @@ def evaluateMathGeometry(arrayToChange, valueParam):
             arrayToChange[i] = sum
     return arrayToChange
 
+''' Funkcja wykorzystywana w celu pozyskania narzędzia posiadajacego najwieksza mozliwa
+srednice do wykonania danego makra na podstawie rozmiaru makra'''
+def getProperTool(macroDia, depth):
+    with open('frez.json') as f:
+        frezLib = json.load(f)
+        choice = '99'
+        for k, v in frezLib.items():
+            if int(v['diameter']) == macroDia:
+                if int(v['worklength']) >= depth:
+                    return k
+            if int(v['diameter']) < macroDia:
+                if int(v['worklength']) >= depth:
+                    if choice == '99':
+                        choice = k
+                    if int(v['diameter']) > int(frezLib[choice]['diameter']):
+                        choice = k
+        return choice
+
 class Example(QWidget):
     # Makra - pusta lista, obecny profil to profil - potem nadamy mu właściwości
     macros, currentProfil = [], Profil
@@ -287,19 +305,11 @@ class Example(QWidget):
                         self.imageView.setPixmap(QPixmap(".\\profile\\"+bar.barProfil+".png"))
 
                         for macro in macros:  # Przypisanie wartości z JSONA do właściwości obiektu
-                            macro.Obrot = macroLib[macro.Ident]['angle']
-                            macro.Frez = macroLib[macro.Ident]['tool']
-                            macro.Description = macroLib[macro.Ident]['description']
-                            macro.Type = macroLib[macro.Ident]['type']
-                            macro.DeltaX = macroLib[macro.Ident]['deltaX']
-                            macro.Width = macroLib[macro.Ident]['width']
-                            macro.Height = macroLib[macro.Ident]['height']
-                            macro.Approach = macroLib[macro.Ident]['approach']
-                            macro.Approach = evaluateMathGeometry(macro.Approach, self.currentProfil.Height)
-                            macro.End = macroLib[macro.Ident]['end']
-                            macro.End =evaluateMathGeometry(macro.End, self.currentProfil.Height)
-                            macro.PosY = macroLib[macro.Ident]['posY']
-                            macro.PosY =evaluateMathGeometry(macro.PosY, self.currentProfil.Width)
+                            try:
+                                macro.Description = macroLib[macro.Ident]['description']
+                            except:
+                                macro.Description = macro.Ident
+
                         midx = 0
                         macrosSorted = copy.copy(macros)
                         macrosSorted.sort(key=lambda x: x.WX)
@@ -381,6 +391,8 @@ class Example(QWidget):
         global inc
         inc = 8  # Zaczynam od 8 linijki - 80
 
+        ''' Stały cig znaków oznaczajcy zmiane narzędzia - konieczne każdorazowe wpisanie w celu poprawnego działania
+        maszyn - Rumb '''
         def zmianaNarzedzia(frez, predkosc, fileIn, inc, kat_lozaIn):
             writeInc(fileIn, str(inc * 10) + ';97;6;;1;' + str(frez) + ';4;' + str(predkosc) + ';;\n')
             inc += 1
@@ -403,7 +415,6 @@ class Example(QWidget):
 
         file = open(self.textbox.text()+'.txt', 'w')
 
-
         #  Definicja zmiennych dla parametrów maszyny ##
         global Delta_X, Delta_Y, Delta_Z, Odsuniecie_Y, kat_loza
         Delta_X = 59.5
@@ -413,6 +424,8 @@ class Example(QWidget):
         Disengage_Z = 95.92
         kat_loza = 0.00
 
+        ''' Zmiana kta - kolejny raz potrzebna jest całościowa funkcja, kilka linijek
+        które wykonywane sa przez maszyne w przypadku zmiany kata obróbki '''
         def zmianaKata(kat):
             global Delta_Y, Delta_Z
             Okrag_Y = -175.375
@@ -433,14 +446,12 @@ class Example(QWidget):
                 # Funkcja przygotowawcza kąta
                 writeInc(file, str(inc * 10) + ';97;10;;' + str(round(-kat, 2)) + ';;;;;\n')
 
-            Delta_Y = round(Okrag_Y + math.cos(katKoncowy) * Okrag_R, 2)
             Delta_Z = round(Okrag_Z + math.sin(katKoncowy) * Okrag_R, 2)
+            Delta_Y = round(Okrag_Y + math.cos(katKoncowy) * Okrag_R, 2)
 
         macrosSortedWX = copy.copy(macros)
         macros.sort(key=lambda x: x.WX)
         macrosSortedWX.sort(key=lambda x: x.WX)
-        macros.sort(key=lambda x: x.Obrot)  # posortuj po obrocie
-        macros.sort(key=lambda x: x.Frez, reverse=True)  # posortuj po narzędziu
 
         m_prev = 0
         distanceList = []
@@ -460,76 +471,65 @@ class Example(QWidget):
 
         frezPoprzedni = 0
         obrotPoprzedni = -1
+
+        curProfil = Profil(arrBars[1].barProfil, arrBars[1].barWidth, arrBars[1].barHeight, arrBars[1].barLength)
+
         for macro in macros:
-            frezWybrany = frezLib[str(macro.Frez[0])]
-            obrot = macro.Obrot
+            pioneer = True
+            obrot = 0  # Do sprawdzenia pozniej - poki co wykonujemy makra bez obracania łożem.
+
             if (obrotPoprzedni != obrot):
-                zmianaKata(macro.Obrot)
-
-            Disengage_Z = ncfunctions.findNearest(macro.Obrot, self.currentProfil.Height)
-            wysDisengage = Delta_Z + frezWybrany['length'] + Disengage_Z
-
-            if (obrotPoprzedni == obrot):
+                zmianaKata(obrot)
+            else:
                 writeInc(file, str(inc * 10) + ';0;;Z;;' + str(round(wysDisengage, 2)) + ';;;;\n')
 
-            if (frezPoprzedni != frezWybrany):
-                zmianaNarzedzia(macro.Frez[0], frezWybrany['speed'], file, inc, kat_loza)
-
             XPos, YPos, ZPosStart, ZPosEnd = '', '', '', ''
-            for i in range(len(macro.Approach)):
-                # Blok ustawiania odpowiednich wartości X, Y, Z
-                if (macro.Height[i] > frezWybrany['diameter'] and macro.Type != 'Hole'):
-                    YPos = Delta_Y - Odsuniecie_Y - macro.PosY[i] + (macro.Height[i] - frezWybrany['diameter']) / 2
+
+            # Iteracja poprzez worki w makrze
+            for work in macro.macroWorks:
+                nrFreza = getProperTool(work.workWW1, work.workDepth)
+                frezWybrany = frezLib[nrFreza]
+
+                if (frezPoprzedni != frezWybrany):
+                    zmianaNarzedzia(nrFreza, frezWybrany['speed'], file, inc, kat_loza)
+
+                Disengage_Z = ncfunctions.findNearest(obrot, self.currentProfil.Height)
+                wysDisengage = Delta_Z + frezWybrany['length'] + Disengage_Z
+
+                # Blok ustawienia odpowiednich wartości X,Y,Z dla obróbki
+                if (work.workWW1 > frezWybrany['diameter'] and work.workType != 'C'):
+                    YPos = Delta_Y - Odsuniecie_Y - work.workWY + (work.workWW1 - frezWybrany['diameter']) / 2
                 else:
-                    YPos = Delta_Y - Odsuniecie_Y - macro.PosY[i]
+                    YPos = Delta_Y - Odsuniecie_Y - work.workWY
 
-                if macro.WX + macro.DeltaX[i] > self.currentprofil.Length:
-                    macro.DeltaX[i] *= -1
-
-                if macro.Width[i] > frezWybrany['diameter'] and macro.Type != 'Hole':
-                    XPos = Delta_X + macro.WX + macro.DeltaX[i] - macro.Width[i] / 2 + frezWybrany['diameter'] / 2
+                if work.workWW2 > frezWybrany['diameter'] and work.workType != 'C':
+                    XPos = Delta_X + macro.WX + work.workWX - work.workWW2 / 2 + frezWybrany['diameter'] / 2
                 else:
-                    XPos = Delta_X + macro.WX + macro.DeltaX[i]
-                # Oznaczenie wartości X, Y, Z zakończone
+                    XPos = Delta_X + macro.WX + work.workWX
+                # Blok ustawiania zakończony
 
-                # Inne zachowanie dla pierwszego wjazdu niż kolejnych
-                if i == 0:
+                # Inne zachowanie dla pierwszego worka z Makro?
+                if pioneer == True:
                     enterPos = wysDisengage
-                elif macro.Approach[i] != macro.Approach[i - 1]:
-                    enterPos = ZPosEnd  # końcówka poprzedniej obróbki!
+                else:
+                    enterPos = ZPosEnd
 
-                ZPosStart = Delta_Z + frezWybrany['length'] - macro.Approach[i]
-                ZPosEnd = Delta_Z + frezWybrany['length'] - macro.End[i]
-                holeDiff = (macro.Height[i] - frezWybrany['diameter']) / 2
+                # W zależności od tego który side to rożne brane approach?
+                if work.workSide == '2' or work.workSide == '3':
+                    approach = float(curProfil.Height)
+                else:
+                    approach = float(curProfil.Width)
+
+                pioneer = False
+                ZPosStart = Delta_Z + frezWybrany['length'] - (approach + work.workHeight)
+                ZPosEnd = Delta_Z + frezWybrany['length'] - (approach - work.workDepth)
+                holeDiff = (work.workWW1 - frezWybrany['diameter']) / 2
 
                 writeInc(file, str(inc * 10) + ';0;;XYZ;;' + str(XPos) + ';' + str(YPos + holeDiff) + ';' + str(round(enterPos, 2)) + ';;\n')
                 writeInc(file, str(inc * 10) + ';0;;Z;;' + str(round(ZPosStart, 2)) + ';;;;\n')
-                writeInc(file, str(inc * 10) + ';97;7;;2;;;;;\n') # Zagadka - co powoduje ta linijka, czy możemy ją jakoś wyselekcjonować.
+                writeInc(file, str(inc * 10) + ';97;7;;2;;;;;\n')  # Zagadka - co powoduje ta linijka, czy możemy ją jakoś wyselekcjonować.
                 writeInc(file, str(inc * 10) + ';97;11;;;;;;;\n')
                 writeInc(file, str(inc * 10) + ';1;;Z;200;' + str(round(ZPosEnd, 2)) + ';;;;\n')  # Praca w osi Z, zejście
-
-                if macro.Type == 'Slot':
-                    if macro.Width[i] > macro.Height[i]:
-                        YPos = Delta_Y - Odsuniecie_Y - macro.PosY[i] + (macro.Height[i] - frezWybrany['diameter']) / 2
-                        writeInc(file, str(inc * 10) + ';28;;XY;;;;;;\n')
-                        writeInc(file, str(inc * 10) + ';1;;XY;800;' + str(XPos) + ';' + str(YPos) + ';;;\n')
-                    else:
-                        XPos = Delta_X + macro.WX + macro.Width[i] / 2 - frezWybrany['diameter'] / 2
-                        writeInc(file, str(inc * 10) + ';28;;XY;;;;;;\n')
-                        writeInc(file, str(inc * 10) + ';1;;XY;800;' + str(XPos) + ';' + str(YPos) + ';;;\n')
-
-                if macro.Type == 'Hole' and holeDiff > 0:
-                    writeInc(file, str(inc * 10) + ';28;;XY;;;;;;\n')
-                    writeInc(file, str(inc * 10) + ';2;;XY;800;' + str(XPos) + ';' + str(YPos - holeDiff) + ';' + str(XPos) + ';' + str(YPos) + ';\n')
-                    writeInc(file, str(inc * 10) + ';2;;XY;800;' + str(XPos) + ';' + str(YPos + holeDiff) + ';' + str(XPos) + ';' + str(YPos) + ';\n')
-
-                writeInc(file, str(inc * 10) + ';97;9;;;;;;;\n')
-
-                # Cofanie się n a pozycje Z jest niepotrzebne - wydlużenie czasu obróbki - wyjatek kiedy maja inne Y
-                if i < len(macro.Approach) - 1 and macro.PosY[i] != macro.PosY[i + 1]:
-                    writeInc(file, str(inc * 10) + ';0;;Z;;' + str(round(wysDisengage, 2)) + ';;;;\n')
-
-
 
             frezPoprzedni = frezWybrany
             obrotPoprzedni = obrot
