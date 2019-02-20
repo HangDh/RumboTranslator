@@ -34,6 +34,7 @@ def load(content):
         Description = ''
         WX = 0.0
         PosY = 0
+        Tool = '0'
         macroWorks = []
 
         def __init__(self, ident):
@@ -49,7 +50,8 @@ def load(content):
         workWW1 = 0
         workWW2 = 0
         workHeight = 0.0
-        workDepth = 0.0
+        workD1 = 0.0
+        workD2 = 0.0
         workAngle = 0.0
 
         def __init__(self, comment):
@@ -158,11 +160,6 @@ def load(content):
                     arrBars[idx].barCuts[sub_idx - 1].cutMacros[macro_idx - 1].macroWorks[work_idx - 1].workHeight = float(
                         (re.search(r'= (\d*.\d*)', y, flags=0).group(1)))
 
-            if y.startswith('WDepth') and macro_ident.startswith('WHeight'):
-                if work_idx > 0:
-                    arrBars[idx].barCuts[sub_idx - 1].cutMacros[macro_idx - 1].macroWorks[work_idx - 1].workDepth = float(
-                        (re.search(r'= (\d*.\d*)', y, flags=0).group(1)))
-
             if y.startswith('WW1') and macro_ident.startswith('WDepth'):
                 if work_idx > 0:
                     arrBars[idx].barCuts[sub_idx - 1].cutMacros[macro_idx - 1].macroWorks[work_idx - 1].workWW1 = float(
@@ -176,6 +173,16 @@ def load(content):
             if y.startswith('WAngle') and macro_ident.startswith('WW2'):
                 if work_idx > 0:
                     arrBars[idx].barCuts[sub_idx - 1].cutMacros[macro_idx - 1].macroWorks[work_idx - 1].workAngle = float(
+                        (re.search(r'= (\d*.\d*)', y, flags=0).group(1)))
+
+            if y.startswith('WDT0D') and macro_ident.startswith('WDrillCorr'):
+                if work_idx > 0:
+                    arrBars[idx].barCuts[sub_idx - 1].cutMacros[macro_idx - 1].macroWorks[work_idx - 1].workD1 = float(
+                        (re.search(r'= (\d*.\d*)', y, flags=0).group(1)))
+
+            if y.startswith('WDT1D') and macro_ident.startswith('WDT0F'):
+                if work_idx > 0:
+                    arrBars[idx].barCuts[sub_idx - 1].cutMacros[macro_idx - 1].macroWorks[work_idx - 1].workD2 = float(
                         (re.search(r'= (\d*.\d*)', y, flags=0).group(1)))
 
             macro_ident = y
