@@ -32,6 +32,8 @@ def load(content):
         Ident = ''
         Comment = ''
         Description = ''
+        Angle = 0.0
+        Side = 0
         WX = 0.0
         PosY = 0
         Tool = '0'
@@ -146,7 +148,16 @@ def load(content):
                     arrBars[idx].barCuts[sub_idx - 1].cutMacros[macro_idx - 1].macroWorks[work_idx - 1].workSide = (
                         re.search(r'= (\d)', y, flags=0).group(1))
 
-            if y.startswith('WY1') and macro_ident.startswith('WSide'):
+            if y.startswith('WPAngleX') and macro_ident.startswith('WSide'):
+                if work_idx > 0:
+                    if '-' in y:
+                        arrBars[idx].barCuts[sub_idx - 1].cutMacros[macro_idx - 1].macroWorks[work_idx - 1].workAngle = float(
+                            (re.search(r'= (-\d*.\d*)', y, flags=0).group(1)))
+                    else:
+                        arrBars[idx].barCuts[sub_idx - 1].cutMacros[macro_idx - 1].macroWorks[work_idx - 1].workAngle = float(
+                            (re.search(r'= (\d*.\d*)', y, flags=0).group(1)))
+
+            if y.startswith('WY1') and (macro_ident.startswith('WSide') or macro_ident.startswith('WPTransZ')):
                 if work_idx > 0:
                     if '-' in y:
                         arrBars[idx].barCuts[sub_idx - 1].cutMacros[macro_idx - 1].macroWorks[work_idx - 1].workWY = float(
@@ -175,7 +186,7 @@ def load(content):
                     arrBars[idx].barCuts[sub_idx - 1].cutMacros[macro_idx - 1].macroWorks[work_idx - 1].workAngle = float(
                         (re.search(r'= (\d*.\d*)', y, flags=0).group(1)))
 
-            if y.startswith('WDT0D') and macro_ident.startswith('WDrillCorr'):
+            if y.startswith('WDT0D') and (macro_ident.startswith('WDrillCorr') or macro_ident.startswith('WAngle')):
                 if work_idx > 0:
                     arrBars[idx].barCuts[sub_idx - 1].cutMacros[macro_idx - 1].macroWorks[work_idx - 1].workD1 = float(
                         (re.search(r'= (\d*.\d*)', y, flags=0).group(1)))

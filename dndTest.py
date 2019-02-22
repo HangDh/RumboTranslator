@@ -294,15 +294,25 @@ class Example(QWidget):
                         self.textBoxMacro.setText('')
                         self.textBoxMacro.append('Belka: ' + cut.cutDescription + ', Długość: ' + str(cut.cutLength) + ', Profil: ' + bar.barProfil + '\n')
                         macros = cut.cutMacros  # wybór belki
+                        sides = []
                         for m in macros:
                             # Ponieważ BJM miał dwa makra pod odwodnienie, to jedno z nich po prostu usuwamy
                             if m.Ident == 'Drain for Frame - hidden d BJM machining 4035':
                                 macros.remove(m)
 
+                            for work in m.macroWorks:
+                                if work.workSide == '7':
+                                    work.workSide = '1'
+                                m.Side = work.workSide
+                                sides.append(work.workSide)
+
+                        if len(set(sides)) > 1:
+                            self.textBoxMacro.append('KONIECZNE ROTACJE/KULANIE PROFILEM!')
+
                         # Dopisujemy właściwości do obecnego profilu - informacje czerpiac z bara (plik ncx)
                         self.currentProfil = Profil(bar.barProfil, bar.barWidth, bar.barHeight, cut.cutLength)
                         # Wczytaj obrazek z bar profilem
-                        self.imageView.setPixmap(QPixmap(".\\profile\\"+bar.barProfil+".png"))
+                        self.imageView.setPixmap(QPixmap(".\\profile\\"+bar.barProfil+'_'+sides[0]+".png"))
 
                         for macro in macros:  # Przypisanie wartości z JSONA do właściwości obiektu
                             try:
@@ -424,7 +434,7 @@ class Example(QWidget):
         Disengage_Z = 95.92
         kat_loza = 0.00
 
-        ''' Zmiana kta - kolejny raz potrzebna jest całościowa funkcja, kilka linijek
+        ''' Zmiana kata - kolejny raz potrzebna jest całościowa funkcja, kilka linijek
         które wykonywane sa przez maszyne w przypadku zmiany kata obróbki '''
         def zmianaKata(kat):
             global Delta_Y, Delta_Z
@@ -456,6 +466,7 @@ class Example(QWidget):
             for work in m.macroWorks:
                 diameterList.append(int(work.workWW1))
                 depthList.append(int(work.workD2))
+                m.Angle = work.workAngle
 
             for work in m.macroWorks:
                 minDia = min(diameterList)
@@ -486,18 +497,22 @@ class Example(QWidget):
         ### KONIEC BLOKU STAŁEGO RUMBA 1 ###
 
         frezPoprzedni = 0
-        obrotPoprzedni = -1
+        obrotPoprzedni = 0.0
 
         curProfil = Profil(arrBars[1].barProfil, arrBars[1].barWidth, arrBars[1].barHeight, arrBars[1].barLength)
 
         for macro in macros:
             workNr = 1
-            obrot = 0  # Do sprawdzenia pozniej - poki co wykonujemy makra bez obracania łożem.
+            obrot = macro.Angle  # Do sprawdzenia pozniej - poki co wykonujemy makra bez obracania łożem.
+
+            Disengage_Z = ncfunctions.findNearest(obrot, self.currentProfil.Height)
+            wysDisengage = Delta_Z + frezLib[macro.Tool]['length'] + Disengage_Z
 
             if (obrotPoprzedni != obrot):
                 zmianaKata(obrot)
             else:
-                writeInc(file, str(inc * 10) + ';0;;Z;;' + str(round(wysDisengage, 2)) + ';;;;\n')
+                if workNr > 1:
+                    writeInc(file, str(inc * 10) + ';0;;Z;;' + str(round(wysDisengage, 2)) + ';;;;\n')
 
             XPos, YPos, ZPosStart, ZPosEnd = '', '', '', ''
 
@@ -506,9 +521,6 @@ class Example(QWidget):
 
                 if (frezPoprzedni != frezWybrany):
                     zmianaNarzedzia(macro.Tool, frezWybrany['speed'], file, inc, kat_loza)
-
-                Disengage_Z = ncfunctions.findNearest(obrot, self.currentProfil.Height)
-                wysDisengage = Delta_Z + frezWybrany['length'] + Disengage_Z
 
                 # Blok ustawienia odpowiednich wartości X,Y,Z dla obróbki
                 if (work.workWW1 > frezWybrany['diameter'] and work.workType != 'C'):
@@ -534,11 +546,11 @@ class Example(QWidget):
                 else:
                     approach = float(curProfil.Width)
 
-                ZPosStart = Delta_Z + frezWybrany['length'] + (approach - work.workD1 + work.workHeight) # do sprawdzenia czy workHeight czy hardcodowac 2.0
+                ZPosStart = Delta_Z + frezWybrany['length'] + (approach - work.workD1)  # do sprawdzenia czy workHeight czy hardcodowac 2.0
                 ZPosEnd = Delta_Z + frezWybrany['length'] + (approach - work.workD2)
                 holeDiff = (work.workWW1 - frezWybrany['diameter']) / 2
 
-                writeInc(file, str(inc * 10) + ';0;;XYZ;;' + str(XPos) + ';' + str(YPos + holeDiff) + ';' + str(round(enterPos, 2)) + ';;\n')
+                writeInc(file, str(inc * 10) + ';0;;XYZ;;' + str(XPos) + ';' + str(round(YPos + holeDiff, 2)) + ';' + str(round(enterPos, 2)) + ';;\n')
                 writeInc(file, str(inc * 10) + ';0;;Z;;' + str(round(ZPosStart, 2)) + ';;;;\n')
                 writeInc(file, str(inc * 10) + ';97;7;;2;;;;;\n')  # Zagadka - co powoduje ta linijka, czy możemy ją jakoś wyselekcjonować.
                 writeInc(file, str(inc * 10) + ';97;11;;;;;;;\n')
@@ -546,7 +558,7 @@ class Example(QWidget):
 
                 if work.workType == 'L':
                     if work.workAngle == 0:
-                        YPos = Delta_Y - Odsuniecie_Y - work.workWY + (work.workWW2 - frezWybrany['diameter']) / 2
+                        YPos = round((Delta_Y - Odsuniecie_Y - work.workWY + (work.workWW2 - frezWybrany['diameter']) / 2), 2)
                         writeInc(file, str(inc * 10) + ';28;;XY;;;;;;\n')
                         writeInc(file, str(inc * 10) + ';1;;XY;800;' + str(XPos) + ';' + str(YPos) + ';;;\n')
                     else:
@@ -556,8 +568,8 @@ class Example(QWidget):
 
                 if work.workType == 'C' and holeDiff > 0:
                     writeInc(file, str(inc * 10) + ';28;;XY;;;;;;\n')
-                    writeInc(file, str(inc * 10) + ';2;;XY;800;' + str(XPos) + ';' + str(YPos - holeDiff) + ';' + str(XPos) + ';' + str(YPos) + ';\n')
-                    writeInc(file, str(inc * 10) + ';2;;XY;800;' + str(XPos) + ';' + str(YPos + holeDiff) + ';' + str(XPos) + ';' + str(YPos) + ';\n')
+                    writeInc(file, str(inc * 10) + ';2;;XY;800;' + str(XPos) + ';' + str(round(YPos + holeDiff, 2)) + ';' + str(XPos) + ';' + str(YPos) + ';\n')
+                    writeInc(file, str(inc * 10) + ';2;;XY;800;' + str(XPos) + ';' + str(round(YPos + holeDiff, 2)) + ';' + str(XPos) + ';' + str(YPos) + ';\n')
 
                 writeInc(file, str(inc * 10) + ';97;9;;;;;;;\n')
 
@@ -570,6 +582,7 @@ class Example(QWidget):
                 obrotPoprzedni = obrot
 
         writeInc(file, str(inc * 10) + ';0;;Z;;24.00;;;;\n')
+        # writeInc(file, str(inc * 10) + '0;;Y;;16.50;;;;\n')  #  w koncu ma byc czy nie?!
         writeInc(file, str(inc * 10) + ';97;5;;;;;;;\n')
         writeInc(file, str(inc * 10) + ';97;50;;;;;;;\n')
         writeInc(file, str(inc * 10) + ';97;80;;;;;;;\n')
