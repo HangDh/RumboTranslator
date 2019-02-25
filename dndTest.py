@@ -523,12 +523,12 @@ class Example(QWidget):
                     zmianaNarzedzia(macro.Tool, frezWybrany['speed'], file, inc, kat_loza)
 
                 # Blok ustawienia odpowiednich wartości X,Y,Z dla obróbki
-                if (work.workWW1 > frezWybrany['diameter'] and work.workType != 'C'):
+                if work.workWW1 > frezWybrany['diameter'] and work.workType != 'C' and work.workType != 'R':
                     YPos = Delta_Y - Odsuniecie_Y - work.workWY + (work.workWW1 - frezWybrany['diameter']) / 2
                 else:
                     YPos = Delta_Y - Odsuniecie_Y - work.workWY
 
-                if work.workWW2 > frezWybrany['diameter'] and work.workType != 'C':
+                if work.workWW2 > frezWybrany['diameter'] and work.workType != 'C' and work.workType != 'R':
                     XPos = Delta_X + macro.WX + work.workWX - work.workWW2 / 2 + frezWybrany['diameter'] / 2
                 else:
                     XPos = Delta_X + macro.WX + work.workWX
@@ -550,11 +550,30 @@ class Example(QWidget):
                 ZPosEnd = Delta_Z + frezWybrany['length'] + (approach - work.workD2)
                 holeDiff = (work.workWW1 - frezWybrany['diameter']) / 2
 
-                writeInc(file, str(inc * 10) + ';0;;XYZ;;' + str(XPos) + ';' + str(round(YPos + holeDiff, 2)) + ';' + str(round(enterPos, 2)) + ';;\n')
+                if work.workType == 'R':
+                    writeInc(file, str(inc * 10) + ';0;;XYZ;;' + str(round(XPos - (work.workWW1 - frezWybrany['diameter'])/ 2, 2)) + ';' +
+                             str(round(YPos + (work.workWW2 - frezWybrany['diameter']) / 2, 2)) + ';' + str(round(enterPos, 2)) + ';;\n')
+                else:
+                    YPos = round((Delta_Y - Odsuniecie_Y - work.workWY + (work.workWW2 - frezWybrany['diameter']) / 2), 2)
+                    XPos = round((Delta_X + work.workWX + (work.workWW1 - frezWybrany['diameter']) / 2), 2)
+                    writeInc(file, str(inc * 10) + ';0;;XYZ;;' + str(XPos) + ';' + str(YPos) + ';' + str(round(enterPos, 2)) + ';;\n')
+
                 writeInc(file, str(inc * 10) + ';0;;Z;;' + str(round(ZPosStart, 2)) + ';;;;\n')
                 writeInc(file, str(inc * 10) + ';97;7;;2;;;;;\n')  # Zagadka - co powoduje ta linijka, czy możemy ją jakoś wyselekcjonować.
                 writeInc(file, str(inc * 10) + ';97;11;;;;;;;\n')
                 writeInc(file, str(inc * 10) + ';1;;Z;200;' + str(round(ZPosEnd, 2)) + ';;;;\n')  # Praca w osi Z, zejście
+
+                if work.workType == 'R':
+                    if work.workAngle == 0:
+                        writeInc(file, str(inc * 10) + ';28;;XY;;;;;;\n')
+                        writeInc(file, str(inc * 10) + ';1;;XY;800;' + str(XPos + (work.workWW1 - frezWybrany['diameter']) / 2) + ';' +
+                                 str(YPos + (work.workWW2 - frezWybrany['diameter']) / 2) + ';;;\n')
+                        writeInc(file, str(inc * 10) + ';1;;XY;800;' + str(XPos + (work.workWW1 - frezWybrany['diameter']) / 2) + ';' +
+                                 str(YPos - (work.workWW2 - frezWybrany['diameter']) / 2) + ';;;\n')
+                        writeInc(file, str(inc * 10) + ';1;;XY;800;' + str(XPos - (work.workWW1 - frezWybrany['diameter']) / 2) + ';' +
+                                 str(YPos - (work.workWW2 - frezWybrany['diameter']) / 2) + ';;;\n')
+                        writeInc(file, str(inc * 10) + ';1;;XY;800;' + str(XPos - (work.workWW1 - frezWybrany['diameter']) / 2) + ';' +
+                                 str(YPos + (work.workWW2 - frezWybrany['diameter']) / 2) + ';;;\n')
 
                 if work.workType == 'L':
                     if work.workAngle == 0:
@@ -562,13 +581,13 @@ class Example(QWidget):
                         writeInc(file, str(inc * 10) + ';28;;XY;;;;;;\n')
                         writeInc(file, str(inc * 10) + ';1;;XY;800;' + str(XPos) + ';' + str(YPos) + ';;;\n')
                     else:
-                        XPos = Delta_X + work.workWX + (work.workWW1 - frezWybrany['diameter']) / 2
+                        XPos = round((Delta_X + work.workWX + (work.workWW1 - frezWybrany['diameter']) / 2), 2)
                         writeInc(file, str(inc * 10) + ';28;;XY;;;;;;\n')
                         writeInc(file, str(inc * 10) + ';1;;XY;800;' + str(XPos) + ';' + str(YPos) + ';;;\n')
 
                 if work.workType == 'C' and holeDiff > 0:
                     writeInc(file, str(inc * 10) + ';28;;XY;;;;;;\n')
-                    writeInc(file, str(inc * 10) + ';2;;XY;800;' + str(XPos) + ';' + str(round(YPos + holeDiff, 2)) + ';' + str(XPos) + ';' + str(YPos) + ';\n')
+                    writeInc(file, str(inc * 10) + ';2;;XY;800;' + str(XPos) + ';' + str(round(YPos - holeDiff, 2)) + ';' + str(XPos) + ';' + str(YPos) + ';\n')
                     writeInc(file, str(inc * 10) + ';2;;XY;800;' + str(XPos) + ';' + str(round(YPos + holeDiff, 2)) + ';' + str(XPos) + ';' + str(YPos) + ';\n')
 
                 writeInc(file, str(inc * 10) + ';97;9;;;;;;;\n')
