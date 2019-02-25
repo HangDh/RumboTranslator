@@ -51,6 +51,7 @@ def load(content):
         workSide = 0
         workWW1 = 0
         workWW2 = 0
+        workWW3 = 0
         workHeight = 0.0
         workD1 = 0.0
         workD2 = 0.0
@@ -181,7 +182,12 @@ def load(content):
                     arrBars[idx].barCuts[sub_idx - 1].cutMacros[macro_idx - 1].macroWorks[work_idx - 1].workWW2 = float(
                         (re.search(r'= (\d*.\d*)', y, flags=0).group(1)))
 
-            if y.startswith('WAngle') and macro_ident.startswith('WW2'):
+            if y.startswith('WW3') and macro_ident.startswith('WW2'):
+                if work_idx > 0:
+                    arrBars[idx].barCuts[sub_idx - 1].cutMacros[macro_idx - 1].macroWorks[work_idx - 1].workWW3 = float(
+                        (re.search(r'= (\d*.\d*)', y, flags=0).group(1)))
+
+            if y.startswith('WAngle') and (macro_ident.startswith('WW2') or macro_ident.startswith('WW3')):
                 if work_idx > 0:
                     arrBars[idx].barCuts[sub_idx - 1].cutMacros[macro_idx - 1].macroWorks[work_idx - 1].workAngle = float(
                         (re.search(r'= (\d*.\d*)', y, flags=0).group(1)))
