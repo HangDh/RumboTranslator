@@ -1,6 +1,6 @@
-from PyQt5.QtWidgets import QPushButton, QWidget, QApplication, QLabel, QLineEdit, QFileDialog, QTextEdit, QGraphicsView
+from PyQt5.QtWidgets import QPushButton, QWidget, QApplication, QLabel, QLineEdit, QFileDialog, QTextEdit, QCheckBox
 from PyQt5.QtCore import Qt, QMimeData
-from PyQt5.QtGui import QDrag, QPainter, QPen, QFont, QPixmap
+from PyQt5.QtGui import QDrag, QPainter, QPen, QFont, QPixmap, QTransform
 import datetime
 import json
 import math
@@ -70,10 +70,10 @@ def getProperTool(macroDia, depth):
         choice = '0'
         for k, v in frezLib.items():
             if int(v['diameter']) == macroDia:
-                if int(v['worklength']) >= depth:
+                if int(v['length']) >= depth:
                     return k
             if int(v['diameter']) < macroDia:
-                if int(v['worklength']) >= depth:
+                if int(v['length']) >= depth:
                     if choice == '0':
                         choice = k
                     if int(v['diameter']) > int(frezLib[choice]['diameter']):
@@ -152,6 +152,12 @@ class Example(QWidget):
         self.label.resize(500, 20)
         self.label.move(130, 135)
 
+        # Checkbox do wprowadzenia mirrora (ułożenie profila)
+        self.checkMirror = QCheckBox('Mirror profile', self)
+        self.checkMirror.resize(100, 20)
+        self.checkMirror.move(580, 230)
+        self.checkMirror.stateChanged.connect(self.clickedMirror)
+
         # Labele z nazwami makr - czy to C, O, W, M - literki od Cornerów, Odwodnień itp.
         self.macrosVis = []
         for i in range(20):
@@ -177,6 +183,19 @@ class Example(QWidget):
         self.setWindowTitle('Rumbominator 2018')
         self.setGeometry(300, 200, 280, 150)
         self.resize(800, 500)
+
+    # Klikniecie mirror - zmiana stanu:
+    def clickedMirror(self):
+        if self.checkMirror.isChecked():
+            t = QTransform()
+            t.scale(-1, 1)
+
+            test = self.image_pix
+            # rotate the pixmap
+            rotated_pixmap = self.image_pix.transformed(t)
+            self.imageView.setPixmap(rotated_pixmap)
+        else:
+            self.imageView.setPixmap(self.image_pix)
 
     # Poruszkanie klemami - informacje na temat przemieszczeń z pola.
     def moveClampK1(self):
@@ -312,7 +331,8 @@ class Example(QWidget):
                         # Dopisujemy właściwości do obecnego profilu - informacje czerpiac z bara (plik ncx)
                         self.currentProfil = Profil(bar.barProfil, bar.barWidth, bar.barHeight, cut.cutLength)
                         # Wczytaj obrazek z bar profilem
-                        self.imageView.setPixmap(QPixmap(".\\profile\\"+bar.barProfil+'_'+sides[0]+".png"))
+                        self.image_pix = QPixmap(".\\profile\\"+bar.barProfil+'_'+sides[0]+".png")
+                        self.imageView.setPixmap(self.image_pix)
 
                         for macro in macros:  # Przypisanie wartości z JSONA do właściwości obiektu
                             try:
@@ -446,15 +466,9 @@ class Example(QWidget):
 
             # Przy pierwszej zmianie kąta wpisywane są te linijki - nie jestesmy pewni dlaczego
             # Dlatego na wszelki wypadek dopisujemy.
-            if Delta_Y != round(Okrag_Y + math.cos(katKoncowy) * Okrag_R, 2):
-                writeInc(file, str(inc * 10) + ';0;;Z;;24.00;;;;\n')
-                writeInc(file, str(inc * 10) + ';0;;Y;;16.50;;;;\n')
-                writeInc(file, str(inc * 10) + ';0;;Z;;24.00;;;;\n')
-                writeInc(file, str(inc * 10) + ';0;;Y;;16.50;;;;\n')
-                writeInc(file, str(inc * 10) + ';0;;Z;;24.00;;;;\n')
-                writeInc(file, str(inc * 10) + ';0;;Y;;16.50;;;;\n')
-                # Funkcja przygotowawcza kąta
-                writeInc(file, str(inc * 10) + ';97;10;;' + str(round(-kat, 2)) + ';;;;;\n')
+            # if Delta_Y != round(Okrag_Y + math.cos(katKoncowy) * Okrag_R, 2):
+                # Funkcja przygotowawcza kąta (ale wygląda, że wszystko dzieje się w zmianie narzędzia! ;)
+                # writeInc(file, str(inc * 10) + ';97;10;;' + str(round(-kat, 2)) + ';;;;;\n')
 
             Delta_Z = round(Okrag_Z + math.sin(katKoncowy) * Okrag_R, 2)
             Delta_Y = round(Okrag_Y + math.cos(katKoncowy) * Okrag_R, 2)
@@ -464,7 +478,10 @@ class Example(QWidget):
             diameterList = []
             depthList = []
             for work in m.macroWorks:
-                diameterList.append(int(work.workWW1))
+                if int(work.workWW1 > 0):
+                    diameterList.append(int(work.workWW1))
+                if int(work.workWW2 > 0):
+                    diameterList.append(int(work.workWW2))
                 depthList.append(int(work.workD2))
                 m.Angle = work.workAngle
 
@@ -503,14 +520,22 @@ class Example(QWidget):
 
         for macro in macros:
             workNr = 1
-            obrot = macro.Angle  # Do sprawdzenia pozniej - poki co wykonujemy makra bez obracania łożem.
+            obroty = []
+
+            for w in macro.macroWorks:
+                obroty.append(w.workRotation)
+            obrot = max(obroty)
+
+            if self.checkMirror.isChecked():
+                obrot = -obrot
+
+            if (obrotPoprzedni != obrot):    # Wyglada na to, że wszystko dzieje sie w zmianie narzędzia (stąd zmiany w funkcji)
+                zmianaKata(obrot)
 
             Disengage_Z = ncfunctions.findNearest(obrot, self.currentProfil.Height)
             wysDisengage = Delta_Z + frezLib[macro.Tool]['length'] + Disengage_Z
 
-            if (obrotPoprzedni != obrot):
-                zmianaKata(obrot)
-            else:
+            if (obrotPoprzedni == obrot):
                 if workNr > 1:
                     writeInc(file, str(inc * 10) + ';0;;Z;;' + str(round(wysDisengage, 2)) + ';;;;\n')
 
@@ -520,15 +545,20 @@ class Example(QWidget):
                 frezWybrany = frezLib[macro.Tool]
 
                 if (frezPoprzedni != frezWybrany):
-                    zmianaNarzedzia(macro.Tool, frezWybrany['speed'], file, inc, kat_loza)
+                    zmianaNarzedzia(macro.Tool, frezWybrany['speed'], file, inc, -obrot)
+
+                if self.checkMirror.isChecked():
+                    work.workWY = float(curProfil.Width) - work.workWY
+                    macro.WX = float(self.currentProfil.Length) - macro.WX
 
                 # Blok ustawienia odpowiednich wartości X,Y,Z dla obróbki
-                if work.workWW1 > frezWybrany['diameter'] and work.workType != 'C' and work.workType != 'R':
+                # Dodano 0.2 ze względu na powiększenie w logikalu o 0.2 każdej obróbki.
+                if work.workWW1 > frezWybrany['diameter']+0.2 and work.workType != 'C' and work.workType != 'R':
                     YPos = Delta_Y - Odsuniecie_Y - work.workWY + (work.workWW1 - frezWybrany['diameter']) / 2
                 else:
                     YPos = Delta_Y - Odsuniecie_Y - work.workWY
 
-                if work.workWW2 > frezWybrany['diameter'] and work.workType != 'C' and work.workType != 'R':
+                if work.workWW2 > frezWybrany['diameter']+0.2 and work.workType != 'C' and work.workType != 'R':
                     XPos = Delta_X + macro.WX + work.workWX - work.workWW2 / 2 + frezWybrany['diameter'] / 2
                 else:
                     XPos = Delta_X + macro.WX + work.workWX
@@ -555,7 +585,7 @@ class Example(QWidget):
                              str(round(YPos + (work.workWW2 - frezWybrany['diameter']) / 2, 2)) + ';' + str(round(enterPos, 2)) + ';;\n')
                 else:
                     YPos = round((Delta_Y - Odsuniecie_Y - work.workWY + (work.workWW2 - frezWybrany['diameter']) / 2), 2)
-                    XPos = round((Delta_X + work.workWX + (work.workWW1 - frezWybrany['diameter']) / 2), 2)
+                    XPos = round((Delta_X + macro.WX + work.workWX + (work.workWW1 - frezWybrany['diameter']) / 2), 2)
                     writeInc(file, str(inc * 10) + ';0;;XYZ;;' + str(XPos) + ';' + str(YPos) + ';' + str(round(enterPos, 2)) + ';;\n')
 
                 writeInc(file, str(inc * 10) + ';0;;Z;;' + str(round(ZPosStart, 2)) + ';;;;\n')

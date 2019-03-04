@@ -56,6 +56,7 @@ def load(content):
         workD1 = 0.0
         workD2 = 0.0
         workAngle = 0.0
+        workRotation = 0.0
 
         def __init__(self, comment):
             self.workComment = comment
@@ -152,10 +153,10 @@ def load(content):
             if y.startswith('WPAngleX') and macro_ident.startswith('WSide'):
                 if work_idx > 0:
                     if '-' in y:
-                        arrBars[idx].barCuts[sub_idx - 1].cutMacros[macro_idx - 1].macroWorks[work_idx - 1].workAngle = float(
+                        arrBars[idx].barCuts[sub_idx - 1].cutMacros[macro_idx - 1].macroWorks[work_idx - 1].workRotation = float(
                             (re.search(r'= (-\d*.\d*)', y, flags=0).group(1)))
                     else:
-                        arrBars[idx].barCuts[sub_idx - 1].cutMacros[macro_idx - 1].macroWorks[work_idx - 1].workAngle = float(
+                        arrBars[idx].barCuts[sub_idx - 1].cutMacros[macro_idx - 1].macroWorks[work_idx - 1].workRotation = float(
                             (re.search(r'= (\d*.\d*)', y, flags=0).group(1)))
 
             if y.startswith('WY1') and (macro_ident.startswith('WSide') or macro_ident.startswith('WPTransZ')):
