@@ -576,6 +576,10 @@ class Example(QWidget):
                 else:
                     approach = float(curProfil.Width)
 
+                if obrot != 0.0:
+                    abs_obrot = math.fabs(obrot)
+                    approach =
+
                 ZPosStart = Delta_Z + frezWybrany['length'] + (approach - work.workD1)  # do sprawdzenia czy workHeight czy hardcodowac 2.0
                 ZPosEnd = Delta_Z + frezWybrany['length'] + (approach - work.workD2)
                 holeDiff = (work.workWW1 - frezWybrany['diameter']) / 2
