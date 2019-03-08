@@ -170,19 +170,27 @@ class Example(QWidget):
 
         # Tutaj znajdują się informacje o makrach, które będą wykonywane na danej belce.
         self.textBoxMacro = QTextEdit(self)
-        self.textBoxMacro.resize(400, 230)
+        self.textBoxMacro.resize(400, 350)
         self.textBoxMacro.move(20, 250)
+
+        # millView - podgląd freza
+        self.millView = QLabel(self)
+        self.millView.setAlignment(Qt.AlignTop)
+        self.millView.resize(30, 64)
+        self.millView.move(600, 300)
+        self.mill_pix = QPixmap(".\\profile\\mill.png")
+        self.millView.setPixmap(self.mill_pix)
 
         # ImageView - podgląd profilu
         self.imageView = QLabel(self)
-        self.imageView.setAlignment(Qt.AlignCenter)
-        self.imageView.resize(320, 230)
-        self.imageView.move(460, 250)
+        self.imageView.setAlignment(Qt.AlignBottom)
+        self.imageView.resize(320, 250)
+        self.imageView.move(460, 350)
 
         # Ogólne okno programu - RUMBOMINATOR
         self.setWindowTitle('Rumbominator 2018')
         self.setGeometry(300, 200, 280, 150)
-        self.resize(800, 500)
+        self.resize(800, 620)
 
     # Klikniecie mirror - zmiana stanu:
     def clickedMirror(self):
@@ -313,6 +321,8 @@ class Example(QWidget):
                         self.textBoxMacro.setText('')
                         self.textBoxMacro.append('Belka: ' + cut.cutDescription + ', Długość: ' + str(cut.cutLength) + ', Profil: ' + bar.barProfil + '\n')
                         macros = cut.cutMacros  # wybór belki
+                        if len(macros) == 0:
+                            break
                         sides = []
                         for m in macros:
                             # Ponieważ BJM miał dwa makra pod odwodnienie, to jedno z nich po prostu usuwamy
@@ -330,9 +340,11 @@ class Example(QWidget):
 
                         # Dopisujemy właściwości do obecnego profilu - informacje czerpiac z bara (plik ncx)
                         self.currentProfil = Profil(bar.barProfil, bar.barWidth, bar.barHeight, cut.cutLength)
+
                         # Wczytaj obrazek z bar profilem
                         self.image_pix = QPixmap(".\\profile\\"+bar.barProfil+'_'+sides[0]+".png")
                         self.imageView.setPixmap(self.image_pix)
+                        self.millView.setPixmap(self.mill_pix)
 
                         for macro in macros:  # Przypisanie wartości z JSONA do właściwości obiektu
                             try:
@@ -358,6 +370,44 @@ class Example(QWidget):
                             else:
                                 self.macrosVis[midx].setText('M')
                             midx += 1
+
+                        distance_list = []
+                        m_prev = 0
+                        k = 0
+
+                        self.clampsReset()
+
+                        for m in range(0, len(macrosSorted)):
+                            if k < 4:
+                                buttonsK = [self.button1, self.button2, self.button3, self.button4]
+                                textBoxesK = [self.textboxK1, self.textboxK2, self.textboxK3, self.textboxK4]
+                                distMacro = macrosSorted[m].WX - m_prev
+                                if (m == len(macrosSorted)):
+                                    distMacro = self.currentProfil.Length - macrosSorted[m].WX
+
+                                if distMacro > 140: # Dla ostrożności - powinno wystarczyć 120
+                                    textBoxesK[k].setText(str(m_prev + 20))
+                                    flPosX = float(float(textBoxesK[k].text()) * 500 / self.currentProfil.Length) + 45
+                                    buttonsK[k].setGeometry(flPosX + 10, 80, 120 * 500 / self.currentProfil.Length, 40)
+                                    klemy[k] = float(textBoxesK[k].text())
+                                    k += 1
+
+                                if distMacro > 500:
+                                    textBoxesK[k].setText(str(macrosSorted[m].WX - 160))
+                                    flPosX = float(float(textBoxesK[k].text()) * 500 / self.currentProfil.Length) + 45
+                                    buttonsK[k].setGeometry(flPosX + 10, 80, 120 * 500 / self.currentProfil.Length, 40)
+                                    klemy[k] = float(textBoxesK[k].text())
+                                    k += 1
+
+                            distance_list.append(macrosSorted[m].WX - m_prev)
+                            m_prev = macrosSorted[m].WX
+                            if (m == len(macrosSorted) - 1):
+                                distance_list.append(self.currentProfil.Length - macrosSorted[m].WX)
+
+                        self.textBoxMacro.append('\nOdległości pomiędzy kolejnymi makrami: ')
+                        for _ in distance_list:
+                            self.textBoxMacro.append(str(_))
+
             try:
                 # Jeszcze raz dla pewności usuwamy makro 4035 ?
                 for index, macro in enumerate(macros):
@@ -372,6 +422,7 @@ class Example(QWidget):
             if len(self.textbox.text()) == 5 or len(self.textbox.text()) == 11:
                 self.textbox.selectAll()
 
+
     def clampsReset(self):
         global klemy
         klemy = ['-9999', '-9999', '-9999', '-9999']
@@ -384,8 +435,10 @@ class Example(QWidget):
         self.textboxK2.setText('')
         self.textboxK3.setText('')
         self.textboxK4.setText('')
-        for i in range(20):
-            self.macrosVis[i].setText('')
+
+        # Resetowanie widoku makr
+        #for i in range(20):
+        #    self.macrosVis[i].setText('')
 
     def paintEvent(self, e):
         qp = QPainter()
@@ -507,9 +560,11 @@ class Example(QWidget):
             if (m == len(macrosSortedWX) - 1):
                 distanceList.append(self.currentProfil.Length - macrosSortedWX[m].WX)
 
+        for i in range(len(klemy)-1):
+            klemy[i] = str(klemy[i])
+
         ### BLOK STAŁY STARTOWY ###
-        file.write('10;97;80;;;;;;;\n' + '20;97;15;;;;;;;\n' + '30;97;99;;' + klemy[0] + ';' + klemy[1] + ';' + klemy[2] + ';' + klemy[
-            3] + ';;\n')  # Pozycja klem - ustawiam na puste
+        file.write('10;97;80;;;;;;;\n' + '20;97;15;;;;;;;\n' + '30;97;99;;' + klemy[0] + ';' + klemy[1] + ';' + klemy[2] + ';' + klemy[3] + ';;\n')  # Pozycja klem - ustawiam na puste
         file.write('40;0;;Z;;24.00;;;;\n' + '50;0;;Y;;16.50;;;;\n' + '60;97;10;;0.00;;;;;\n' + '70;28;;XY;;;;;;\n')
         ### KONIEC BLOKU STAŁEGO RUMBA 1 ###
 
@@ -532,6 +587,11 @@ class Example(QWidget):
             if (obrotPoprzedni != obrot):    # Wyglada na to, że wszystko dzieje sie w zmianie narzędzia (stąd zmiany w funkcji)
                 zmianaKata(obrot)
 
+                t = QTransform()
+                t.rotate(obrot)
+                rotated_pixmap = self.image_pix.transformed(t)
+                self.imageView.setPixmap(rotated_pixmap)
+
             Disengage_Z = ncfunctions.findNearest(obrot, self.currentProfil.Height)
             wysDisengage = Delta_Z + frezLib[macro.Tool]['length'] + Disengage_Z
 
@@ -548,7 +608,7 @@ class Example(QWidget):
                     zmianaNarzedzia(macro.Tool, frezWybrany['speed'], file, inc, -obrot)
 
                 if self.checkMirror.isChecked():
-                    work.workWY = float(curProfil.Width) - work.workWY
+                    work.workWY = float(self.currentProfil.Width) - work.workWY
                     macro.WX = float(self.currentProfil.Length) - macro.WX
 
                 # Blok ustawienia odpowiednich wartości X,Y,Z dla obróbki
@@ -572,23 +632,29 @@ class Example(QWidget):
 
                 # W zależności od tego który side to rożne brane approach?
                 if work.workSide == '1' or work.workSide == '6':
-                    approach = float(curProfil.Height)
+                    approach = float(self.currentProfil.Height)
                 else:
-                    approach = float(curProfil.Width)
+                    approach = float(self.currentProfil.Width)
 
                 if obrot != 0.0:
                     abs_obrot = math.fabs(obrot)
-                    approach =
+                    approach = -(float(self.currentProfil.Width)+Odsuniecie_Y)*math.sin(math.radians(obrot))+float(self.currentProfil.Height)*math.cos(math.radians(obrot))
 
-                ZPosStart = Delta_Z + frezWybrany['length'] + (approach - work.workD1)  # do sprawdzenia czy workHeight czy hardcodowac 2.0
-                ZPosEnd = Delta_Z + frezWybrany['length'] + (approach - work.workD2)
+                ZPosStart = Delta_Z + frezWybrany['length'] + (approach - work.workD1 + work.workHeight)  # do sprawdzenia czy workHeight czy hardcodowac 2.0
+                ZPosEnd = Delta_Z + frezWybrany['length'] + (approach - work.workD2 + work.workHeight)
                 holeDiff = (work.workWW1 - frezWybrany['diameter']) / 2
 
                 if work.workType == 'R':
                     writeInc(file, str(inc * 10) + ';0;;XYZ;;' + str(round(XPos - (work.workWW1 - frezWybrany['diameter'])/ 2, 2)) + ';' +
                              str(round(YPos + (work.workWW2 - frezWybrany['diameter']) / 2, 2)) + ';' + str(round(enterPos, 2)) + ';;\n')
                 else:
-                    YPos = round((Delta_Y - Odsuniecie_Y - work.workWY + (work.workWW2 - frezWybrany['diameter']) / 2), 2)
+                    if obrot == 0.0:
+                        YPos = round((Delta_Y - Odsuniecie_Y - work.workWY + (work.workWW2 - frezWybrany['diameter']) / 2), 2)
+                    else:
+                        delta_dist = (float(self.currentProfil.Width)+Odsuniecie_Y)*math.cos(math.radians(obrot)) + \
+                                     float(self.currentProfil.Height) * math.sin(math.radians(obrot))
+                        YPos = round((Delta_Y - delta_dist + work.workWY + (work.workWW2 - frezWybrany['diameter']) / 2), 2)
+
                     XPos = round((Delta_X + macro.WX + work.workWX + (work.workWW1 - frezWybrany['diameter']) / 2), 2)
                     writeInc(file, str(inc * 10) + ';0;;XYZ;;' + str(XPos) + ';' + str(YPos) + ';' + str(round(enterPos, 2)) + ';;\n')
 
