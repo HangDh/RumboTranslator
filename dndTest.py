@@ -1,14 +1,9 @@
 from PyQt5.QtWidgets import QPushButton, QWidget, QApplication, QLabel, QLineEdit, QFileDialog, QTextEdit, QCheckBox
 from PyQt5.QtCore import Qt, QMimeData
 from PyQt5.QtGui import QDrag, QPainter, QPen, QFont, QPixmap, QTransform
-import datetime
-import json
-import math
-import sys
-import copy
+import datetime, json, math, sys, copy
+import ncfunctions, ncloader
 
-import ncfunctions
-import ncloader
 
 class Frez(object):
     Srednica = 0
@@ -19,6 +14,7 @@ class Frez(object):
         self.Srednica = srednica
         self.Dlugosc = dlugosc
         self.Predkosc = predkosc
+
 
 class Profil(object):
     Name = ''
@@ -32,13 +28,13 @@ class Profil(object):
         self.Height = height
         self.Length = length
 
-class Button(QPushButton):
 
+class Button(QPushButton):
     def __init__(self, title, parent):
         super().__init__(title, parent)
         self.setAcceptDrops(True)
 
-    # Zdefiniowanie drag'n'dropa - bez drop Action? ;) - dropAction do usuniecia
+    # Zdefiniowanie drag'n'dropa - (overriden)
     def mouseMoveEvent(self, e):
         mimeData = QMimeData()
         drag = QDrag(self)
@@ -52,6 +48,7 @@ global klemy, arrBars
 klemy = ['-9999', '-9999', '-9999', '-9999']
 arrBars = []
 
+''' Dopisać o co chodzi w tej funkcji . '''
 def evaluateMathGeometry(arrayToChange, valueParam):
     for i, s in enumerate(arrayToChange):
         if type(arrayToChange[i]) == str:
@@ -80,7 +77,7 @@ def getProperTool(macroDia, depth):
                         choice = k
         return choice
 
-class Example(QWidget):
+class ApplicationWindow(QWidget):
     # Makra - pusta lista, obecny profil to profil - potem nadamy mu właściwości
     macros, currentProfil = [], Profil
 
@@ -91,9 +88,9 @@ class Example(QWidget):
     def initUI(self):
         self.setAcceptDrops(True)
 
-        generateBtn = QPushButton('Generuj', self)
-        generateBtn.move(270, 26)
-        generateBtn.clicked.connect(self.generateFile)
+        self.generateBtn = QPushButton('Generuj', self)
+        self.generateBtn.move(270, 26)
+        self.generateBtn.clicked.connect(self.generateFile)
 
         searchBtn = QPushButton('Wczytaj', self)
         searchBtn.move(650, 25)
@@ -216,7 +213,7 @@ class Example(QWidget):
             # Zmień wartość w liscie (do poźniejszego zapisu do pliku)
             klemy[0] = int(self.textboxK1.text())
         except:
-            print('ERROR')
+            print('')
 
     # J/W - klema K2
     def moveClampK2(self):
@@ -226,7 +223,7 @@ class Example(QWidget):
             self.button2.setGeometry(flPosX+10, 80, 120*500/length, 40)
             klemy[1] = int(self.textboxK2.text())
         except:
-            print('ERROR')
+            print('')
 
     # J/W - klema K3
     def moveClampK3(self):
@@ -236,7 +233,7 @@ class Example(QWidget):
             self.button3.setGeometry(flPosX+20, 80, 120*500/length, 40)
             klemy[2] = int(self.textboxK3.text())
         except:
-            print('ERROR')
+            print('')
 
     # J/W - klema K4
     def moveClampK4(self):
@@ -246,7 +243,7 @@ class Example(QWidget):
             self.button4.setGeometry(flPosX+20, 80, 120*500/length, 40)
             klemy[3] = int(self.textboxK4.text())
         except:
-            print('ERROR')
+            print('')
 
     # Początek drag and dropa - zaakceptowanie - pozwolenie na event.
     def dragEnterEvent(self, e):
@@ -321,9 +318,13 @@ class Example(QWidget):
                         self.textBoxMacro.setText('')
                         self.textBoxMacro.append('Belka: ' + cut.cutDescription + ', Długość: ' + str(cut.cutLength) + ', Profil: ' + bar.barProfil + '\n')
                         macros = cut.cutMacros  # wybór belki
-                        if len(macros) == 0:
+
+                        if len(macros) == 0:  # Jeżeli nie znajdzie makr - to wykonywanie programu ma się zakończyć - i nie można generować
+                            self.generateBtn.setEnabled(False)
                             break
+                        self.generateBtn.setEnabled(True)
                         sides = []
+
                         for m in macros:
                             # Ponieważ BJM miał dwa makra pod odwodnienie, to jedno z nich po prostu usuwamy
                             if m.Ident == 'Drain for Frame - hidden d BJM machining 4035':
@@ -579,14 +580,12 @@ class Example(QWidget):
 
             for w in macro.macroWorks:
                 obroty.append(w.workRotation)
-            obrot = max(obroty)
+            obrot = obroty[0]
 
             if self.checkMirror.isChecked():
                 obrot = -obrot
 
             if (obrotPoprzedni != obrot):    # Wyglada na to, że wszystko dzieje sie w zmianie narzędzia (stąd zmiany w funkcji)
-                zmianaKata(obrot)
-
                 t = QTransform()
                 t.rotate(obrot)
                 rotated_pixmap = self.image_pix.transformed(t)
@@ -595,13 +594,21 @@ class Example(QWidget):
             Disengage_Z = ncfunctions.findNearest(obrot, self.currentProfil.Height)
             wysDisengage = Delta_Z + frezLib[macro.Tool]['length'] + Disengage_Z
 
-            if (obrotPoprzedni == obrot):
-                if workNr > 1:
-                    writeInc(file, str(inc * 10) + ';0;;Z;;' + str(round(wysDisengage, 2)) + ';;;;\n')
-
             XPos, YPos, ZPosStart, ZPosEnd = '', '', '', ''
 
+            prev_obrot = obrot
+            prev_side = macro.macroWorks[0].workSide
+
             for work in macro.macroWorks:
+                obrot = work.workRotation
+                if (prev_side == '2' and work.workSide =='6'):
+                    obrot = -90.0
+                if (prev_obrot == obrot):
+                    if workNr > 1:
+                        writeInc(file, str(inc * 10) + ';0;;Z;;' + str(round(wysDisengage, 2)) + ';;;;\n')
+                else:
+                    zmianaKata(obrot)
+
                 frezWybrany = frezLib[macro.Tool]
 
                 if (frezPoprzedni != frezWybrany):
@@ -655,7 +662,7 @@ class Example(QWidget):
                                      float(self.currentProfil.Height) * math.sin(math.radians(obrot))
                         YPos = round((Delta_Y - delta_dist + work.workWY + (work.workWW2 - frezWybrany['diameter']) / 2), 2)
 
-                    XPos = round((Delta_X + macro.WX + work.workWX + (work.workWW1 - frezWybrany['diameter']) / 2), 2)
+                    XPos = round((Delta_X + macro.WX + work.workWX - (work.workWW1 - frezWybrany['diameter']) / 2), 2)
                     writeInc(file, str(inc * 10) + ';0;;XYZ;;' + str(XPos) + ';' + str(YPos) + ';' + str(round(enterPos, 2)) + ';;\n')
 
                 writeInc(file, str(inc * 10) + ';0;;Z;;' + str(round(ZPosStart, 2)) + ';;;;\n')
@@ -677,7 +684,8 @@ class Example(QWidget):
 
                 if work.workType == 'L':
                     if work.workAngle == 0:
-                        YPos = round((Delta_Y - Odsuniecie_Y - work.workWY + (work.workWW2 - frezWybrany['diameter']) / 2), 2)
+                        XPos = round((Delta_X + macro.WX + work.workWX + (work.workWW1 - frezWybrany['diameter']) / 2), 2)
+                        #YPos = round((Delta_Y - delta_dist - work.workWY + (work.workWW2 - frezWybrany['diameter']) / 2), 2)
                         writeInc(file, str(inc * 10) + ';28;;XY;;;;;;\n')
                         writeInc(file, str(inc * 10) + ';1;;XY;800;' + str(XPos) + ';' + str(YPos) + ';;;\n')
                     else:
@@ -698,7 +706,9 @@ class Example(QWidget):
 
                 workNr += 1
                 frezPoprzedni = frezWybrany
+                prev_obrot = obrot
                 obrotPoprzedni = obrot
+                prev_side = work.workSide
 
         writeInc(file, str(inc * 10) + ';0;;Z;;24.00;;;;\n')
         # writeInc(file, str(inc * 10) + '0;;Y;;16.50;;;;\n')  #  w koncu ma byc czy nie?!
@@ -714,6 +724,6 @@ class Example(QWidget):
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    ex = Example()
+    ex = ApplicationWindow()
     ex.show()
     app.exec_()
