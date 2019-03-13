@@ -520,9 +520,9 @@ class ApplicationWindow(QWidget):
 
             # Przy pierwszej zmianie kąta wpisywane są te linijki - nie jestesmy pewni dlaczego
             # Dlatego na wszelki wypadek dopisujemy.
-            # if Delta_Y != round(Okrag_Y + math.cos(katKoncowy) * Okrag_R, 2):
+            if Delta_Y != round(Okrag_Y + math.cos(katKoncowy) * Okrag_R, 2):
                 # Funkcja przygotowawcza kąta (ale wygląda, że wszystko dzieje się w zmianie narzędzia! ;)
-                # writeInc(file, str(inc * 10) + ';97;10;;' + str(round(-kat, 2)) + ';;;;;\n')
+                writeInc(file, str(inc * 10) + ';97;10;;' + str(round(-kat, 2)) + ';;;;;\n')
 
             Delta_Z = round(Okrag_Z + math.sin(katKoncowy) * Okrag_R, 2)
             Delta_Y = round(Okrag_Y + math.cos(katKoncowy) * Okrag_R, 2)
@@ -598,16 +598,32 @@ class ApplicationWindow(QWidget):
 
             prev_obrot = obrot
             prev_side = macro.macroWorks[0].workSide
+            w = self.currentProfil.Width
+            h = self.currentProfil.Height
 
             for work in macro.macroWorks:
                 obrot = work.workRotation
-                if (prev_side == '2' and work.workSide =='6'):
+
+                if work.workSide =='2' or work.workSide =='3':
+                    self.currentProfil.Width = h
+                    self.currentProfil.Height = w
+                else:
+                    self.currentProfil.Width = w
+                    self.currentProfil.Height = h
+
+                if macro.macroWorks[0].workSide == '2' and work.workSide == '6':
+                    obrot = 90.0
+                elif macro.macroWorks[0].workSide == '6' and work.workSide == '2':
                     obrot = -90.0
-                if (prev_obrot == obrot):
+
+                if prev_obrot == obrot:
                     if workNr > 1:
                         writeInc(file, str(inc * 10) + ';0;;Z;;' + str(round(wysDisengage, 2)) + ';;;;\n')
                 else:
                     zmianaKata(obrot)
+
+                if work.workWY < 0 and obrot == 0.0:
+                    work.workWY = float(self.currentProfil.Width) + float(work.workWY)
 
                 frezWybrany = frezLib[macro.Tool]
 
@@ -618,15 +634,19 @@ class ApplicationWindow(QWidget):
                     work.workWY = float(self.currentProfil.Width) - work.workWY
                     macro.WX = float(self.currentProfil.Length) - macro.WX
 
+                # Dla obróbek typu C zdarza się, że nie ma drugiej WW2, stąd?
+                if work.workWW2 == 0.0 and work.workType == 'C' and obrot == 90.0 or obrot == -90.0:
+                    work.workWW2 = work.workWW1
+
                 # Blok ustawienia odpowiednich wartości X,Y,Z dla obróbki
-                # Dodano 0.2 ze względu na powiększenie w logikalu o 0.2 każdej obróbki.
+                # Dodano 0.2 ze względu na powiększenie w logikalu o 0.2 każdej obróbki. (zmieniony WW1 na WW2 i vice versa?)
                 if work.workWW1 > frezWybrany['diameter']+0.2 and work.workType != 'C' and work.workType != 'R':
-                    YPos = Delta_Y - Odsuniecie_Y - work.workWY + (work.workWW1 - frezWybrany['diameter']) / 2
+                    YPos = Delta_Y - Odsuniecie_Y - work.workWY + (work.workWW2 - frezWybrany['diameter']) / 2
                 else:
                     YPos = Delta_Y - Odsuniecie_Y - work.workWY
 
                 if work.workWW2 > frezWybrany['diameter']+0.2 and work.workType != 'C' and work.workType != 'R':
-                    XPos = Delta_X + macro.WX + work.workWX - work.workWW2 / 2 + frezWybrany['diameter'] / 2
+                    XPos = Delta_X + macro.WX + work.workWX - work.workWW1 / 2 + frezWybrany['diameter'] / 2
                 else:
                     XPos = Delta_X + macro.WX + work.workWX
                 # Blok ustawiania zakończony
@@ -657,12 +677,16 @@ class ApplicationWindow(QWidget):
                 else:
                     if obrot == 0.0:
                         YPos = round((Delta_Y - Odsuniecie_Y - work.workWY + (work.workWW2 - frezWybrany['diameter']) / 2), 2)
+                        XPos = round((Delta_X + macro.WX + work.workWX - (work.workWW1 - frezWybrany['diameter']) / 2), 2)
+                    elif obrot == 90.0 or obrot == -90.0:
+                        YPos = round((Delta_Y - (float(self.currentProfil.Width)) - work.workWY + (work.workWW2 - frezWybrany['diameter']) / 2), 2)
+                        XPos = round((Delta_X + macro.WX + work.workWX), 2)
                     else:
                         delta_dist = (float(self.currentProfil.Width)+Odsuniecie_Y)*math.cos(math.radians(obrot)) + \
                                      float(self.currentProfil.Height) * math.sin(math.radians(obrot))
                         YPos = round((Delta_Y - delta_dist + work.workWY + (work.workWW2 - frezWybrany['diameter']) / 2), 2)
+                        XPos = round((Delta_X + macro.WX + work.workWX - (work.workWW1 - frezWybrany['diameter']) / 2), 2)
 
-                    XPos = round((Delta_X + macro.WX + work.workWX - (work.workWW1 - frezWybrany['diameter']) / 2), 2)
                     writeInc(file, str(inc * 10) + ';0;;XYZ;;' + str(XPos) + ';' + str(YPos) + ';' + str(round(enterPos, 2)) + ';;\n')
 
                 writeInc(file, str(inc * 10) + ';0;;Z;;' + str(round(ZPosStart, 2)) + ';;;;\n')
@@ -688,6 +712,13 @@ class ApplicationWindow(QWidget):
                         #YPos = round((Delta_Y - delta_dist - work.workWY + (work.workWW2 - frezWybrany['diameter']) / 2), 2)
                         writeInc(file, str(inc * 10) + ';28;;XY;;;;;;\n')
                         writeInc(file, str(inc * 10) + ';1;;XY;800;' + str(XPos) + ';' + str(YPos) + ';;;\n')
+                        if (work.workWW2 - frezWybrany['diameter']) > 0.2:
+                            YPos -= (work.workWW2 - frezWybrany['diameter'])/2
+                            miniDeltaY = round((work.workWW2 - frezWybrany['diameter'])/4, 2)
+                            writeInc(file, str(inc * 10) + ';1;;XY;800;' + str(XPos) + ';' + str(YPos - miniDeltaY) + ';' + str(XPos) + ';' + str(YPos) + ';' + '\n')
+                            XPos = round((Delta_X + macro.WX + work.workWX - (work.workWW1 - frezWybrany['diameter']) / 2), 2)
+                            writeInc(file, str(inc * 10) + ';1;;XY;800;' + str(XPos) + ';' + str(YPos - miniDeltaY) + ';;;\n')
+                            writeInc(file, str(inc * 10) + ';1;;XY;800;' + str(XPos) + ';' + str(YPos + miniDeltaY) + ';' + str(XPos) + ';' + str(YPos) + ';' + '\n')
                     else:
                         XPos = round((Delta_X + work.workWX + (work.workWW1 - frezWybrany['diameter']) / 2), 2)
                         writeInc(file, str(inc * 10) + ';28;;XY;;;;;;\n')
@@ -701,8 +732,11 @@ class ApplicationWindow(QWidget):
                 writeInc(file, str(inc * 10) + ';97;9;;;;;;;\n')
 
                 # Cofanie się n a pozycje Z jest niepotrzebne - wydlużenie czasu obróbki - wyjatek kiedy maja inne Y
-                if workNr < len(macro.macroWorks) - 1 and work.workWY != macro.macroWorks[workNr].workWY:
+                if workNr < len(macro.macroWorks) - 1 and work.workWY != macro.macroWorks[workNr].workWY and work.workWY == macro.macroWorks[workNr].workSide:
                     writeInc(file, str(inc * 10) + ';0;;Z;;' + str(round(wysDisengage, 2)) + ';;;;\n')
+                if workNr < len(macro.macroWorks) and work.workSide != macro.macroWorks[workNr].workSide:
+                    writeInc(file, str(inc * 10) + ';0;;Z;;24.00;;;;\n')
+                    writeInc(file, str(inc * 10) + ';0;;Y;;16.50;;;;\n')
 
                 workNr += 1
                 frezPoprzedni = frezWybrany
