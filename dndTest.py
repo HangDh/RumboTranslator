@@ -618,7 +618,9 @@ class ApplicationWindow(QWidget):
 
                 if prev_obrot == obrot:
                     if workNr > 1:
-                        writeInc(file, str(inc * 10) + ';0;;Z;;' + str(round(wysDisengage, 2)) + ';;;;\n')
+                        #  Do testów co to będzie (raczej niepotrzebnie sie cofa).
+                        #writeInc(file, str(inc * 10) + ';0;;Z;;' + str(round(wysDisengage, 2)) + ';;;;\n')
+                        print('Test')
                 else:
                     zmianaKata(obrot)
                     Disengage_Z = ncfunctions.findNearest(obrot, self.currentProfil.Height)
