@@ -591,9 +591,6 @@ class ApplicationWindow(QWidget):
                 rotated_pixmap = self.image_pix.transformed(t)
                 self.imageView.setPixmap(rotated_pixmap)
 
-            Disengage_Z = ncfunctions.findNearest(obrot, self.currentProfil.Height)
-            wysDisengage = Delta_Z + frezLib[macro.Tool]['length'] + Disengage_Z
-
             XPos, YPos, ZPosStart, ZPosEnd = '', '', '', ''
 
             prev_obrot = obrot
@@ -616,11 +613,16 @@ class ApplicationWindow(QWidget):
                 elif macro.macroWorks[0].workSide == '6' and work.workSide == '2':
                     obrot = -90.0
 
+                Disengage_Z = ncfunctions.findNearest(obrot, self.currentProfil.Height)
+                wysDisengage = Delta_Z + frezLib[macro.Tool]['length'] + Disengage_Z
+
                 if prev_obrot == obrot:
                     if workNr > 1:
                         writeInc(file, str(inc * 10) + ';0;;Z;;' + str(round(wysDisengage, 2)) + ';;;;\n')
                 else:
                     zmianaKata(obrot)
+                    Disengage_Z = ncfunctions.findNearest(obrot, self.currentProfil.Height)
+                    wysDisengage = Delta_Z + frezLib[macro.Tool]['length'] + Disengage_Z
 
                 if work.workWY < 0 and obrot == 0.0:
                     work.workWY = float(self.currentProfil.Width) + float(work.workWY)
@@ -652,7 +654,7 @@ class ApplicationWindow(QWidget):
                 # Blok ustawiania zakończony
 
                 # Inne zachowanie dla pierwszego worka z Makro?
-                if workNr == 1:
+                if workNr == 1 or prev_obrot != obrot:
                     enterPos = wysDisengage
                 else:
                     enterPos = ZPosEnd
@@ -666,6 +668,8 @@ class ApplicationWindow(QWidget):
                 if obrot != 0.0:
                     abs_obrot = math.fabs(obrot)
                     approach = -(float(self.currentProfil.Width)+Odsuniecie_Y)*math.sin(math.radians(obrot))+float(self.currentProfil.Height)*math.cos(math.radians(obrot))
+                    if obrot == 90.0:
+                        approach = -float(Odsuniecie_Y)
 
                 ZPosStart = Delta_Z + frezWybrany['length'] + (approach - work.workD1 + work.workHeight)  # do sprawdzenia czy workHeight czy hardcodowac 2.0
                 ZPosEnd = Delta_Z + frezWybrany['length'] + (approach - work.workD2 + work.workHeight)
@@ -712,13 +716,14 @@ class ApplicationWindow(QWidget):
                         #YPos = round((Delta_Y - delta_dist - work.workWY + (work.workWW2 - frezWybrany['diameter']) / 2), 2)
                         writeInc(file, str(inc * 10) + ';28;;XY;;;;;;\n')
                         writeInc(file, str(inc * 10) + ';1;;XY;800;' + str(XPos) + ';' + str(YPos) + ';;;\n')
+                        YPosOld = YPos
                         if (work.workWW2 - frezWybrany['diameter']) > 0.2:
                             YPos -= (work.workWW2 - frezWybrany['diameter'])/2
                             miniDeltaY = round((work.workWW2 - frezWybrany['diameter'])/4, 2)
                             writeInc(file, str(inc * 10) + ';1;;XY;800;' + str(XPos) + ';' + str(YPos - miniDeltaY) + ';' + str(XPos) + ';' + str(YPos) + ';' + '\n')
                             XPos = round((Delta_X + macro.WX + work.workWX - (work.workWW1 - frezWybrany['diameter']) / 2), 2)
                             writeInc(file, str(inc * 10) + ';1;;XY;800;' + str(XPos) + ';' + str(YPos - miniDeltaY) + ';;;\n')
-                            writeInc(file, str(inc * 10) + ';1;;XY;800;' + str(XPos) + ';' + str(YPos + miniDeltaY) + ';' + str(XPos) + ';' + str(YPos) + ';' + '\n')
+                            writeInc(file, str(inc * 10) + ';1;;XY;800;' + str(XPos) + ';' + str(YPosOld) + ';' + str(XPos) + ';' + str(YPos) + ';' + '\n')
                     else:
                         XPos = round((Delta_X + work.workWX + (work.workWW1 - frezWybrany['diameter']) / 2), 2)
                         writeInc(file, str(inc * 10) + ';28;;XY;;;;;;\n')
