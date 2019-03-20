@@ -21,7 +21,7 @@
       <file leaf-file-name="ncinfo.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/../NC_Info/ncinfo.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="23">
+            <state relative-caret-position="1035">
               <caret line="48" column="57" selection-start-line="48" selection-start-column="57" selection-end-line="48" selection-end-column="57" />
               <folding>
                 <element signature="e#0#15#0" expanded="true" />
@@ -33,8 +33,8 @@
       <file leaf-file-name="dndTest.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/dndTest.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="305">
-              <caret line="623" column="21" lean-forward="true" selection-start-line="623" selection-start-column="21" selection-end-line="623" selection-end-column="21" />
+            <state relative-caret-position="66">
+              <caret line="572" column="41" lean-forward="true" selection-start-line="572" selection-start-column="41" selection-end-line="572" selection-end-column="41" />
               <folding>
                 <element signature="e#0#116#0" expanded="true" />
               </folding>
@@ -42,20 +42,20 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="macro.json" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/macro.json">
+      <file leaf-file-name="frez.json" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/frez.json">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="207">
-              <caret line="9" column="22" selection-start-line="9" selection-start-column="20" selection-end-line="9" selection-end-column="22" />
+            <state>
+              <caret line="6" column="7" lean-forward="true" selection-start-line="6" selection-start-column="7" selection-end-line="6" selection-end-column="7" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="frez.json" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/frez.json">
+      <file leaf-file-name="frez_oldrumba.json" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/frez_oldrumba.json">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="851">
-              <caret line="37" column="18" selection-start-line="37" selection-start-column="18" selection-end-line="37" selection-end-column="18" />
+            <state relative-caret-position="161">
+              <caret line="16" column="18" lean-forward="true" selection-start-line="16" selection-start-column="18" selection-end-line="16" selection-end-column="18" />
             </state>
           </provider>
         </entry>
@@ -63,8 +63,8 @@
       <file leaf-file-name="ncfunctions.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ncfunctions.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="207">
-              <caret line="9" column="24" lean-forward="true" selection-start-line="9" selection-start-column="24" selection-end-line="9" selection-end-column="24" />
+            <state relative-caret-position="276">
+              <caret line="12" column="143" selection-start-line="12" selection-start-column="143" selection-end-line="12" selection-end-column="148" />
             </state>
           </provider>
         </entry>
@@ -72,7 +72,7 @@
       <file leaf-file-name="ncloader.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ncloader.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3680">
+            <state relative-caret-position="608">
               <caret line="161" column="108" selection-start-line="161" selection-start-column="108" selection-end-line="161" selection-end-column="108" />
             </state>
           </provider>
@@ -89,21 +89,12 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>user</find>
-      <find>wysD</find>
-      <find>findNea</find>
-      <find>Dis</find>
-      <find>checkE</find>
-      <find>macroLib</find>
-      <find>textbox</find>
       <find>evalu</find>
       <find>type</find>
       <find>.Type</find>
       <find>get</find>
-      <find>zmianaNarzedzia</find>
       <find>approach</find>
       <find>pioneer</find>
-      <find>zmianaKata</find>
       <find>zmianaNa</find>
       <find>getProperTool</find>
       <find>imageView</find>
@@ -119,6 +110,15 @@
       <find>csv</find>
       <find>zmianaK</find>
       <find>Delta_Y</find>
+      <find>zmianaKata</find>
+      <find>97;80</find>
+      <find>inc</find>
+      <find>frez.json</find>
+      <find>97;6</find>
+      <find>zmianaNarzedzia</find>
+      <find>macro.Tool</find>
+      <find>zmianaN</find>
+      <find>Tool</find>
     </findStrings>
     <replaceStrings>
       <replace>ncloader.writeInc</replace>
@@ -157,6 +157,7 @@
         <option value="$PROJECT_DIR$/../PythonCut2/MainCutShucoXLS.py" />
         <option value="$PROJECT_DIR$/../PythonOptimCut/MainCutShucoXLS.py" />
         <option value="$PROJECT_DIR$/ncfunctions.py" />
+        <option value="$PROJECT_DIR$/frez_oldrumba.json" />
         <option value="$PROJECT_DIR$/dndTest.py" />
       </list>
     </option>
@@ -173,7 +174,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -185,6 +185,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -194,6 +195,7 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Python_Programy\NC_Reader" />
       <recent name="C:\Python_Programy\PythonOptimCut" />
       <recent name="C:\NC_Reader" />
     </key>
@@ -532,25 +534,32 @@
       <option name="project" value="LOCAL" />
       <updated>1552907644733</updated>
     </task>
-    <option name="localTasksCounter" value="30" />
+    <task id="LOCAL-00030" summary="Little workarounds.">
+      <created>1552915777975</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1552915777975</updated>
+    </task>
+    <option name="localTasksCounter" value="31" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.13154362" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.13557047" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="right" id="R Packages" order="4" />
       <window_info anchor="right" id="R Graphics" order="3" />
       <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.50067115" side_tool="true" weight="0.2920228" />
       <window_info anchor="bottom" id="Version Control" order="9" weight="0.32905984" />
       <window_info anchor="bottom" id="Python Console" order="8" weight="0.23789173" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.49932885" visible="true" weight="0.2920228" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49932885" weight="0.2920228" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Terminal" order="7" weight="0.26495728" />
       <window_info id="Favorites" order="2" side_tool="true" weight="0.3294271" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.31623933" />
+      <window_info active="true" anchor="bottom" id="Debug" order="3" visible="true" weight="0.31623933" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
@@ -564,7 +573,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="JSON up to the drainage is working - some finetuning with macros at 43" />
     <MESSAGE value="JSON kinda Working - rotate to change" />
     <MESSAGE value="Working GUI - Change bar/cut selection, code needs refactoring." />
     <MESSAGE value="Fixing GUI - length of the profile working now." />
@@ -589,7 +597,8 @@
     <MESSAGE value="Changed rotation - can happen inside the macro." />
     <MESSAGE value="Changed big slot (&gt;tool diameter) - working around side switching." />
     <MESSAGE value="Changed way of calculating Z-Axis when rotating inside of macro." />
-    <option name="LAST_COMMIT_MESSAGE" value="Changed way of calculating Z-Axis when rotating inside of macro." />
+    <MESSAGE value="Little workarounds." />
+    <option name="LAST_COMMIT_MESSAGE" value="Little workarounds." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -691,7 +700,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/dndTest.py</url>
-          <line>494</line>
+          <line>511</line>
           <option name="timeStamp" value="102" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -961,7 +970,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/dndTest.py</url>
-          <line>735</line>
+          <line>783</line>
           <option name="timeStamp" value="292" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -1006,68 +1015,83 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/dndTest.py</url>
-          <line>730</line>
+          <line>778</line>
           <option name="timeStamp" value="348" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/dndTest.py</url>
-          <line>719</line>
+          <line>767</line>
           <option name="timeStamp" value="349" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/dndTest.py</url>
-          <line>695</line>
+          <line>740</line>
           <option name="timeStamp" value="356" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/dndTest.py</url>
-          <line>717</line>
+          <line>765</line>
           <option name="timeStamp" value="358" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/dndTest.py</url>
-          <line>687</line>
+          <line>732</line>
           <option name="timeStamp" value="368" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/dndTest.py</url>
-          <line>631</line>
+          <line>676</line>
           <option name="timeStamp" value="370" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/dndTest.py</url>
-          <line>677</line>
+          <line>722</line>
           <option name="timeStamp" value="374" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/dndTest.py</url>
-          <line>628</line>
+          <line>673</line>
           <option name="timeStamp" value="379" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/dndTest.py</url>
-          <line>616</line>
+          <line>655</line>
           <option name="timeStamp" value="380" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/dndTest.py</url>
-          <line>618</line>
+          <line>657</line>
           <option name="timeStamp" value="381" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/dndTest.py</url>
-          <line>697</line>
+          <line>742</line>
           <option name="timeStamp" value="382" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/dndTest.py</url>
-          <line>700</line>
+          <line>748</line>
           <option name="timeStamp" value="383" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/dndTest.py</url>
-          <line>742</line>
+          <line>790</line>
           <option name="timeStamp" value="385" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/dndTest.py</url>
+          <line>556</line>
+          <option name="timeStamp" value="388" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/dndTest.py</url>
+          <line>600</line>
+          <option name="timeStamp" value="389" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/dndTest.py</url>
+          <line>679</line>
+          <option name="timeStamp" value="397" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
@@ -1077,7 +1101,7 @@
           </properties>
         </breakpoint>
       </default-breakpoints>
-      <option name="time" value="386" />
+      <option name="time" value="398" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="PythonConfigurationType">
@@ -1085,6 +1109,7 @@
         <watch expression="arrBars[1].barCuts[0].cutMacros" />
         <watch expression="arrBars" />
         <watch expression="arrBars[1].barCuts[0].cutMacros" />
+        <watch expression="__py_debug_temp_var_2134033329" />
       </configuration>
     </watches-manager>
   </component>
@@ -1098,7 +1123,6 @@
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://V:/Dział Produkcji Tech. &amp; CR/Codecademy/DAN/Spotkanie_3/praca+3.2.py" />
     <entry file="file://V:/Dział Produkcji Tech. &amp; CR/Codecademy/DAN/Spotkanie_3/praca+3.3.py" />
     <entry file="file://$USER_HOME$/AppData/Local/Microsoft/Windows/INetCache/Content.Outlook/V7A2PHEQ/calc.py" />
     <entry file="file://$USER_HOME$/AppData/Local/Microsoft/Windows/INetCache/Content.Outlook/V7A2PHEQ/co.py" />
@@ -1209,20 +1233,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/macro.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="207">
-          <caret line="9" column="22" selection-start-line="9" selection-start-column="20" selection-end-line="9" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/frez.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="851">
-          <caret line="37" column="18" selection-start-line="37" selection-start-column="18" selection-end-line="37" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../OptimaROApp/OptimaROApp_NEW.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="266">
@@ -1285,16 +1295,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ncloader.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3680">
-          <caret line="161" column="108" selection-start-line="161" selection-start-column="108" selection-end-line="161" selection-end-column="108" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../NC_Info/ncinfo.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="23">
+        <state relative-caret-position="1035">
           <caret line="48" column="57" selection-start-line="48" selection-start-column="57" selection-end-line="48" selection-end-column="57" />
           <folding>
             <element signature="e#0#15#0" expanded="true" />
@@ -1302,27 +1305,52 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ncfunctions.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="207">
-          <caret line="9" column="24" lean-forward="true" selection-start-line="9" selection-start-column="24" selection-end-line="9" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../PlanCheck/PlanMain.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="322">
           <caret line="30" column="33" lean-forward="true" selection-start-line="30" selection-start-column="33" selection-end-line="30" selection-end-column="33" />
-          <folding>
-            <element signature="e#0#14#0" expanded="true" />
-          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ncloader.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="608">
+          <caret line="161" column="108" selection-start-line="161" selection-start-column="108" selection-end-line="161" selection-end-column="108" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/macro.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="207">
+          <caret line="9" column="22" selection-start-line="9" selection-start-column="20" selection-end-line="9" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/frez_oldrumba.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="161">
+          <caret line="16" column="18" lean-forward="true" selection-start-line="16" selection-start-column="18" selection-end-line="16" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/frez.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret line="6" column="7" lean-forward="true" selection-start-line="6" selection-start-column="7" selection-end-line="6" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ncfunctions.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="276">
+          <caret line="12" column="143" selection-start-line="12" selection-start-column="143" selection-end-line="12" selection-end-column="148" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/dndTest.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="305">
-          <caret line="623" column="21" lean-forward="true" selection-start-line="623" selection-start-column="21" selection-end-line="623" selection-end-column="21" />
+        <state relative-caret-position="66">
+          <caret line="572" column="41" lean-forward="true" selection-start-line="572" selection-start-column="41" selection-end-line="572" selection-end-column="41" />
           <folding>
             <element signature="e#0#116#0" expanded="true" />
           </folding>

@@ -3,7 +3,9 @@ from PyQt5.QtCore import Qt, QMimeData
 from PyQt5.QtGui import QDrag, QPainter, QPen, QFont, QPixmap, QTransform
 import datetime, json, math, sys, copy
 import ncfunctions, ncloader
+from operator import attrgetter
 
+rumbaVer = 'old'
 
 class Frez(object):
     Srednica = 0
@@ -62,7 +64,11 @@ def evaluateMathGeometry(arrayToChange, valueParam):
 ''' Funkcja wykorzystywana w celu pozyskania narzędzia posiadajacego najwieksza mozliwa
 srednice do wykonania danego makra na podstawie rozmiaru makra'''
 def getProperTool(macroDia, depth):
-    with open('frez.json') as f:
+    if rumbaVer == 'old':
+        frezFileName = 'frez_oldrumba.json'
+    else:
+        frezFileName = 'frez.json'
+    with open(frezFileName) as f:
         frezLib = json.load(f)
         choice = '0'
         for k, v in frezLib.items():
@@ -300,8 +306,13 @@ class ApplicationWindow(QWidget):
         with open("macro.json", "r", encoding='utf-8') as f:
             macroLib = json.load(f)
         # Definicje frezów (JSON)
-        with open("frez.json", "r") as f:
-            frezLib = json.load(f)
+        if rumbaVer == 'old':
+            with open("frez_oldrumba.json", "r") as f:
+                frezLib = json.load(f)
+        else:
+            with open("frez.json", "r") as f:
+                frezLib = json.load(f)
+
 
         # Wpisz nazwe profilu to początkowy string pola 'textbox' - po zmianie odpalamy funkcje.
         if self.textbox.text() != 'Wpisz nazwę profilu':
@@ -382,19 +393,22 @@ class ApplicationWindow(QWidget):
                             if k < 4:
                                 buttonsK = [self.button1, self.button2, self.button3, self.button4]
                                 textBoxesK = [self.textboxK1, self.textboxK2, self.textboxK3, self.textboxK4]
+                                deltaWorkX = abs(max(macrosSorted[m].macroWorks, key=attrgetter('workWX')).workWX)
+                                workLength = max(macrosSorted[m].macroWorks, key=attrgetter('workWW1')).workWW1
                                 distMacro = macrosSorted[m].WX - m_prev
                                 if (m == len(macrosSorted)):
                                     distMacro = self.currentProfil.Length - macrosSorted[m].WX
 
-                                if distMacro > 140: # Dla ostrożności - powinno wystarczyć 120
-                                    textBoxesK[k].setText(str(m_prev + 20))
+                                if distMacro > 130 + deltaWorkX + workLength/2 : # Dla ostrożności - powinno wystarczyć 120
+                                    textBoxesK[k].setText(str(m_prev + deltaWorkX + workLength/2 + 20))
                                     flPosX = float(float(textBoxesK[k].text()) * 500 / self.currentProfil.Length) + 45
                                     buttonsK[k].setGeometry(flPosX + 10, 80, 120 * 500 / self.currentProfil.Length, 40)
                                     klemy[k] = float(textBoxesK[k].text())
                                     k += 1
 
-                                if distMacro > 500:
-                                    textBoxesK[k].setText(str(macrosSorted[m].WX - 160))
+                                # Duża odległość między makrami, ale na tyle, żeby się zmieściła klema + 20
+                                if distMacro > 450 and (macrosSorted[m].WX - deltaWorkX - workLength/2 - 150) > float(textBoxesK[k-1].text())+120:
+                                    textBoxesK[k].setText(str(macrosSorted[m].WX - deltaWorkX - workLength/2 - 150))
                                     flPosX = float(float(textBoxesK[k].text()) * 500 / self.currentProfil.Length) + 45
                                     buttonsK[k].setGeometry(flPosX + 10, 80, 120 * 500 / self.currentProfil.Length, 40)
                                     klemy[k] = float(textBoxesK[k].text())
@@ -473,7 +487,10 @@ class ApplicationWindow(QWidget):
 
     def generateFile(self):
         global inc
-        inc = 8  # Zaczynam od 8 linijki - 80
+        if rumbaVer == 'old':
+            inc = 10  # Zaczynam od 10 linijki - 100
+        else:
+            inc = 8  # Zaczynam od 8 linijki - 80
 
         ''' Stały cig znaków oznaczajcy zmiane narzędzia - konieczne każdorazowe wpisanie w celu poprawnego działania
         maszyn - Rumb '''
@@ -501,26 +518,38 @@ class ApplicationWindow(QWidget):
 
         #  Definicja zmiennych dla parametrów maszyny ##
         global Delta_X, Delta_Y, Delta_Z, Odsuniecie_Y, kat_loza
-        Delta_X = 59.5
-        Delta_Y = -78.5
-        Delta_Z = -272.8
+        if rumbaVer == 'old':
+            Delta_X = 41
+            Delta_Y = -87.8
+            Delta_Z = -267.1
+        else:
+            Delta_X = 59.5
+            Delta_Y = -78.5
+            Delta_Z = -272.8
+
         Odsuniecie_Y = 15.5
         Disengage_Z = 95.92
         kat_loza = 0.00
 
         ''' Zmiana kata - kolejny raz potrzebna jest całościowa funkcja, kilka linijek
         które wykonywane sa przez maszyne w przypadku zmiany kata obróbki '''
-        def zmianaKata(kat):
+        def zmianaKata(kat, silent):
             global Delta_Y, Delta_Z
-            Okrag_Y = -175.375
-            Okrag_Z = -331.15
-            Okrag_R = 113.09
-            katPierwotny = 31.06
+            if rumbaVer == 'old':
+                Okrag_Y = -184.11
+                Okrag_Z = -323.51
+                Okrag_R = 111.61
+                katPierwotny = 30.36
+            else:
+                Okrag_Y = -175.375
+                Okrag_Z = -331.15
+                Okrag_R = 113.09
+                katPierwotny = 31.06
             katKoncowy = math.radians(katPierwotny + kat)
 
             # Przy pierwszej zmianie kąta wpisywane są te linijki - nie jestesmy pewni dlaczego
             # Dlatego na wszelki wypadek dopisujemy.
-            if Delta_Y != round(Okrag_Y + math.cos(katKoncowy) * Okrag_R, 2):
+            if Delta_Y != round(Okrag_Y + math.cos(katKoncowy) * Okrag_R, 2) and silent!='y':
                 # Funkcja przygotowawcza kąta (ale wygląda, że wszystko dzieje się w zmianie narzędzia! ;)
                 writeInc(file, str(inc * 10) + ';97;10;;' + str(round(-kat, 2)) + ';;;;;\n')
 
@@ -561,12 +590,21 @@ class ApplicationWindow(QWidget):
             if (m == len(macrosSortedWX) - 1):
                 distanceList.append(self.currentProfil.Length - macrosSortedWX[m].WX)
 
-        for i in range(len(klemy)-1):
-            klemy[i] = str(klemy[i])
+        for i in range(4):
+            if rumbaVer == 'old' and klemy[i] == '-9999':
+                klemy[i] = ''
+            else:
+                klemy[i] = str(klemy[i])
 
         ### BLOK STAŁY STARTOWY ###
-        file.write('10;97;80;;;;;;;\n' + '20;97;15;;;;;;;\n' + '30;97;99;;' + klemy[0] + ';' + klemy[1] + ';' + klemy[2] + ';' + klemy[3] + ';;\n')  # Pozycja klem - ustawiam na puste
-        file.write('40;0;;Z;;24.00;;;;\n' + '50;0;;Y;;16.50;;;;\n' + '60;97;10;;0.00;;;;;\n' + '70;28;;XY;;;;;;\n')
+        if rumbaVer == 'old':
+            file.write('10;97;80;;;;;;;\n' + '20;0;;Z;;0.00;;;;\n' + '30;0;;Y;;0.00;;;;\n' + '40;97;15;;;;;;;\n')
+            file.write('50;97;99;;' + klemy[0] + ';' + klemy[1] + ';' + klemy[2] + ';' + klemy[3] + ';;\n')  # Pozycja klem - ustawiam na puste
+            file.write('60;0;;Z;;0.00;;;;\n' + '70;0;;Y;;0.00;;;;\n' + '80;97;10;;0.00;;;;;\n' + '90;28;;XY;;;;;;\n')
+
+        else:
+            file.write('10;97;80;;;;;;;\n' + '20;97;15;;;;;;;\n' + '30;97;99;;' + klemy[0] + ';' + klemy[1] + ';' + klemy[2] + ';' + klemy[3] + ';;\n')  # Pozycja klem - ustawiam na puste
+            file.write('40;0;;Z;;24.00;;;;\n' + '50;0;;Y;;16.50;;;;\n' + '60;97;10;;0.00;;;;;\n' + '70;28;;XY;;;;;;\n')
         ### KONIEC BLOKU STAŁEGO RUMBA 1 ###
 
         frezPoprzedni = 0
@@ -593,7 +631,8 @@ class ApplicationWindow(QWidget):
 
             XPos, YPos, ZPosStart, ZPosEnd = '', '', '', ''
 
-            prev_obrot = obrot
+            # prev_obrot = obrot - trochę to nie pasuje, zmiana
+            prev_obrot = 0.0
             prev_side = macro.macroWorks[0].workSide
             w = self.currentProfil.Width
             h = self.currentProfil.Height
@@ -622,7 +661,13 @@ class ApplicationWindow(QWidget):
                         #writeInc(file, str(inc * 10) + ';0;;Z;;' + str(round(wysDisengage, 2)) + ';;;;\n')
                         print('Test')
                 else:
-                    zmianaKata(obrot)
+                    # Wycisz zmiane kąta, jeżeli to kąt początkowy (wszystkie makra pod kątem)
+                    if prev_obrot != macro.macroWorks[0].workRotation:
+                        silent = 'y'
+                    else:
+                        silent = 'n'
+
+                    zmianaKata(obrot, silent)
                     Disengage_Z = ncfunctions.findNearest(obrot, self.currentProfil.Height)
                     wysDisengage = Delta_Z + frezLib[macro.Tool]['length'] + Disengage_Z
 
@@ -696,7 +741,10 @@ class ApplicationWindow(QWidget):
                     writeInc(file, str(inc * 10) + ';0;;XYZ;;' + str(XPos) + ';' + str(YPos) + ';' + str(round(enterPos, 2)) + ';;\n')
 
                 writeInc(file, str(inc * 10) + ';0;;Z;;' + str(round(ZPosStart, 2)) + ';;;;\n')
-                writeInc(file, str(inc * 10) + ';97;7;;2;;;;;\n')  # Zagadka - co powoduje ta linijka, czy możemy ją jakoś wyselekcjonować.
+                if rumbaVer == 'old':
+                    writeInc(file, str(inc * 10) + ';97;7;;100;;;;;\n')
+                else:
+                    writeInc(file, str(inc * 10) + ';97;7;;2;;;;;\n')  # Zagadka - co powoduje ta linijka, czy możemy ją jakoś wyselekcjonować.
                 writeInc(file, str(inc * 10) + ';97;11;;;;;;;\n')
                 writeInc(file, str(inc * 10) + ';1;;Z;200;' + str(round(ZPosEnd, 2)) + ';;;;\n')  # Praca w osi Z, zejście
 
@@ -742,8 +790,12 @@ class ApplicationWindow(QWidget):
                 if workNr < len(macro.macroWorks) - 1 and work.workWY != macro.macroWorks[workNr].workWY and work.workWY == macro.macroWorks[workNr].workSide:
                     writeInc(file, str(inc * 10) + ';0;;Z;;' + str(round(wysDisengage, 2)) + ';;;;\n')
                 if workNr < len(macro.macroWorks) and work.workSide != macro.macroWorks[workNr].workSide:
-                    writeInc(file, str(inc * 10) + ';0;;Z;;24.00;;;;\n')
-                    writeInc(file, str(inc * 10) + ';0;;Y;;16.50;;;;\n')
+                    if rumbaVer == 'old':
+                        writeInc(file, str(inc * 10) + ';0;;Z;;0.00;;;;\n')
+                        writeInc(file, str(inc * 10) + ';0;;Y;;0.00;;;;\n')
+                    else:
+                        writeInc(file, str(inc * 10) + ';0;;Z;;24.00;;;;\n')
+                        writeInc(file, str(inc * 10) + ';0;;Y;;16.50;;;;\n')
 
                 workNr += 1
                 frezPoprzedni = frezWybrany
@@ -755,6 +807,8 @@ class ApplicationWindow(QWidget):
         # writeInc(file, str(inc * 10) + '0;;Y;;16.50;;;;\n')  #  w koncu ma byc czy nie?!
         writeInc(file, str(inc * 10) + ';97;5;;;;;;;\n')
         writeInc(file, str(inc * 10) + ';97;50;;;;;;;\n')
+        if rumbaVer == 'old':
+            writeInc(file, str(inc * 10) + ';97;9;;;;;;;\n')
         writeInc(file, str(inc * 10) + ';97;80;;;;;;;\n')
         writeInc(file, str(inc * 10) + ';97;15;;;;;;;\n')
 
