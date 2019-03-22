@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="740396fc-4634-4cad-bd4c-b68fb3ae1b56" name="Default" comment="">
+    <list default="true" id="740396fc-4634-4cad-bd4c-b68fb3ae1b56" name="Default" comment="Working around old rumba, checkbox, finetuning center of circle.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dndTest.py" beforeDir="false" afterPath="$PROJECT_DIR$/dndTest.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/time.log" beforeDir="false" afterPath="$PROJECT_DIR$/time.log" afterDir="false" />
@@ -18,25 +18,15 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="ncinfo.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../NC_Info/ncinfo.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1035">
-              <caret line="48" column="57" selection-start-line="48" selection-start-column="57" selection-end-line="48" selection-end-column="57" />
-              <folding>
-                <element signature="e#0#15#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="dndTest.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/dndTest.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="66">
-              <caret line="572" column="41" lean-forward="true" selection-start-line="572" selection-start-column="41" selection-end-line="572" selection-end-column="41" />
+            <state relative-caret-position="250">
+              <caret line="838" column="32" lean-forward="true" selection-start-line="838" selection-start-column="32" selection-end-line="838" selection-end-column="32" />
               <folding>
                 <element signature="e#0#116#0" expanded="true" />
+                <element signature="e#20249#20749#0" />
+                <element signature="e#20798#20859#0" />
               </folding>
             </state>
           </provider>
@@ -46,7 +36,7 @@
         <entry file="file://$PROJECT_DIR$/frez.json">
           <provider selected="true" editor-type-id="text-editor">
             <state>
-              <caret line="6" column="7" lean-forward="true" selection-start-line="6" selection-start-column="7" selection-end-line="6" selection-end-column="7" />
+              <caret line="6" column="7" selection-start-line="6" selection-start-column="7" selection-end-line="6" selection-end-column="7" />
             </state>
           </provider>
         </entry>
@@ -54,8 +44,8 @@
       <file leaf-file-name="frez_oldrumba.json" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/frez_oldrumba.json">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="161">
-              <caret line="16" column="18" lean-forward="true" selection-start-line="16" selection-start-column="18" selection-end-line="16" selection-end-column="18" />
+            <state relative-caret-position="299">
+              <caret line="16" column="18" selection-start-line="16" selection-start-column="18" selection-end-line="16" selection-end-column="18" />
             </state>
           </provider>
         </entry>
@@ -89,14 +79,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>evalu</find>
-      <find>type</find>
-      <find>.Type</find>
-      <find>get</find>
-      <find>approach</find>
-      <find>pioneer</find>
-      <find>zmianaNa</find>
-      <find>getProperTool</find>
       <find>imageView</find>
       <find>10.111</find>
       <find>png</find>
@@ -116,9 +98,17 @@
       <find>frez.json</find>
       <find>97;6</find>
       <find>zmianaNarzedzia</find>
-      <find>macro.Tool</find>
       <find>zmianaN</find>
       <find>Tool</find>
+      <find>check</find>
+      <find>old</find>
+      <find>zmiana</find>
+      <find>macro.Tool</find>
+      <find>getProperTool</find>
+      <find>json</find>
+      <find>Delta_X</find>
+      <find>XY</find>
+      <find>Z;;</find>
     </findStrings>
     <replaceStrings>
       <replace>ncloader.writeInc</replace>
@@ -267,24 +257,6 @@
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
     </configuration>
-    <configuration name="RW_Depozyt" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="NC_Reader" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/../RW_Depozyt" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/../RW_Depozyt/RW_Depozyt.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-    </configuration>
     <configuration name="dndTest" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="NC_Reader" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -303,20 +275,38 @@
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
     </configuration>
+    <configuration name="ncinfo" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="NC_Reader" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/../NC_Info" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/../NC_Info/ncinfo.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+    </configuration>
     <list>
       <item itemvalue="Python.dndTest" />
       <item itemvalue="Python.MainCutShucoXLS" />
-      <item itemvalue="Python.RW_Depozyt" />
       <item itemvalue="Python.MainCutShuco — kopia" />
       <item itemvalue="Python.PlanMain" />
+      <item itemvalue="Python.ncinfo" />
     </list>
     <recent_temporary>
       <list>
         <item itemvalue="Python.dndTest" />
+        <item itemvalue="Python.ncinfo" />
         <item itemvalue="Python.PlanMain" />
         <item itemvalue="Python.MainCutShuco — kopia" />
         <item itemvalue="Python.MainCutShucoXLS" />
-        <item itemvalue="Python.RW_Depozyt" />
       </list>
     </recent_temporary>
   </component>
@@ -541,7 +531,21 @@
       <option name="project" value="LOCAL" />
       <updated>1552915777975</updated>
     </task>
-    <option name="localTasksCounter" value="31" />
+    <task id="LOCAL-00031" summary="Working around old rumba">
+      <created>1553088674160</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1553088674160</updated>
+    </task>
+    <task id="LOCAL-00032" summary="Working around old rumba">
+      <created>1553165995586</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1553165995586</updated>
+    </task>
+    <option name="localTasksCounter" value="33" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -573,7 +577,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="JSON kinda Working - rotate to change" />
     <MESSAGE value="Working GUI - Change bar/cut selection, code needs refactoring." />
     <MESSAGE value="Fixing GUI - length of the profile working now." />
     <MESSAGE value="Gui - showing macros" />
@@ -598,7 +601,8 @@
     <MESSAGE value="Changed big slot (&gt;tool diameter) - working around side switching." />
     <MESSAGE value="Changed way of calculating Z-Axis when rotating inside of macro." />
     <MESSAGE value="Little workarounds." />
-    <option name="LAST_COMMIT_MESSAGE" value="Little workarounds." />
+    <MESSAGE value="Working around old rumba" />
+    <option name="LAST_COMMIT_MESSAGE" value="Working around old rumba" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -697,11 +701,6 @@
           <url>file://C:/PythonCut2/MainCutShucoXLS.py</url>
           <line>452</line>
           <option name="timeStamp" value="97" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/dndTest.py</url>
-          <line>511</line>
-          <option name="timeStamp" value="102" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://C:/PlanCheck/PlanMain.py</url>
@@ -969,11 +968,6 @@
           <option name="timeStamp" value="291" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/dndTest.py</url>
-          <line>783</line>
-          <option name="timeStamp" value="292" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/../PythonCut2/MainCutShucoXLS.py</url>
           <line>269</line>
           <option name="timeStamp" value="317" />
@@ -1015,83 +1009,23 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/dndTest.py</url>
-          <line>778</line>
-          <option name="timeStamp" value="348" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/dndTest.py</url>
-          <line>767</line>
-          <option name="timeStamp" value="349" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/dndTest.py</url>
-          <line>740</line>
-          <option name="timeStamp" value="356" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/dndTest.py</url>
-          <line>765</line>
-          <option name="timeStamp" value="358" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/dndTest.py</url>
-          <line>732</line>
-          <option name="timeStamp" value="368" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/dndTest.py</url>
-          <line>676</line>
-          <option name="timeStamp" value="370" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/dndTest.py</url>
-          <line>722</line>
-          <option name="timeStamp" value="374" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/dndTest.py</url>
-          <line>673</line>
-          <option name="timeStamp" value="379" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/dndTest.py</url>
-          <line>655</line>
-          <option name="timeStamp" value="380" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/dndTest.py</url>
-          <line>657</line>
-          <option name="timeStamp" value="381" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/dndTest.py</url>
-          <line>742</line>
-          <option name="timeStamp" value="382" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/dndTest.py</url>
-          <line>748</line>
-          <option name="timeStamp" value="383" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/dndTest.py</url>
-          <line>790</line>
-          <option name="timeStamp" value="385" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/dndTest.py</url>
-          <line>556</line>
+          <line>569</line>
           <option name="timeStamp" value="388" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/dndTest.py</url>
-          <line>600</line>
-          <option name="timeStamp" value="389" />
+          <line>81</line>
+          <option name="timeStamp" value="399" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/dndTest.py</url>
-          <line>679</line>
-          <option name="timeStamp" value="397" />
+          <line>803</line>
+          <option name="timeStamp" value="401" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/dndTest.py</url>
+          <line>762</line>
+          <option name="timeStamp" value="405" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
@@ -1101,7 +1035,7 @@
           </properties>
         </breakpoint>
       </default-breakpoints>
-      <option name="time" value="398" />
+      <option name="time" value="406" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="PythonConfigurationType">
@@ -1295,23 +1229,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../NC_Info/ncinfo.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1035">
-          <caret line="48" column="57" selection-start-line="48" selection-start-column="57" selection-end-line="48" selection-end-column="57" />
-          <folding>
-            <element signature="e#0#15#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../PlanCheck/PlanMain.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="322">
-          <caret line="30" column="33" lean-forward="true" selection-start-line="30" selection-start-column="33" selection-end-line="30" selection-end-column="33" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/ncloader.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="608">
@@ -1326,20 +1243,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/frez_oldrumba.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="161">
-          <caret line="16" column="18" lean-forward="true" selection-start-line="16" selection-start-column="18" selection-end-line="16" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/frez.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret line="6" column="7" lean-forward="true" selection-start-line="6" selection-start-column="7" selection-end-line="6" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/ncfunctions.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="276">
@@ -1347,12 +1250,45 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/../PlanCheck/PlanMain.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1017">
+          <caret line="30" column="33" lean-forward="true" selection-start-line="30" selection-start-column="33" selection-end-line="30" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../NC_Info/ncinfo.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="207">
+          <caret line="9" column="29" lean-forward="true" selection-start-line="9" selection-start-column="29" selection-end-line="9" selection-end-column="29" />
+          <folding>
+            <element signature="e#0#15#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/frez_oldrumba.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="299">
+          <caret line="16" column="18" selection-start-line="16" selection-start-column="18" selection-end-line="16" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/frez.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret line="6" column="7" selection-start-line="6" selection-start-column="7" selection-end-line="6" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/dndTest.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="66">
-          <caret line="572" column="41" lean-forward="true" selection-start-line="572" selection-start-column="41" selection-end-line="572" selection-end-column="41" />
+        <state relative-caret-position="250">
+          <caret line="838" column="32" lean-forward="true" selection-start-line="838" selection-start-column="32" selection-end-line="838" selection-end-column="32" />
           <folding>
             <element signature="e#0#116#0" expanded="true" />
+            <element signature="e#20249#20749#0" />
+            <element signature="e#20798#20859#0" />
           </folding>
         </state>
       </provider>

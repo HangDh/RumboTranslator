@@ -657,7 +657,7 @@ class ApplicationWindow(QWidget):
             for work in macro.macroWorks:
                 obrot = work.workRotation
 
-                if work.workSide =='2' or work.workSide =='3':
+                if (work.workSide =='2' or work.workSide =='3'):
                     self.currentProfil.Width = h
                     self.currentProfil.Height = w
                 else:
@@ -723,11 +723,8 @@ class ApplicationWindow(QWidget):
                 else:
                     enterPos = ZPosEnd
 
-                # W zależności od tego który side to rożne brane approach?
-                if work.workSide == '1' or work.workSide == '6':
-                    approach = float(self.currentProfil.Height)
-                else:
-                    approach = float(self.currentProfil.Width)
+                # W zależności od tego który side to rożne brane approach? Nie - obracamy juz wcześniej
+                approach = float(self.currentProfil.Height)
 
                 if obrot != 0.0:
                     abs_obrot = math.fabs(obrot)
@@ -804,7 +801,7 @@ class ApplicationWindow(QWidget):
                 writeInc(file, str(inc * 10) + ';97;9;;;;;;;\n')
 
                 # Cofanie się n a pozycje Z jest niepotrzebne - wydlużenie czasu obróbki - wyjatek kiedy maja inne Y
-                if workNr < len(macro.macroWorks) - 1 and work.workWY != macro.macroWorks[workNr].workWY and work.workWY == macro.macroWorks[workNr].workSide:
+                if workNr < len(macro.macroWorks) - 1 and (work.workWY != macro.macroWorks[workNr].workWY or work.workSide != macro.macroWorks[workNr].workSide):
                     writeInc(file, str(inc * 10) + ';0;;Z;;' + str(round(wysDisengage, 2)) + ';;;;\n')
                 if workNr == 1 and len(macro.macroWorks) == 1:
                     writeInc(file, str(inc * 10) + ';0;;Z;;' + str(round(wysDisengage, 2)) + ';;;;\n')
@@ -823,6 +820,8 @@ class ApplicationWindow(QWidget):
                 prev_side = work.workSide
         if self.checkRumbaVer.isChecked() == False:
             writeInc(file, str(inc * 10) + ';0;;Z;;24.00;;;;\n')
+        else:
+            writeInc(file, str(inc * 10) + ';0;;Z;;' + str(round(wysDisengage, 2)) + ';;;;\n')
         # writeInc(file, str(inc * 10) + '0;;Y;;16.50;;;;\n')  #  w koncu ma byc czy nie?!
         writeInc(file, str(inc * 10) + ';97;5;;;;;;;\n')
         writeInc(file, str(inc * 10) + ';97;50;;;;;;;\n')
