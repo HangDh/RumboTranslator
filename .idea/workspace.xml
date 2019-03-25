@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="740396fc-4634-4cad-bd4c-b68fb3ae1b56" name="Default" comment="Working around old rumba, checkbox, finetuning center of circle.">
+    <list default="true" id="740396fc-4634-4cad-bd4c-b68fb3ae1b56" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dndTest.py" beforeDir="false" afterPath="$PROJECT_DIR$/dndTest.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/time.log" beforeDir="false" afterPath="$PROJECT_DIR$/time.log" afterDir="false" />
@@ -21,12 +21,10 @@
       <file leaf-file-name="dndTest.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/dndTest.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="250">
-              <caret line="838" column="32" lean-forward="true" selection-start-line="838" selection-start-column="32" selection-end-line="838" selection-end-column="32" />
+            <state relative-caret-position="253">
+              <caret line="566" column="36" lean-forward="true" selection-start-line="566" selection-start-column="36" selection-end-line="566" selection-end-column="36" />
               <folding>
                 <element signature="e#0#116#0" expanded="true" />
-                <element signature="e#20249#20749#0" />
-                <element signature="e#20798#20859#0" />
               </folding>
             </state>
           </provider>
@@ -35,7 +33,7 @@
       <file leaf-file-name="frez.json" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/frez.json">
           <provider selected="true" editor-type-id="text-editor">
-            <state>
+            <state relative-caret-position="138">
               <caret line="6" column="7" selection-start-line="6" selection-start-column="7" selection-end-line="6" selection-end-column="7" />
             </state>
           </provider>
@@ -44,7 +42,7 @@
       <file leaf-file-name="frez_oldrumba.json" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/frez_oldrumba.json">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="299">
+            <state relative-caret-position="368">
               <caret line="16" column="18" selection-start-line="16" selection-start-column="18" selection-end-line="16" selection-end-column="18" />
             </state>
           </provider>
@@ -62,7 +60,7 @@
       <file leaf-file-name="ncloader.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ncloader.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="608">
+            <state relative-caret-position="3680">
               <caret line="161" column="108" selection-start-line="161" selection-start-column="108" selection-end-line="161" selection-end-column="108" />
             </state>
           </provider>
@@ -221,24 +219,6 @@
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
     </configuration>
-    <configuration name="MainCutShucoXLS" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="NC_Reader" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/../PythonCut2" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/../PythonCut2/MainCutShucoXLS.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-    </configuration>
     <configuration name="PlanMain" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="NC_Reader" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -252,6 +232,24 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/../PlanCheck/PlanMain.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+    </configuration>
+    <configuration name="RCP" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="NC_Reader" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="V:/TEST/RCP" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="V:/TEST/RCP/RCP.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -295,18 +293,18 @@
     </configuration>
     <list>
       <item itemvalue="Python.dndTest" />
-      <item itemvalue="Python.MainCutShucoXLS" />
       <item itemvalue="Python.MainCutShuco — kopia" />
       <item itemvalue="Python.PlanMain" />
       <item itemvalue="Python.ncinfo" />
+      <item itemvalue="Python.RCP" />
     </list>
     <recent_temporary>
       <list>
         <item itemvalue="Python.dndTest" />
+        <item itemvalue="Python.RCP" />
         <item itemvalue="Python.ncinfo" />
         <item itemvalue="Python.PlanMain" />
         <item itemvalue="Python.MainCutShuco — kopia" />
-        <item itemvalue="Python.MainCutShucoXLS" />
       </list>
     </recent_temporary>
   </component>
@@ -545,39 +543,54 @@
       <option name="project" value="LOCAL" />
       <updated>1553165995586</updated>
     </task>
-    <option name="localTasksCounter" value="33" />
+    <task id="LOCAL-00033" summary="Finetuning, handle and so on.">
+      <created>1553257223562</created>
+      <option name="number" value="00033" />
+      <option name="presentableId" value="LOCAL-00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1553257223562</updated>
+    </task>
+    <option name="localTasksCounter" value="34" />
     <servers />
+  </component>
+  <component name="TodoView">
+    <todo-panel id="selected-file">
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="true" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.13557047" />
-      <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="right" id="R Packages" order="4" />
-      <window_info anchor="right" id="R Graphics" order="3" />
+      <window_info anchor="bottom" id="TODO" order="6" weight="0.32905984" />
       <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.50067115" side_tool="true" weight="0.2920228" />
       <window_info anchor="bottom" id="Version Control" order="9" weight="0.32905984" />
       <window_info anchor="bottom" id="Python Console" order="8" weight="0.23789173" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49932885" weight="0.2920228" />
-      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.49932885" visible="true" weight="0.2920228" />
       <window_info anchor="bottom" id="Terminal" order="7" weight="0.26495728" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.1375839" />
+      <window_info anchor="right" id="R Packages" order="4" />
+      <window_info anchor="right" id="R Graphics" order="3" />
+      <window_info anchor="bottom" id="Find" order="1" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" weight="0.3294271" />
-      <window_info active="true" anchor="bottom" id="Debug" order="3" visible="true" weight="0.31623933" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.31623933" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
-      <window_info anchor="bottom" id="Find" order="1" />
     </layout>
   </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Working GUI - Change bar/cut selection, code needs refactoring." />
     <MESSAGE value="Fixing GUI - length of the profile working now." />
     <MESSAGE value="Gui - showing macros" />
     <MESSAGE value="Gui - showing text + profile image - TODO: autoclamp" />
@@ -602,7 +615,8 @@
     <MESSAGE value="Changed way of calculating Z-Axis when rotating inside of macro." />
     <MESSAGE value="Little workarounds." />
     <MESSAGE value="Working around old rumba" />
-    <option name="LAST_COMMIT_MESSAGE" value="Working around old rumba" />
+    <MESSAGE value="Finetuning, handle and so on." />
+    <option name="LAST_COMMIT_MESSAGE" value="Finetuning, handle and so on." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -843,16 +857,6 @@
           <option name="timeStamp" value="174" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://V:/TEST/RCP/RCP.py</url>
-          <line>147</line>
-          <option name="timeStamp" value="175" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://V:/TEST/RCP/RCP.py</url>
-          <line>131</line>
-          <option name="timeStamp" value="176" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://C:/RW_Depozyt/RW_Depozyt.py</url>
           <line>125</line>
           <option name="timeStamp" value="178" />
@@ -938,26 +942,6 @@
           <option name="timeStamp" value="211" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://V:/TEST/RCP/RCP.py</url>
-          <line>123</line>
-          <option name="timeStamp" value="220" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://V:/TEST/RCP/RCP.py</url>
-          <line>99</line>
-          <option name="timeStamp" value="221" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://V:/TEST/RCP/RCP.py</url>
-          <line>101</line>
-          <option name="timeStamp" value="222" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://V:/TEST/RCP/RCP.py</url>
-          <line>97</line>
-          <option name="timeStamp" value="223" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/../PythonOptimCut/MainCutShucoXLS.py</url>
           <line>164</line>
           <option name="timeStamp" value="232" />
@@ -1009,7 +993,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/dndTest.py</url>
-          <line>569</line>
+          <line>576</line>
           <option name="timeStamp" value="388" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -1019,13 +1003,28 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/dndTest.py</url>
-          <line>803</line>
+          <line>810</line>
           <option name="timeStamp" value="401" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/dndTest.py</url>
-          <line>762</line>
+          <line>769</line>
           <option name="timeStamp" value="405" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://V:/TEST/RCP/RCP.py</url>
+          <line>156</line>
+          <option name="timeStamp" value="407" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/dndTest.py</url>
+          <line>405</line>
+          <option name="timeStamp" value="408" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/dndTest.py</url>
+          <line>394</line>
+          <option name="timeStamp" value="409" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
@@ -1035,7 +1034,7 @@
           </properties>
         </breakpoint>
       </default-breakpoints>
-      <option name="time" value="406" />
+      <option name="time" value="410" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="PythonConfigurationType">
@@ -1116,7 +1115,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://V:/TEST/RCP/RCP.py" />
     <entry file="file://$PROJECT_DIR$/873.NCX" />
     <entry file="file://C:/Codecademy/web01.py">
       <provider selected="true" editor-type-id="text-editor">
@@ -1231,7 +1229,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/ncloader.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="608">
+        <state relative-caret-position="3680">
           <caret line="161" column="108" selection-start-line="161" selection-start-column="108" selection-end-line="161" selection-end-column="108" />
         </state>
       </provider>
@@ -1269,26 +1267,34 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/frez_oldrumba.json">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="299">
+        <state relative-caret-position="368">
           <caret line="16" column="18" selection-start-line="16" selection-start-column="18" selection-end-line="16" selection-end-column="18" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/frez.json">
       <provider selected="true" editor-type-id="text-editor">
-        <state>
+        <state relative-caret-position="138">
           <caret line="6" column="7" selection-start-line="6" selection-start-column="7" selection-end-line="6" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://V:/TEST/RCP/RCP.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="282">
+          <caret line="156" selection-start-line="156" selection-end-line="156" />
+          <folding>
+            <element signature="e#0#13#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/dndTest.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="250">
-          <caret line="838" column="32" lean-forward="true" selection-start-line="838" selection-start-column="32" selection-end-line="838" selection-end-column="32" />
+        <state relative-caret-position="253">
+          <caret line="566" column="36" lean-forward="true" selection-start-line="566" selection-start-column="36" selection-end-line="566" selection-end-column="36" />
           <folding>
             <element signature="e#0#116#0" expanded="true" />
-            <element signature="e#20249#20749#0" />
-            <element signature="e#20798#20859#0" />
           </folding>
         </state>
       </provider>

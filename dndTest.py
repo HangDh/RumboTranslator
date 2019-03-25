@@ -399,6 +399,7 @@ class ApplicationWindow(QWidget):
                                 deltaWorkX = abs(max(macrosSorted[m].macroWorks, key=attrgetter('workWX')).workWX)
                                 workLength = max(macrosSorted[m].macroWorks, key=attrgetter('workWW1')).workWW1
                                 distMacro = macrosSorted[m].WX - m_prev
+
                                 if (m == len(macrosSorted)):
                                     distMacro = self.currentProfil.Length - macrosSorted[m].WX
 
@@ -416,6 +417,12 @@ class ApplicationWindow(QWidget):
                                     buttonsK[k].setGeometry(flPosX + 10, 80, 120 * 500 / self.currentProfil.Length, 40)
                                     klemy[k] = float(textBoxesK[k].text())
                                     k += 1
+
+                                if len(macrosSorted) == 1:
+                                    textBoxesK[k].setText(str(macrosSorted[m].WX + deltaWorkX + workLength / 2 + 20))
+                                    flPosX = float(float(textBoxesK[k].text()) * 500 / self.currentProfil.Length) + 45
+                                    buttonsK[k].setGeometry(flPosX + 10, 80, 120 * 500 / self.currentProfil.Length, 40)
+                                    klemy[k] = float(textBoxesK[k].text())
 
                             distance_list.append(macrosSorted[m].WX - m_prev)
                             m_prev = macrosSorted[m].WX
@@ -562,7 +569,7 @@ class ApplicationWindow(QWidget):
 
             # Przy pierwszej zmianie kąta wpisywane są te linijki - nie jestesmy pewni dlaczego
             # Dlatego na wszelki wypadek dopisujemy.
-            if Delta_Y != round(Okrag_Y + math.cos(katKoncowy) * Okrag_R, 2) and silent!='y':
+            if Delta_Y != round(Okrag_Y + math.cos(katKoncowy) * Okrag_R, 2) and silent != 'y':
                 # Funkcja przygotowawcza kąta (ale wygląda, że wszystko dzieje się w zmianie narzędzia! ;)
                 writeInc(file, str(inc * 10) + ';97;10;;' + str(round(-kat, 2)) + ';;;;;\n')
 
